@@ -3,13 +3,6 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-import axios from 'axios'
-
-// 后端连接
-axios.defaults.baseURL = "http://localhost:8080"
-
-Vue.prototype.$axios = axios
-
 // import home from '../components/home/home.vue'
 // import green from '../components/green/green.vue'
 // import labour from '../components/labour/labour.vue'

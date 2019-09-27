@@ -6,8 +6,6 @@ export default {
       pageSizes: [15, 30, 45], // 每页显示条数
       pageSize: 15, // 默认显示条数
       currentPage: 1, // 页码数
-      domain: '47.106.71.3',
-      port: '8080',
     }
   },
   created() {

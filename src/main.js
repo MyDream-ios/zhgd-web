@@ -1,5 +1,6 @@
 import Vue from 'vue'
-// import axios from './utils/axios'
+import axios from './utils/axios'
+import OLDURL from './utils/oldUrl'
 import VueAMap from 'vue-amap'
 import App from './App.vue'
 import router from './router'
@@ -41,6 +42,8 @@ Vue.directive('focus', function (el) {
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$md5 = md5
+Vue.prototype.$axios = axios
+Vue.prototype.$old = OLDURL
 
 // Vue.use(Carousel);
 // Vue.use(Row);

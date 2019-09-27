@@ -2176,8 +2176,8 @@
             // 获取基坑列表
             getSelectStructure() {
                 this.$axios
-                    // .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectStructure?projectId=5`)
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectStructure?projectId=${this.projectId}`)
+                    // .post(`/api/HjGhformworktApi/selectStructure?projectId=5`)
+                    .post(`/api/HjGhformworktApi/selectStructure?projectId=${this.projectId}`)
                     .then(res => {
                         this.deviceName = res.data.data[0].deviceName
                         this.structureId = res.data.data[0].deviceId
@@ -2207,7 +2207,7 @@
             // 查询因素列表
             getSelectDisplay() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectDisplay?structureId=${this.structureId}`)
+                    .post(`/api/HjGhformworktApi/selectDisplay?structureId=${this.structureId}`)
                     .then(res => {
                         this.factorList = res.data.data
                         if (this.factorList[0].name == '支架水平位移') {
@@ -2244,7 +2244,7 @@
             getFactorList() {
                 if (this.stage > 0) {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.stage}`)
+                        .post(`/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.stage}`)
                         .then(res => {
                             this.stageList = res.data.data
                             this.stageListChild = res.data.data[0].id
@@ -2256,7 +2256,7 @@
                 }
                 if (this.offset > 0) {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.offset}`)
+                        .post(`/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.offset}`)
                         .then(res => {
                             this.offsetList = res.data.data
                             this.offsetListChild = res.data.data[0].id
@@ -2268,7 +2268,7 @@
                 }
                 if (this.subside > 0) {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.subside}`)
+                        .post(`/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.subside}`)
                         .then(res => {
                             this.subsideList = res.data.data
                             this.subsideListChild = res.data.data[0].id
@@ -2280,7 +2280,7 @@
                 }
                 if (this.product > 0) {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.product}`)
+                        .post(`/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.product}`)
                         .then(res => {
                             this.productList = res.data.data
                             this.productListChild = res.data.data[0].id
@@ -2295,7 +2295,7 @@
             // 获取测点水位数据 这里需要添加一下每个返回数据的total，用来显示总条目数
             getStage(num, size) {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorData?factorId=${this.stageListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+                    .post(`/api/HjGhformworktApi/getFactorData?factorId=${this.stageListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
                     .then(res => {
                         if (!size) {
                             // this.stageHistoryTable = res.data.data
@@ -2308,7 +2308,7 @@
             // 获取测点位移数据
             getOffset(num, size) {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorData?factorId=${this.offsetListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+                    .post(`/api/HjGhformworktApi/getFactorData?factorId=${this.offsetListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
                     .then(res => {
                         if (!size) {
                             // this.offsetHistoryTable = res.data.data
@@ -2321,7 +2321,7 @@
             // 获取测点沉降数据
             getSubside(num, size) {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorData?factorId=${this.subsideListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+                    .post(`/api/HjGhformworktApi/getFactorData?factorId=${this.subsideListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
                     .then(res => {
                         if (!size) {
                             // this.subsideHistoryTable = res.data.data
@@ -2334,7 +2334,7 @@
             // 获取测点结构数据
             getProduct(num, size) {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorData?factorId=${this.productListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+                    .post(`/api/HjGhformworktApi/getFactorData?factorId=${this.productListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
                     .then(res => {
                         if (!size) {
                             // this.productHistoryTable = res.data.data
@@ -2347,7 +2347,7 @@
             // 获取测点倾斜数据
             getBias(num, size) {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorData?factorId=${this.biasListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+                    .post(`/api/HjGhformworktApi/getFactorData?factorId=${this.biasListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
                     .then(res => {
                         if (!size) {
                             // this.biasHistoryTable = res.data.data
@@ -2406,7 +2406,7 @@
             // 获取模板沉降四小时记录
             getStageFourHoverList() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=subside`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=subside`)
                     .then(res => {
                         this.stageFourHoverList = res.data
                     })
@@ -2415,7 +2415,7 @@
             // 获取支架水平位移四小时记录
             getOffsetFourHoverList() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=displacement`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=displacement`)
                     .then(res => {
                         this.offsetFourHoverListX = res.data
                     })
@@ -2424,7 +2424,7 @@
             // 获取立杆轴力四小时记录
             getSubsideFourHoverList() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.subsideListChild}&date=${this.nowTime}&param=force_r`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.subsideListChild}&date=${this.nowTime}&param=force_r`)
                     .then(res => {
                         this.subsideFourHoverList = res.data
                     })
@@ -2433,12 +2433,12 @@
             // 获取高支模倾斜四小时记录
             getProductFourHoverList() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=tilt_x`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=tilt_x`)
                     .then(res => {
                         this.productHzFourHoverList = res.data
                     })
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=tilt_y`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=tilt_y`)
                     .then(res => {
                         this.productTempFourHoverList = res.data
                     })
@@ -2447,12 +2447,12 @@
             // 获取倾斜四小时记录
             getBiasFourHoverList() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_x`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_x`)
                     .then(res => {
                         this.biasFourHoverListX = res.data
                     })
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_y`)
+                    .post(`/api/HjGhformworktApi/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_y`)
                     .then(res => {
                         this.biasFourHoverListY = res.data
                     })
@@ -2503,7 +2503,7 @@
             // 获取地下水位最大值
             getStageMax() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getParmeterAvg?displayId=${this.stage}&factorId=${this.stageListChild}`)
+                    .post(`/api/HjGhformworktApi/getParmeterAvg?displayId=${this.stage}&factorId=${this.stageListChild}`)
                     .then(res => {
                         this.stageMaxList = res.data.data
                     })
@@ -2512,7 +2512,7 @@
             // 获取立杆轴力
             getSubsideMax() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getParmeterAvg?displayId=${this.subside}&factorId=${this.subsideListChild}`)
+                    .post(`/api/HjGhformworktApi/getParmeterAvg?displayId=${this.subside}&factorId=${this.subsideListChild}`)
                     .then(res => {
                         this.subsideMaxList = res.data.data
                     })
@@ -2521,7 +2521,7 @@
             // 获取倾斜最大值 倾斜不知道怎么搞，等隆鑫回来 调用已经写了
             getBiasMax() {
                 /*this.$axios
-                  .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getParmeterAvg?displayId=${this.bias}&factorId=${this.biasListChild}`)
+                  .post(`/api/HjGhformworktApi/getParmeterAvg?displayId=${this.bias}&factorId=${this.biasListChild}`)
                   .then(res => {
                     this.offsetMaxList = res.data.data
                   })*/
@@ -2530,7 +2530,7 @@
             // 获取立杆轴力最大值
             getOffsetMax() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getParmeterAvg?displayId=${this.subside}&factorId=${this.offsetListChild}`)
+                    .post(`/api/HjGhformworktApi/getParmeterAvg?displayId=${this.subside}&factorId=${this.offsetListChild}`)
                     .then(res => {
                         this.offsetMaxList = res.data.data
                     })
@@ -2557,12 +2557,12 @@
                     var startTime = this.nowTime + ' 00:00:00'
                     var endTime = this.nowTime + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
                         .then(res => {
                             this.stageHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.stageHistoryTable = res.data.data
                             this.historyStageTolal = res.data.sum
@@ -2571,12 +2571,12 @@
                     var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
                     var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
                         .then(res => {
                             this.stageHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.stageHistoryTable = res.data.data
                             this.historyStageTolal = res.data.sum
@@ -2590,12 +2590,12 @@
                     var startTime = this.nowTime + ' 00:00:00'
                     var endTime = this.nowTime + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
                         .then(res => {
                             this.offsetHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.offsetHistoryTable = res.data.data
                             this.historyOffsetTolal = res.data.sum
@@ -2604,12 +2604,12 @@
                     var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
                     var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
                         .then(res => {
                             this.offsetHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.offsetHistoryTable = res.data.data
                             this.historyOffsetTolal = res.data.sum
@@ -2623,12 +2623,12 @@
                     var startTime = this.nowTime + ' 00:00:00'
                     var endTime = this.nowTime + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.subside}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.subside}`)
                         .then(res => {
                             this.subsideHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.subsideHistoryTable = res.data.data
                             this.historySubsideTolal = res.data.sum
@@ -2637,12 +2637,12 @@
                     var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
                     var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.force_r}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.force_r}`)
                         .then(res => {
                             this.subsideHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.subsideHistoryTable = res.data.data
                             this.historySubsideTolal = res.data.sum
@@ -2656,12 +2656,12 @@
                     var startTime = this.nowTime + ' 00:00:00'
                     var endTime = this.nowTime + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
                         .then(res => {
                             this.productHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.productHistoryTable = res.data.data
                             this.historyProductTolal = res.data.sum
@@ -2670,12 +2670,12 @@
                     var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
                     var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
                         .then(res => {
                             this.productHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.productHistoryTable = res.data.data
                             this.historyProductTolal = res.data.sum
@@ -2689,12 +2689,12 @@
                     var startTime = this.nowTime + ' 00:00:00'
                     var endTime = this.nowTime + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
                         .then(res => {
                             this.biasHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.biasHistoryTable = res.data.data
                             this.historyBiasTolal = res.data.sum
@@ -2703,12 +2703,12 @@
                     var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
                     var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
+                        .post(`/api/HjGhformworktApi/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
                         .then(res => {
                             this.biasHistoryEcharts = res.data
                         })
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/getFactorDataT?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+                        .post(`/api/HjGhformworktApi/getFactorDataT?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
                         .then(res => {
                             this.biasHistoryTable = res.data.data
                             this.historyBiasTolal = res.data.sum
@@ -2755,14 +2755,14 @@
             selectUserAlarms(today) {
                 if (today) {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectUserAlarms?structureId=${this.structureId}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
+                        .post(`/api/HjGhformworktApi/selectUserAlarms?structureId=${this.structureId}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
                         .then(res => {
                             this.alarmList = res.data.data
                             this.alarmListTotal = res.data.sum
                         })
                 } else {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectUserAlarms?structureId=${this.structureId}&pageSize=100&pageNum=1&date=`)
+                        .post(`/api/HjGhformworktApi/selectUserAlarms?structureId=${this.structureId}&pageSize=100&pageNum=1&date=`)
                         .then(res => {
                             this.allAlarmList = res.data.data
                             this.allOfAlarm = res.data.sum
@@ -2774,14 +2774,14 @@
             searchUserAlarms(today) {
                 if (today) {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectUserAlarmsByFactor?factorName=${this.searchValue}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
+                        .post(`/api/HjGhformworktApi/selectUserAlarmsByFactor?factorName=${this.searchValue}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
                         .then(res => {
                             this.alarmList = res.data.data.rows
                             this.alarmListTotal = res.data.total
                         })
                 } else {
                     this.$axios
-                        .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectUserAlarmsByFactor?factorName=${this.searchValue}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
+                        .post(`/api/HjGhformworktApi/selectUserAlarmsByFactor?factorName=${this.searchValue}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
                         .then(res => {
                             this.alarmList = res.data.data.rows
                             this.alarmListTotal = res.data.total
@@ -2804,7 +2804,7 @@
                         this.searchUserAlarms()
                     } else {
                         this.$axios
-                            .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/selectUserAlarms?structureId=${this.structureId}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
+                            .post(`/api/HjGhformworktApi/selectUserAlarms?structureId=${this.structureId}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
                             .then(res => {
                                 // debugger
                                 this.alarmList = res.data.data
@@ -2823,7 +2823,7 @@
             // 报警图表
             getAlarmEchats() {
                 this.$axios
-                    .post(`http://192.168.1.117:4524/provider/HjGhformworktApi/statisticsAlertor?structureId=${this.structureId}`)
+                    .post(`/api/HjGhformworktApi/statisticsAlertor?structureId=${this.structureId}`)
                     .then(res => {
                         // this.alarmEchats = res.data.data
                         for (let i = 0; i < res.data.data.length; i++) {
