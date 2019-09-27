@@ -30,14 +30,18 @@
                 {{ item.hxzId }}
               </div>
               <div class="subcontract">
-                <span>设备SN（32位）：</span>
-                {{ item.deviceNo }}
+                <span>设备厂商：</span>
+                {{ getManufacturerName(item.manufacturerId) }}
+              </div>
+              <div class="subcontract">
+                <span>上传平台：</span>
+                {{ geScznlName(item.scznl) }}
               </div>
             </div>
             <div class="right-box">
               <a>人员设置</a>
               <a @click="compileShow=true,clickEdit1(item)">编辑</a>
-              <a @click="deleteTower(item.id)">删除</a>
+              <a @click="deleteTower(item)">删除</a>
             </div>
           </li>
         </ul>
@@ -94,12 +98,42 @@
       <div class="dialog-box" v-show="dialogShow">
         <div class="title">
           新增设备
-          <a class="close" @click="dialogClick(),craneName='',hxzId='',deviceNo=''">
+          <a class="close" @click="dialogClick">
             <i class="el-icon-close"></i>
           </a>
         </div>
         <div class="form">
           <ul>
+            <li>
+              <span>
+                对接平台
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="scznl"> -->
+              <el-select v-model="scznl" @change="getCay">
+                <el-option
+                  v-for="item in scznlList"
+                  :key="item.tag"
+                  :label="item.name"
+                  :value="item.tag"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
+                设备厂商
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="manufacturerId"> -->
+              <el-select v-model="manufacturerId">
+                <el-option
+                  v-for="item in manufacturerIdList"
+                  :key="item.id"
+                  :label="item.manufacturerName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </li>
             <li>
               <span>
                 设备名称
@@ -114,13 +148,48 @@
               </span>
               <input type="number" v-model="hxzId">
             </li>
-            <!-- <li>
+            <li>
               <span>
-                设备SN（32位）
+                安装编号
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="deviceNo">
-            </li> -->
+              <input type="number" v-model="serialNum" placeholder="广东省统一安装告知编号">
+            </li>
+            <li>
+              <span>
+                最大幅度
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="tcMaxScope">
+            </li>
+            <li>
+              <span>
+                最大高度
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="tcMaxHeight">
+            </li>
+            <li>
+              <span>
+                最大载重
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="tcLoadCapacity" placeholder="单位为Kg">
+            </li>
+            <li>
+              <span>
+                起重力矩
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="tcLoadMoment">
+            </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
           </ul>
         </div>
         <div class="confirm">
@@ -139,6 +208,36 @@
           <ul>
             <li>
               <span>
+                对接平台
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="scznl"> -->
+              <el-select v-model="editTower.scznl" @change="getCay">
+                <el-option
+                  v-for="item in scznlList"
+                  :key="item.tag"
+                  :label="item.name"
+                  :value="item.tag"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
+                设备厂商
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="manufacturerId"> -->
+              <el-select v-model="editTower.manufacturerId">
+                <el-option
+                  v-for="item in manufacturerIdList"
+                  :key="item.id"
+                  :label="item.manufacturerName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
                 设备名称
                 <div class="required">*</div>
               </span>
@@ -151,13 +250,48 @@
               </span>
               <input type="number" v-model="editTower.hxzId">
             </li>
-            <!-- <li>
+            <li>
               <span>
-                设备SN（32位）
+                安装编号
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="editTower.deviceNo">
-            </li> -->
+              <input type="number" v-model="editTower.serialNum" placeholder="广东省统一安装告知编号">
+            </li>
+            <li>
+              <span>
+                最大幅度
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="editTower.tcMaxScope">
+            </li>
+            <li>
+              <span>
+                最大高度
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="editTower.tcMaxHeight">
+            </li>
+            <li>
+              <span>
+                最大载重
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="editTower.tcLoadCapacity" placeholder="单位为Kg">
+            </li>
+            <li>
+              <span>
+                起重力矩
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="editTower.tcLoadMoment">
+            </li>
+            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
+            </li>
           </ul>
         </div>
         <div class="confirm">
@@ -202,8 +336,29 @@
           <a class="button">保存</a>
         </div>
       </div>
+
+      <!-- 移除时间 -->
+      <div class="dialog-box" v-show="deleteShow">
+        <div class="title">
+          移除时间
+          <a class="close" @click="deleteShow=false,deleteTime=''">
+            <i class="el-icon-close"></i>
+          </a>
+        </div>
+        <div class="form">
+          <el-date-picker
+            v-model="deleteTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期">
+          </el-date-picker>
+        </div>
+        <div class="confirm">
+          <a class="button" @click="deleteCAY">保存</a>
+        </div>
+      </div>
       <!-- 遮罩层 -->
-      <div class="shade-box" v-show="dialogShow || compileShow || personnelShow"></div>
+      <div class="shade-box" v-show="dialogShow || compileShow || personnelShow || deleteShow"></div>
     </div>
   </div>
 </template>
@@ -327,7 +482,7 @@
         width: 100%;
         li {
           width: 100%;
-          height: 1.29rem;
+          height: 1.7rem;
           padding-top: 0.05rem;
           padding-left: 0.2rem;
           margin-bottom: 0.2rem;
@@ -356,7 +511,7 @@
               color: #0090ff;
               font-size: 0.18rem;
               margin-right: 0.3rem;
-              line-height: 1.21rem;
+              line-height: 1.7rem;
             }
           }
         }
@@ -411,7 +566,7 @@
     }
     .dialog-box {
       left: 50%;
-      top: 2.14rem;
+      top: 0rem;
       z-index: 200;
       width: 6.84rem;
       overflow: hidden;
@@ -658,20 +813,33 @@ export default {
       pageNum2: 1, // 每页条数
       pageTotal2: 2, // 总条数
       craneList: '', // 塔吊列表
-      craneName: '', // 设备名称
-      deviceNo: '', //设备编号32位
-      hxzId: '', // 设备编号
-      craneName: '', // 设备名称
-      deviceNo: '', // 设备编号32位
-      hxzId: '', // 设备编号
       editTower: {}, // 编辑的塔吊
       userList: [], // 报警设置列表
       search: '', // 报警设置搜索
+      scznl: '', // 对接平台
+      manufacturerId: '', // 设备厂商
+      craneName: '', // 设备名称
+      hxzId: '', // 设备SN
+      serialNum: '', // 安装编号
+      jdbh: '', // 项目监督编号
+      xmid: '', // 项目ID
+      subId: '', // 工程ID
+      scznlList: [], // 对接平台列表
+      manufacturerIdList: [], // 设备厂家列表
+      deleteShow: false, // 删除弹窗
+      deleteTime: '', // 删除的时间
+      deleteId: '', // 删除的ID
+      tcMaxScope: '', // 最大幅度
+      tcMaxHeight: '', // 最大高度
+      tcLoadCapacity: '', // 最大载重
+      tcLoadMoment: '', // 起重力矩
     };
   },
   mounted() {
     this.getCraneList()
     this.getCraneUserList()
+    this.getMerchantList()
+    this.getManufacturersList()
   },
   methods: {
     // 每页条数切换
@@ -695,26 +863,75 @@ export default {
     // 新增对话框状态切换
     dialogClick() {
       this.dialogShow = !this.dialogShow;
+      this.scznl = ''
+      this.manufacturerId = ''
+      this.craneName = ''
+      this.hxzId = ''
+      this.serialNum = ''
+      this.jdbh = ''
+      this.tcMaxScope = ''
+      this.tcMaxHeight = ''
+      this.tcLoadCapacity = ''
+      this.tcLoadMoment = ''
+    },
+
+    // 获取项目监督编号
+    getCay() {
+      this.jdbh = ''
+      this.xmid = ''
+      this.subId = ''
+      if (this.editTower.scznl == 'CAY' || this.manufacturerId == 'CAY') {
+        this.$axios
+          .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
+          .then(res => {
+            this.jdbh = res.data.jdbh
+            this.xmid = res.data.xmid
+            this.subId = res.data.subId
+            this.editTower.jdbh = res.data.jdbh
+          })
+      }
     },
 
     // 获取塔吊列表
     getCraneList() {
       this.$axios
-        .post(`/api/OptionsCraneApi/getCraneList?projectId=${this.projectId}`)
+        .post(`http://192.168.1.22:8080/api/OptionsCraneApi/getCraneList?projectId=${this.projectId}`)
         .then(res => {
           this.craneList = res.data.data
         })
     },
 
+    // 设备厂商名称
+    getManufacturerName(id) {
+      for (let i = 0; i < this.manufacturerIdList.length; i++) {
+        if (this.manufacturerIdList[i].id == id) {
+          return this.manufacturerIdList[i].manufacturerName
+        }
+      }
+    },
+
+    // 上传平台名称
+    geScznlName(id) {
+      for (let i = 0; i < this.scznlList.length; i++) {
+        if (this.scznlList[i].tag == id) {
+          return this.scznlList[i].name
+        }
+      }
+    },
+
     // 删除塔吊
-    deleteTower(id) {
-      this.$confirm('此操作将永久删除该塔吊, 是否继续?', '提示', {
+    deleteTower(item) {
+      if (item.scznl == 'CAY') {
+        this.deleteShow = !this.deleteShow
+        this.deleteId = item.id
+      } else {
+        this.$confirm('此操作将永久删除该塔吊, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$axios
-            .post(`/api/OptionsCraneApi/deleteCrane?id=${id}`)
+            .post(`http://192.168.1.22:8080/api/OptionsCraneApi/deleteCrane?id=${itemid}`)
             .then(res => {
               if (res.data.code == 0) {
                 this.$message({
@@ -735,30 +952,65 @@ export default {
             message: '已取消删除'
           });
         });
+      }
+    },
+
+    // 删除诚安院
+    deleteCAY(id) {
+      if (this.deleteTime) {
+        this.$axios
+          .post(`http://192.168.1.22:8080/api/OptionsCraneApi/deleteCrane?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.deleteTime = ''
+              this.personnelShow3 = false
+              this.getEquipmentList()
+            } else {
+              this.$message({
+                message: '删除失败',
+                type: 'warning'
+              });
+            }
+          })
+      } else {
+        this.$message({
+          message: '请选择移除时间',
+          type: 'warning'
+        });
+      }
     },
 
     // 添加设备提交
     insertCrane() {
-      if (this.craneName == '') {
+      var temp = true
+      if (!this.scznl || !this.manufacturerId || !this.craneName || !this.hxzId || !this.serialNum || !this.tcMaxScope || !this.tcLoadCapacity || !this.tcLoadMoment) {
+        temp = false
         this.$message({
-          message: '请填写设备名称',
-          type: 'warning'
-        });
-      } else if (this.hxzId == '') {
-        this.$message({
-          message: '设备SN为必填项',
+          message: '*号项为必填项',
           type: 'warning'
         });
       }
-      // else if (this.deviceNo == '') {
-      //   this.$message({
-      //     message: '设备SN（32位）为必填项',
-      //     type: 'warning'
-      //   });
-      // }
-      else {
+      if (this.scznl == 'CAY' && !this.jdbh) {
+        temp = false
+        this.$message({
+          message: '未在诚安院查询到该项目信息，请先进行备案',
+          type: 'warning'
+        });
+      }
+      if (this.scznl == 'RCAJ' && !this.jdbh) {
+        temp = false
+        this.$message({
+          message: '*号项为必填项',
+          type: 'warning'
+        });
+      }
+      if (temp) {
         this.$axios
-          .post(`/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}`)
+          .post(`/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&${this.serialNum}&tcMaxScope=${this.tcMaxScope}&tcMaxHeight=${this.tcMaxHeight}&tcLoadCapacity=${this.tcLoadCapacity}&tcLoadMoment=${this.tcLoadMoment}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -766,9 +1018,7 @@ export default {
                 type: 'success'
               });
               this.getCraneList()
-              this.craneName = ''
-              this.hxzId = ''
-              this.dialogShow = false
+              this.dialogClick()
             } else {
               this.$message({
                 message: '添加失败',
@@ -781,23 +1031,32 @@ export default {
 
     // 点击编辑塔吊
     clickEdit1(item) {
-      this.editTower = Object.assign({}, item)
+      // this.editTower = Object.assign({}, item)
+      var temp = Object.assign({}, item)
+      Object.keys(temp).forEach(item => {
+        if (temp[item] == null) {
+          temp[item] = ''
+        }
+      })
+      this.editTower = temp
     },
 
     // 编辑塔吊提交
     saveEdit() {
-      // console.log('点击')
-      if (this.editTower.craneName == '') {
-        this.messageBox('设备名称为必填项', 0)
-      } else if (this.editTower.hxzId == '') {
-        this.messageBox('设备SN为必填项', 0)
+      var temp = true
+      if (!this.editTower.scznl || !this.editTower.manufacturerId || !this.editTower.elevatorName || !this.editTower.hxzId || !this.editTower.serialNum || !this.editTower.tcMaxScope || !this.editTower.tcMaxHeight || !this.editTower.tcLoadCapacity || !this.editTower.tcLoadMoment) {
+        temp = false
       }
-      //  else if (this.editTower.deviceNo == '') {
-      //   this.messageBox('设备SN（32位）为必填项', 0)
-      // }
-      else {
+      if (this.editTower.scznl == 'CAY' && !this.editTower.jdbh) {
+        this.messageBox('未在诚安院查询到该项目信息，请先进行备案', 0)
+        return
+      }
+      if (this.editTower.scznl == 'RCAJ' && !this.editTower.jdbh) {
+        temp = false
+      }
+      if (temp) {
         this.$axios
-          .post(`/api/OptionsCraneApi/updateCrane?id=${this.editTower.id}&craneName=${this.editTower.craneName}&hxzId=${this.editTower.hxzId}`)
+          .post(`http://192.168.1.22:8080/api/OptionsCraneApi/updateCrane?id=${this.editTower.id}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&craneName=${this.editTower.craneName}&hxzId=${this.editTower.hxzId}&serialNum=${this.editTower.serialNum}&tcMaxScope=${this.editTower.tcMaxScope}&tcMaxHeight=${this.editTower.tcMaxHeight}&tcLoadCapacity=${this.editTower.tcLoadCapacity}&tcLoadMoment=${this.editTower.tcLoadMoment}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}`)
           .then(res => {
             if (res.data.code == 0) {
               this.messageBox('修改成功', 1)
@@ -807,6 +1066,8 @@ export default {
               this.messageBox('修改失败', 0)
             }
           })
+      } else {
+        this.messageBox('*号项为必填项', 0)
       }
     },
 
@@ -865,7 +1126,25 @@ export default {
             this.userList = res.data.data
           }
         })
-    }
+    },
+
+    // 获取上传平台列表
+    getMerchantList() {
+      this.$axios
+        .post(`http://192.168.1.22:8083/provider/dictionariesApi/cxdjpt?category=PLATFORM`)
+        .then(res => {
+          this.scznlList = res.data.data
+        })
+    },
+
+    // 获取厂家列表
+    getManufacturersList() {
+      this.$axios
+        .post(`http://192.168.1.22:8083/provider/manufacturer/list`)
+        .then(res => {
+          this.manufacturerIdList = res.data.data
+        })
+    },
   }
 };
 </script>
