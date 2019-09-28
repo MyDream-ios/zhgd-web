@@ -964,7 +964,7 @@ export default {
     getEquipmentList() {
       this.$axios
         .post(
-          `/api/ProjectElectricityBox/list?projectId=${this.projectId}&pageNum=${this.pageNum3}&pageSize=${this.pageSize3}`
+          `http://192.168.1.22:8080/api/ProjectElectricityBox/list?projectId=${this.projectId}&pageNum=${this.pageNum3}&pageSize=${this.pageSize3}`
         )
         .then(res => {
           // console.log(res.data)
