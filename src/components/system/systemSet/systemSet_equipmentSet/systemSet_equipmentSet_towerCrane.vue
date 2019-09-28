@@ -39,7 +39,7 @@
               </div>
             </div>
             <div class="right-box">
-              <a>人员设置</a>
+              <!-- <a>人员设置</a> -->
               <a @click="compileShow=true,clickEdit1(item)">编辑</a>
               <a @click="deleteTower(item)">删除</a>
             </div>
@@ -146,28 +146,28 @@
                 设备SN
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="hxzId">
+              <input type="text" v-model="hxzId">
             </li>
             <li>
               <span>
                 安装编号
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="serialNum" placeholder="广东省统一安装告知编号">
+              <input type="text" v-model="serialNum" placeholder="广东省统一安装告知编号">
             </li>
             <li>
               <span>
                 最大幅度
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="tcMaxScope">
+              <input type="number" v-model="tcMaxScope" placeholder="单位为m">
             </li>
             <li>
               <span>
                 最大高度
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="tcMaxHeight">
+              <input type="number" v-model="tcMaxHeight" placeholder="单位为m">
             </li>
             <li>
               <span>
@@ -181,7 +181,14 @@
                 起重力矩
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="tcLoadMoment">
+              <input type="number" v-model="tcLoadMoment"  placeholder="单位为Kg">
+            </li>
+            <li>
+              <span>
+                设备安装单位
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="installCompany">
             </li>
             <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
               <span>
@@ -248,28 +255,28 @@
                 设备SN
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.hxzId">
+              <input type="text" v-model="editTower.hxzId">
             </li>
             <li>
               <span>
                 安装编号
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.serialNum" placeholder="广东省统一安装告知编号">
+              <input type="text" v-model="editTower.serialNum" placeholder="广东省统一安装告知编号">
             </li>
             <li>
               <span>
                 最大幅度
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.tcMaxScope">
+              <input type="number" v-model="editTower.tcMaxScope" placeholder="单位为m">
             </li>
             <li>
               <span>
                 最大高度
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.tcMaxHeight">
+              <input type="number" v-model="editTower.tcMaxHeight" placeholder="单位为m">
             </li>
             <li>
               <span>
@@ -283,7 +290,14 @@
                 起重力矩
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.tcLoadMoment">
+              <input type="number" v-model="editTower.tcLoadMoment"  placeholder="单位为Kg">
+            </li>
+            <li>
+              <span>
+                设备安装单位
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editTower.installCompany">
             </li>
             <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
               <span>
@@ -338,14 +352,14 @@
       </div>
 
       <!-- 移除时间 -->
-      <div class="dialog-box" v-show="deleteShow">
+      <div class="dialog-box" v-show="deleteShow" style="width:5rem">
         <div class="title">
-          移除时间
+          设备移除时间
           <a class="close" @click="deleteShow=false,deleteTime=''">
             <i class="el-icon-close"></i>
           </a>
         </div>
-        <div class="form">
+        <div class="form3">
           <el-date-picker
             v-model="deleteTime"
             type="date"
@@ -354,7 +368,7 @@
           </el-date-picker>
         </div>
         <div class="confirm">
-          <a class="button" @click="deleteCAY">保存</a>
+          <a class="button" @click="deleteCAY">移除</a>
         </div>
       </div>
       <!-- 遮罩层 -->
@@ -722,6 +736,16 @@
           }
         }
       }
+      .form3 {
+        padding: 0.4rem;
+        .el-date-editor.el-input, .el-date-editor.el-input__inner {
+          width: 100%;
+          input {
+            border: 1px solid rgb(146, 146, 146);
+            border-radius: 5px;
+          }
+        }
+      }
       .confirm {
         height: 0.8rem;
         background-color: #f8f8f8;
@@ -833,6 +857,7 @@ export default {
       tcMaxHeight: '', // 最大高度
       tcLoadCapacity: '', // 最大载重
       tcLoadMoment: '', // 起重力矩
+      installCompany: '', // 设备安装单位
     };
   },
   mounted() {
@@ -873,6 +898,7 @@ export default {
       this.tcMaxHeight = ''
       this.tcLoadCapacity = ''
       this.tcLoadMoment = ''
+      this.installCompany = ''
     },
 
     // 获取项目监督编号
@@ -880,7 +906,7 @@ export default {
       this.jdbh = ''
       this.xmid = ''
       this.subId = ''
-      if (this.editTower.scznl == 'CAY' || this.manufacturerId == 'CAY') {
+      if (this.editTower.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
           .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
           .then(res => {
@@ -931,7 +957,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$axios
-            .post(`http://192.168.1.22:8080/api/OptionsCraneApi/deleteCrane?id=${itemid}`)
+            .post(`http://192.168.1.22:8080/api/OptionsCraneApi/deleteCrane?id=${item.id}`)
             .then(res => {
               if (res.data.code == 0) {
                 this.$message({
@@ -967,8 +993,8 @@ export default {
                 type: 'success'
               });
               this.deleteTime = ''
-              this.personnelShow3 = false
-              this.getEquipmentList()
+              this.deleteShow = false
+              this.getCraneList()
             } else {
               this.$message({
                 message: '删除失败',
@@ -987,7 +1013,7 @@ export default {
     // 添加设备提交
     insertCrane() {
       var temp = true
-      if (!this.scznl || !this.manufacturerId || !this.craneName || !this.hxzId || !this.serialNum || !this.tcMaxScope || !this.tcLoadCapacity || !this.tcLoadMoment) {
+      if (!this.scznl || !this.manufacturerId || !this.craneName || !this.hxzId || !this.serialNum || !this.tcMaxScope || !this.tcLoadCapacity || !this.tcLoadMoment || !this.installCompany) {
         temp = false
         this.$message({
           message: '*号项为必填项',
@@ -1010,7 +1036,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&${this.serialNum}&tcMaxScope=${this.tcMaxScope}&tcMaxHeight=${this.tcMaxHeight}&tcLoadCapacity=${this.tcLoadCapacity}&tcLoadMoment=${this.tcLoadMoment}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}`)
+          .post(`http://192.168.1.22:8080/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&serialNum=${this.serialNum}&tcMaxScope=${this.tcMaxScope}&tcMaxHeight=${this.tcMaxHeight}&tcLoadCapacity=${this.tcLoadCapacity}&tcLoadMoment=${this.tcLoadMoment}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&installCompany=${this.installCompany}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1039,12 +1065,14 @@ export default {
         }
       })
       this.editTower = temp
+      this.editTower.manufacturerId = Number(temp.manufacturerId)
+      this.editTower.installCompany
     },
 
     // 编辑塔吊提交
     saveEdit() {
       var temp = true
-      if (!this.editTower.scznl || !this.editTower.manufacturerId || !this.editTower.elevatorName || !this.editTower.hxzId || !this.editTower.serialNum || !this.editTower.tcMaxScope || !this.editTower.tcMaxHeight || !this.editTower.tcLoadCapacity || !this.editTower.tcLoadMoment) {
+      if (!this.editTower.scznl || !this.editTower.manufacturerId || !this.editTower.craneName || !this.editTower.hxzId || !this.editTower.serialNum || !this.editTower.tcMaxScope || !this.editTower.tcMaxHeight || !this.editTower.tcLoadCapacity || !this.editTower.tcLoadMoment || !this.editTower.installCompany) {
         temp = false
       }
       if (this.editTower.scznl == 'CAY' && !this.editTower.jdbh) {
@@ -1056,7 +1084,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/OptionsCraneApi/updateCrane?id=${this.editTower.id}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&craneName=${this.editTower.craneName}&hxzId=${this.editTower.hxzId}&serialNum=${this.editTower.serialNum}&tcMaxScope=${this.editTower.tcMaxScope}&tcMaxHeight=${this.editTower.tcMaxHeight}&tcLoadCapacity=${this.editTower.tcLoadCapacity}&tcLoadMoment=${this.editTower.tcLoadMoment}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}`)
+          .post(`http://192.168.1.22:8080/api/OptionsCraneApi/updateCrane?id=${this.editTower.id}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&craneName=${this.editTower.craneName}&hxzId=${this.editTower.hxzId}&serialNum=${this.editTower.serialNum}&tcMaxScope=${this.editTower.tcMaxScope}&tcMaxHeight=${this.editTower.tcMaxHeight}&tcLoadCapacity=${this.editTower.tcLoadCapacity}&tcLoadMoment=${this.editTower.tcLoadMoment}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}&installCompany=${this.editTower.installCompany}`)
           .then(res => {
             if (res.data.code == 0) {
               this.messageBox('修改成功', 1)

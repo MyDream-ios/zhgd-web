@@ -156,14 +156,14 @@
                 最大载重
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="capacity">
+              <input type="number" v-model="capacity" placeholder="单位为Kg">
             </li>
             <li>
               <span>
                 最大高度
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="height">
+              <input type="number" v-model="height"  placeholder="单位为m">
             </li>
             <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
               <span>
@@ -251,14 +251,14 @@
                 最大载重
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.capacity">
+              <input type="number" v-model="editTower.capacity" placeholder="单位为Kg">
             </li>
             <li>
               <span>
                 最大高度
                 <div class="required">*</div>
               </span>
-              <input type="number" v-model="editTower.height">
+              <input type="number" v-model="editTower.height" placeholder="单位为m">
             </li>
             <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
               <span>
@@ -319,14 +319,14 @@
         </div>
       </div>
       <!-- 移除时间 -->
-      <div class="dialog-box" v-show="deleteShow">
+      <div class="dialog-box" v-show="deleteShow" style="width:5rem">
         <div class="title">
           移除时间
           <a class="close" @click="deleteShow=false,deleteTime=''">
             <i class="el-icon-close"></i>
           </a>
         </div>
-        <div class="form">
+        <div class="form3">
           <el-date-picker
             v-model="deleteTime"
             type="date"
@@ -335,7 +335,7 @@
           </el-date-picker>
         </div>
         <div class="confirm">
-          <a class="button" @click="deleteCAY">保存</a>
+          <a class="button" @click="deleteCAY">移除</a>
         </div>
       </div>
       <!-- 遮罩层 -->
@@ -703,6 +703,16 @@
           }
         }
       }
+      .form3 {
+        padding: 0.4rem;
+        .el-date-editor.el-input, .el-date-editor.el-input__inner {
+          width: 100%;
+          input {
+            border: 1px solid rgb(146, 146, 146);
+            border-radius: 5px;
+          }
+        }
+      }
       .confirm {
         height: 0.8rem;
         background-color: #f8f8f8;
@@ -795,9 +805,6 @@ export default {
       pageTotal2: 2, // 总条数
       craneList: '', // 塔吊列表
       craneName: '', // 设备名称
-      deviceNo: '', //设备编号32位
-      hxzId: '', // 设备编号
-      craneName: '', // 设备名称
       deviceNo: '', // 设备编号32位
       hxzId: '', // 设备编号
       editTower: {}, // 编辑的塔吊
@@ -861,7 +868,7 @@ export default {
       this.jdbh = ''
       this.xmid = ''
       this.subId = ''
-      if (this.editTower.scznl == 'CAY' || this.manufacturerId == 'CAY') {
+      if (this.editTower.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
           .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
           .then(res => {
@@ -948,8 +955,8 @@ export default {
                 type: 'success'
               });
               this.deleteTime = ''
-              this.personnelShow3 = false
-              this.getEquipmentList()
+              this.deleteShow = false
+              this.getCraneList()
             } else {
               this.$message({
                 message: '删除失败',
