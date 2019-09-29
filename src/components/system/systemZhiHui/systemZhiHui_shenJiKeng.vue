@@ -41,9 +41,6 @@
             <ul v-if="allAlarmList.length>0">
               <li v-for="item in allAlarmList" :key="item.id">
                 <span>{{item.sourceName}}于{{getAlarmTime(item.endTime)}}产生{{item.level}}级{{item.content}}告警</span>
-                <!-- <a>确认</a> -->
-                <!-- <span>1号深基坑于2018-02-08产生1级超阀值告警</span>
-                <a>确认</a> -->
               </li>
             </ul>
           </div>
@@ -2873,10 +2870,12 @@ export default {
           })
       } else {
         this.$axios
-          .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=100&pageNum=1&date=`)
+          .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=100&pageNum=1&date=${this.nowTime.split('-')[0]}`)
           .then(res => {
-            this.allAlarmList = res.data.data
-            this.allOfAlarm = res.data.sum
+            if (res.data.code == 0) {
+              this.allAlarmList = res.data.data
+              this.allOfAlarm = res.data.sum
+            }
           })
       }
     },
@@ -2892,7 +2891,7 @@ export default {
           })
       } else {
         this.$axios
-          .post(`/api/hjDeeppit/selectUserAlarmsByFactor?factorName=${this.searchValue}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
+          .post(`/api/hjDeeppit/selectUserAlarmsByFactor?factorName=${this.searchValue}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=${this.nowTime.split('-')[0]}`)
           .then(res => {
             this.alarmList = res.data.data.rows
             this.alarmListTotal = res.data.total
@@ -2934,9 +2933,8 @@ export default {
           this.searchUserAlarms()
         } else {
           this.$axios
-            .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
+            .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=${this.nowTime.split('-')[0]}`)
             .then(res => {
-              // debugger
               this.alarmList = res.data.data
               this.alarmListTotal = res.data.sum
             })
@@ -4127,19 +4125,19 @@ export default {
     // 渲染当前选中模块的ECharts图
     ifCart() {
       if (this.selectShow == 1 && !this.historyShow) {
-        if (document.getElementById("oneChart")) {
+        if (document.getElementById("oneChart") && this.stageFourHoverList.length>0) {
           this.oneChart(this.stageFourHoverList);
         }
       }
       if (this.selectShow == 2 && !this.historyShow) {
         // this.twoChart();
-        if (document.getElementById("twoChart")) {
+        if (document.getElementById("twoChart") && this.offsetFourHoverListX.length>0 && this.offsetFourHoverListY.length>0) {
           this.twoChart(this.offsetFourHoverListX, this.offsetFourHoverListY);
         }
       }
       if (this.selectShow == 3 && !this.historyShow) {
         // this.threeChart();
-        if (document.getElementById("threeChart")) {
+        if (document.getElementById("threeChart") && this.subsideFourHoverList.length>0) {
           this.threeChart(this.subsideFourHoverList);
         }
       }
@@ -4150,7 +4148,7 @@ export default {
         // }
       }
       if (this.selectShow == 5 && !this.historyShow) {
-        if (document.getElementById('structureFrequency')) {
+        if (document.getElementById('structureFrequency') && this.productHzFourHoverList.length>0 && this.productTempFourHoverList.length>0) {
           this.structureFrequency(this.productHzFourHoverList);
           this.structureTemperature(this.productTempFourHoverList);
         }
@@ -4158,7 +4156,7 @@ export default {
         // this.structureTemperature();
       }
       if (this.selectShow == 6 && !this.historyShow) {
-        if (document.getElementById("slantX")) {
+        if (document.getElementById("slantX") && this.biasFourHoverListX.length>0 && this.biasFourHoverListY.length>0) {
           this.slantX(this.biasFourHoverListX);
           this.slantY(this.biasFourHoverListY)
         }
@@ -4166,33 +4164,37 @@ export default {
       // 历史记录
       if (this.selectShow == 1 && this.historyShow) {
         // this.historyOne();
-        if (document.getElementById("historyOne")) {
+        if (document.getElementById("historyOne") && this.stageHistoryEcharts.length>0) {
           this.historyOne(this.stageHistoryEcharts);
         }
       }
       if (this.selectShow == 2 && this.historyShow) {
         // this.historyTwo();
-        if (document.getElementById("historyTwo")) {
+        if (document.getElementById("historyTwo") && this.offsetHistoryEcharts.length>0) {
           this.historyTwo(this.offsetHistoryEcharts);
         }
       }
       if (this.selectShow == 3 && this.historyShow) {
         // this.historyThree();
-        if (document.getElementById("historyThree")) {
+        if (document.getElementById("historyThree") && this.subsideHistoryEcharts.length>0) {
           this.historyThree(this.subsideHistoryEcharts);
         }
       }
       if (this.selectShow == 4 && this.historyShow) {
         // this.historyFour();
-        if (document.getElementById("historyFour")) {
+        if (document.getElementById("historyFour") && this.stageFourHoverList.length>0) {
           this.historyFour();
         }
       }
       if (this.selectShow == 5 && this.historyShow) {
-        this.historyFive(this.productHistoryEcharts);
+        if (document.getElementById("historyFive") && this.productHistoryEcharts.length>0) {
+          this.historyFive(this.productHistoryEcharts);
+        }
       }
       if (this.selectShow == 6 && this.historyShow) {
-        this.historySix(this.biasHistoryEcharts);
+        if (document.getElementById("historySix") && this.biasHistoryEcharts.length>0) {
+          this.historySix(this.biasHistoryEcharts);
+        }
       }
     },
 

@@ -204,21 +204,21 @@
                 电缆温度限值
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="tempLimit">
+              <input type="number" v-model="tempLimit" placeholder="单位为A">
             </li>
             <li>
               <span>
                 漏电限值
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="elecLimit">
+              <input type="number" v-model="elecLimit" placeholder="单位为A">
             </li>
             <li>
               <span>
                 周围温度限值
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="aroundTemp">
+              <input type="text" v-model="aroundTemp" placeholder="单位为℃">
             </li>
           </ul>
         </div>
@@ -308,12 +308,12 @@
                 ></el-option>
               </el-select>
             </li>
-            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+            <li v-if="editObject.scznl == 'CAY' || editObject.scznl == 'RCAJ'">
               <span>
                 项目监督编号
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="editObject.jdbh" :disabled="scznl == 'CAY'">
+              <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
             </li>
             <li>
               <span>
@@ -334,14 +334,14 @@
                 电缆温度限值
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="editObject.tempLimit">
+              <input type="number" v-model="editObject.tempLimit">
             </li>
             <li>
               <span>
                 漏电限值
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="editObject.elecLimit">
+              <input type="number" v-model="editObject.elecLimit">
             </li>
             <li>
               <span>
@@ -781,6 +781,13 @@
           }
         }
       }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      input[type="number"]{
+        -moz-appearance: textfield;
+      }
     }
     .shade-box {
       top: 0;
@@ -847,7 +854,7 @@ export default {
       pageTotal: 2, // 总条数
       pageNum2: 1, // 每页条数
       pageTotal2: 2, // 总条数
-      pageSize3: 5, // 设备列表每页条数
+      pageSize3: 3, // 设备列表每页条数
       pageNum3: 1, // 设备列表当前页
       pageTotal3: 0, // 设备列表总条数
       equipmentListData: [], // 设备列表
@@ -1051,7 +1058,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/ProjectElectricityBox/editSave?editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}`)
+          .post(`http://192.168.1.22:8080/api/ProjectElectricityBox/editSave?editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1100,14 +1107,15 @@ export default {
       this.jdbh = ''
       this.xmid = ''
       this.subId = ''
-      // if (this.editTower.scznl == 'CAY' || this.scznl == 'CAY') {
-      if (this.scznl == 'CAY') {
+      this.editObject.jdbh = ''
+      if (this.editObject.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
           .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
           .then(res => {
             this.jdbh = res.data.jdbh
             this.xmid = res.data.xmid
             this.subId = res.data.subId
+            this.editObject.jdbh = res.data.jdbh
           })
       }
     },

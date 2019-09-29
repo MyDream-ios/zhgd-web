@@ -906,6 +906,7 @@ export default {
       this.jdbh = ''
       this.xmid = ''
       this.subId = ''
+      this.editTower.jdbh = ''
       if (this.editTower.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
           .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)

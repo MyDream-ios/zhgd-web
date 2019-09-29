@@ -868,6 +868,7 @@ export default {
       this.jdbh = ''
       this.xmid = ''
       this.subId = ''
+      this.editTower.jdbh = ''
       if (this.editTower.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
           .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
@@ -913,7 +914,7 @@ export default {
         this.deleteShow = !this.deleteShow
         this.deleteId = item.id
       } else {
-        this.$confirm('此操作将永久删除该塔吊, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该升降机, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

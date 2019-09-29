@@ -554,7 +554,7 @@
     padding-left: 0.2rem;
     padding-bottom: 0.3rem;
     max-height: 9rem;
-    overflow-y: auto;
+    // overflow-y: auto;
     > .title {
       height: 0.71rem;
       width: 98%;
@@ -661,10 +661,10 @@
       position: relative;
       > ul {
         width: 100%;
-        min-height: 5.6rem;
+        min-height: 6.3rem;
         li {
           width: 100%;
-          height: 2rem;
+          height: 1.95rem;
           padding-top: 0.05rem;
           padding-left: 0.2rem;
           margin-bottom: 0.2rem;
@@ -1093,7 +1093,7 @@ export default {
       pageNum2: 1, // 当前页
       pageTotal2: 2, // 总条数
       pageNum3: 1, // 设备列表当前页
-      pageSize3: 4, // 设备列表每页条数
+      pageSize3: 3, // 设备列表每页条数
       pageTotal3: 0, // 设备列表总条数
       equipmentListData: "", // 设备列表
       addComments: "", // 新增设备设备名称
