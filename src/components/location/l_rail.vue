@@ -270,15 +270,6 @@ export default {
 
         // 编辑电子围栏信息
         setRailRadius() {
-            // console.log(this.gid)
-
-            // 设置电子围栏半径
-            // this.$axios.get(`http://192.168.0.102:8989/lz/area/edit?id=${this.gid}&radius=${this.radius}`).then(
-            //     res => {
-            //         console.log(res.data)
-                    
-            //     }
-            // )
         },
 
         // 取消点击事件

@@ -709,7 +709,7 @@ export default {
     // 获取车辆列表
     getSelectpkcount() {
       this.$axios
-        .post(`http://192.168.1.22:8080/api/parkings/selectpkcount?projectId=${this.projectId}`)
+        .post(`/api/parkings/selectpkcount?projectId=${this.projectId}`)
         .then(res => {
           this.carList = res.data.data
           this.deptId = res.data.data[0].deviceId
@@ -733,7 +733,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$axios
-            .post(`http://192.168.1.22:8080//api/parkings/vehicleSnDel?id=${id}`)
+            .post(`/api/parkings/vehicleSnDel?id=${id}`)
             .then(res => {
               if (res.data.data == 0) {
                 this.messageBox('删除成功', 1)
@@ -753,7 +753,7 @@ export default {
     // 修改点击
     editCarClick() {
       this.$axios
-        .post(`http://192.168.1.22:8080/api/parkings/vehicleSnUpd?id=${this.editCar.id}&sn=${this.editCar.sn}&snName=${this.editCar.snName}&carName=${this.editCar.deviceName}`)
+        .post(`/api/parkings/vehicleSnUpd?id=${this.editCar.id}&sn=${this.editCar.sn}&snName=${this.editCar.snName}&carName=${this.editCar.deviceName}`)
         .then(res => {
           if (res.data.data == 0) {
             this.messageBox('修改成功', 1)
@@ -778,7 +778,7 @@ export default {
         this.messageBox('请填写进出类型', 0)
       } else {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/parkings/vehicleSnAdd?projectId=${this.projectId}&deptID=${this.deptId}&sn=${this.sn}&snName=${this.snName}&carName=${this.carName}`)
+          .post(`/api/parkings/vehicleSnAdd?projectId=${this.projectId}&deptID=${this.deptId}&sn=${this.sn}&snName=${this.snName}&carName=${this.carName}`)
           .then(res => {
             if (res.data.data == 0) {
               this.messageBox('添加成功', 1)
@@ -806,7 +806,7 @@ export default {
         this.messageBox('请输入车位数', 0)
       } else {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/parkings/carUpd?deptId=${this.deptId}&pkcount=${this.pkcounts}`)
+          .post(`/api/parkings/carUpd?deptId=${this.deptId}&pkcount=${this.pkcounts}`)
           .then(res => {
             if (res.data.data == 0) {
               this.messageBox('设置成功', 1)
@@ -822,7 +822,7 @@ export default {
     // 获取司机列表
     getDriverList() {
       this.$axios
-        .post(`http://192.168.1.22:8080/api/driver/selectAll?projectId=${this.projectId}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
+        .post(`/api/driver/selectAll?projectId=${this.projectId}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
         .then(res => {
           this.driverList = res.data.data[0].rows
           this.pageTotal = res.data.data[0].total
@@ -837,7 +837,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$axios
-            .post(`http://192.168.1.22:8080/api/driver/delDriver?id=${id}`)
+            .post(`/api/driver/delDriver?id=${id}`)
             .then(res => {
               if (res.data.data == 0) {
                 this.messageBox('删除成功', 1)
@@ -868,7 +868,7 @@ export default {
         this.messageBox('请填写车牌号码', 0)
       } else {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/driver/insertDriver?projectId=${this.projectId}&driver=${this.createDriver}&vehicle=${this.createVehicle}`)
+          .post(`/api/driver/insertDriver?projectId=${this.projectId}&driver=${this.createDriver}&vehicle=${this.createVehicle}`)
           .then(res => {
             if (res.data.data == 0) {
               this.messageBox('添加成功', 1)
@@ -891,7 +891,7 @@ export default {
         this.messageBox('请填写车牌号码', 0)
       } else {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/driver/updateDriver?vehicle=${this.editDriverObj.vehicle}&driver=${this.editDriverObj.driver}&id=${this.editDriverObj.id}`)
+          .post(`/api/driver/updateDriver?vehicle=${this.editDriverObj.vehicle}&driver=${this.editDriverObj.driver}&id=${this.editDriverObj.id}`)
           .then(res => {
             if (res.data.data == 0) {
               this.messageBox('编辑成功', 1)

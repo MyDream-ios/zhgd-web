@@ -182,7 +182,6 @@ export default {
     // this.getWeather()
     this.setTime()
     this.setActive()
-    // this.getliuyong()
     this.getProjectId()
     this.selectIndex()
   },
@@ -229,19 +228,6 @@ export default {
       return null;
     },
 
-    // 测试
-    getliuyong() {
-      // this.$axios.post('http://192.168.0.110:8989/logins?password=lj123&validateCode=0&username=lj').then(res=>{
-      //   console.log(res.data)
-      // })
-      this.$axios.post('http://192.168.0.110:8989/logins',{
-        password:'lj123',validateCode:0,username:'lj'
-        }).then(
-          res=>{
-        console.log(res.data)
-      })
-    },
-    
     // 人员管理下拉事件
     personnelClick() {
       // console.log(`123`)

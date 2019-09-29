@@ -210,13 +210,13 @@
               </span>
               <input type="text" v-model="superviseNum" :disabled="changeUnit=='CAY'"/>
             </li>
-            <li v-if="changeUnit=='CAY' || changeUnit=='RCAJ'">
+            <!-- <li v-if="changeUnit=='CAY' || changeUnit=='RCAJ'">
               <span>
                 项目编号
                 <div class="required">*</div>
               </span>
               <input type="text" v-model="itemsId" :disabled="changeUnit=='CAY'"/>
-            </li>
+            </li> -->
             <li>
               <span>
                 设备名称
@@ -343,13 +343,13 @@
               </span>
               <input type="text" v-model="editSuperviseNum" :disabled="editChangeUnit=='CAY'"/>
             </li>
-            <li v-if="editChangeUnit=='CAY' || editChangeUnit=='RCAJ'">
+            <!-- <li v-if="editChangeUnit=='CAY' || editChangeUnit=='RCAJ'">
               <span>
                 项目编号
                 <div class="required">*</div>
               </span>
               <input type="text" v-model="editItemsId" :disabled="editChangeUnit=='CAY'"/>
-            </li>
+            </li> -->
             <li>
               <span>
                 设备名称
@@ -554,7 +554,7 @@
     padding-left: 0.2rem;
     padding-bottom: 0.3rem;
     max-height: 9rem;
-    overflow-y: auto;
+    // overflow-y: auto;
     > .title {
       height: 0.71rem;
       width: 98%;
@@ -661,10 +661,10 @@
       position: relative;
       > ul {
         width: 100%;
-        min-height: 5.6rem;
+        min-height: 6.3rem;
         li {
           width: 100%;
-          height: 2rem;
+          height: 1.95rem;
           padding-top: 0.05rem;
           padding-left: 0.2rem;
           margin-bottom: 0.2rem;
@@ -1093,7 +1093,7 @@ export default {
       pageNum2: 1, // 当前页
       pageTotal2: 2, // 总条数
       pageNum3: 1, // 设备列表当前页
-      pageSize3: 4, // 设备列表每页条数
+      pageSize3: 3, // 设备列表每页条数
       pageTotal3: 0, // 设备列表总条数
       equipmentListData: "", // 设备列表
       addComments: "", // 新增设备设备名称
@@ -1147,7 +1147,7 @@ export default {
       ],
       changeUnit: '', // 上传位置选择
       itemsId: '', // 项目编号
-      sub_id: '', // 工程ID
+      subId: '', // 工程ID
       manufacturers: '', // 设备厂家
       manufacturersList: [], // 设备厂家列表
       editChangeUnit: '', // 修改对接平台
@@ -1166,7 +1166,6 @@ export default {
     this.getTSP()
     this.initChange()
     this.getManufacturer()
-    this.getCay()
   },
   methods: {
     // 获取项目id
@@ -1212,7 +1211,7 @@ export default {
       this.superviseNum = ''
       this.changeUnit = ''
       this.itemsId = ''
-      this.sub_id = ''
+      this.subId = ''
       this.manufacturers = ''
     },
 
@@ -1249,13 +1248,18 @@ export default {
 
     // 获取项目监督编号
     getCay() {
-      if (this.editChangeUnit == 'CAY') {
+      this.superviseNum = ''
+      this.itemsId = ''
+      this.subId = ''
+      this.editSuperviseNum = ''
+      this.editItemsId = ''
+      if (this.editChangeUnit == 'CAY' || this.changeUnit == 'CAY') {
         this.$axios
           .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
           .then(res => {
             this.superviseNum = res.data.jdbh
             this.itemsId = res.data.xmid
-            this.sub_id = res.data.subId
+            this.subId = res.data.subId
             this.editSuperviseNum = res.data.jdbh
             this.editItemsId = res.data.xmid
           })
@@ -1265,8 +1269,17 @@ export default {
     // 添加设备
     addSave() {
       if (this.changeUnit && this.manufacturers && this.addComments && this.addSn) {
-        if (this.changeUnit == 'CAY' || this.changeUnit == 'RCAJ') {
+        if (this.changeUnit == 'CAY') {
           if (this.superviseNum == '' || this.itemsId == '') {
+            this.$message({
+              message: "未在诚安院查询到该项目信息，请先进行备案",
+              type: "warning"
+            });
+          } else {
+            this.childAddSave()
+          }
+        } else if (this.changeUnit == 'RCAJ') {
+          if (this.superviseNum == '') {
             this.$message({
               message: "带 * 号的输入框不得为空",
               type: "warning"
@@ -1290,12 +1303,12 @@ export default {
       if (this.deviceInstallationDate == null) {
         this.deviceInstallationDate = ''
       }
-      if (this.itemsId == undefined) {
-        this.itemsId = ''
-      }
+      // if (this.itemsId == undefined) {
+      //   this.itemsId = ''
+      // }
       this.$axios
         .post(
-          `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&sub_id=${this.sub_id}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
+          `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&subId=${this.subId}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
         )
         .then(res => {
           // console.log(res.data)
@@ -1305,7 +1318,7 @@ export default {
               type: "success"
             });
             this.dialogShow = false;
-            // this.pageNum3 = 1
+            this.pageNum3 = 1
             this.getEquipmentList();
           } else {
             this.$message({
@@ -1358,25 +1371,32 @@ export default {
 
     // 删除城安院数据
     deleteCAY() {
-      console.log(this.deleteTime)
-      this.$axios
-        .post(`http://192.168.1.22:8080/api/ProjectDustEmission/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
-        .then(res => {
-          if (res.data.code == 0) {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.deleteTime = ''
-            this.personnelShow3 = false
-            this.getEquipmentList()
-          } else {
-            this.$message({
-              message: '删除失败',
-              type: 'warning'
-            });
-          }
+      // console.log(this.deleteTime)
+      if (this.deleteTime) {
+        this.$axios
+          .post(`http://192.168.1.22:8080/api/ProjectDustEmission/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.deleteTime = ''
+              this.personnelShow3 = false
+              this.getEquipmentList()
+            } else {
+              this.$message({
+                message: '删除失败',
+                type: 'warning'
+              });
+            }
+          })
+      } else {
+        this.$message({
+          message: '请选择设备移除时间',
+          type: 'warning'
         })
+      }
     },
 
     // 设备厂商名称
@@ -1444,45 +1464,51 @@ export default {
 
     // 编辑设备
     editClick() {
-      if (this.editDeviceInstallationDate == null) {
-        this.editDeviceInstallationDate = ''
+      var temp = false
+      if (this.editComments && this.editSn && this.editChangeUnit && this.editManufacturers) {
+        temp = true
+        if (this.editDeviceInstallationDate == null) {
+          this.editDeviceInstallationDate = ''
+        }
+        if (this.editMeOption == null) {
+          this.editMeOption = ''
+        }
+        if (this.editInstallAddress == null) {
+          this.editInstallAddress = ''
+        }
+        if (this.editInstallCompany == null) {
+          this.editInstallCompany = ''
+        }
+        if (this.editChangeUnit == 'CAY' && this.editSuperviseNum == '') {
+          this.$message({
+            message: "未在诚安院查询到该项目信息，请先进行备案",
+            type: "warning"
+          })
+          return
+        }
+        if (this.editChangeUnit == 'RCAJ' && this.editSuperviseNum == '') {
+          temp = false
+        }
       }
-      if (this.editMeOption == null) {
-        this.editMeOption = ''
-      }
-      if (this.editInstallAddress == null) {
-        this.editInstallAddress = ''
-      }
-      if (this.editInstallCompany == null) {
-        this.editInstallCompany = ''
-      }
-      if (this.editSuperviseNum == null) {
-        this.editSuperviseNum = ''
-      }
-      if (this.editItemsId == null) {
-        this.editItemsId = ''
-      }
-      if (this.sub_id == null) {
-        this.sub_id = ''
-      }
-      if (this.editComments && this.editSn) {
+
+      if (temp) {
         this.$axios
           .post(
-            `/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${
+            `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${
               this.projectId
             }&comments=${this.editComments}&sn=${this.editSn}&videoAddress=${
               this.editVideoAddress ? this.editVideoAddress : ""
-            }&id=${this.selectId}&meOption=${this.editMeOption}&installAddress=${this.editInstallAddress}&installCompany=${this.editInstallCompany}&deviceInstallationDate=${this.editDeviceInstallationDate}&jdbh=${this.editSuperviseNum}&xmid=${this.editItemsId}&subId=${this.sub_id}`
+            }&id=${this.selectId}&meOption=${this.editMeOption}&installAddress=${this.editInstallAddress}&installCompany=${this.editInstallCompany}&deviceInstallationDate=${this.editDeviceInstallationDate}&jdbh=${this.editSuperviseNum}&xmid=${this.editItemsId}&subId=${this.subId}&manufacturerId=${this.editManufacturers}&scznl=${this.editChangeUnit}`
           )
           .then(res => {
             // console.log(res.data)
             if (res.data.code == 0) {
               this.$message({
-                message: "添加成功",
+                message: "修改成功",
                 type: "success"
               });
               this.compileShow = false;
-              // this.pageNum3 = 1
+              this.pageNum3 = 1
               this.getEquipmentList();
             } else {
               this.$message({
