@@ -1610,7 +1610,7 @@ export default {
 
         // 获取工种
         getWorkList() {
-            this.$axios.post(`/api/dictionariesApi/selectDictionaries?category=WORK_TYPE`).then(
+            this.$axios.post(`/api/dictionariesApi/selectDictionariesWorkType?pid=${this.pid}`).then(
                 res => {
                     // console.log(res.data)
                     this.profession = res.data.data
@@ -1728,7 +1728,7 @@ export default {
 
         // 获取工种名称
         getJobName() {
-            this.$axios.post(`/api/dictionariesApi/selectDictionaries?category=WORK_TYPE`).then(
+            this.$axios.post(`/api/dictionariesApi/selectDictionariesWorkType?pid=${this.pid}`).then(
                 res => {
                     // console.log(res.data)
                     this.jobNameOption = res.data.data

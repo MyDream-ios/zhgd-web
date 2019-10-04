@@ -41,9 +41,6 @@
             <ul v-if="allAlarmList.length>0">
               <li v-for="item in allAlarmList" :key="item.id">
                 <span>{{item.sourceName}}于{{getAlarmTime(item.endTime)}}产生{{item.level}}级{{item.content}}告警</span>
-                <!-- <a>确认</a> -->
-                <!-- <span>1号深基坑于2018-02-08产生1级超阀值告警</span>
-                <a>确认</a> -->
               </li>
             </ul>
           </div>
@@ -2275,9 +2272,8 @@ export default {
 
     // 获取基坑列表
     getSelectStructure() {
-      var num = new Date().getTime();
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectStructure?projectId=4&k=${num}`)
+        .post(`/api/hjDeeppit/selectStructure?projectId=${this.projectId}`)
         .then(res => {
           this.deviceName = res.data.data[0].deviceName
           this.structureId = res.data.data[0].deviceId
@@ -2306,7 +2302,7 @@ export default {
     // 查询因素列表
     getSelectDisplay() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectDisplay?structureId=${this.structureId}`)
+        .post(`/api/hjDeeppit/selectDisplay?structureId=${this.structureId}`)
         .then(res => {
           this.factorList = res.data.data
           if (this.factorList[0].name == '深层水平位移') {
@@ -2341,7 +2337,7 @@ export default {
     getFactorList() {
       if (this.stage > 0) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.stage}`)
+          .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.stage}`)
           .then(res => {
             this.stageList = res.data.data
             this.stageListChild = res.data.data[0].id
@@ -2353,7 +2349,7 @@ export default {
       }
       if (this.offset > 0) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.offset}`)
+          .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.offset}`)
           .then(res => {
             this.offsetList = res.data.data
             this.offsetListChild = res.data.data[0].id
@@ -2364,7 +2360,7 @@ export default {
       }
       if (this.subside > 0) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.subside}`)
+          .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.subside}`)
           .then(res => {
             this.subsideList = res.data.data
             this.subsideListChild = res.data.data[0].id
@@ -2376,7 +2372,7 @@ export default {
       }
       if (this.product > 0) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.product}`)
+          .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.product}`)
           .then(res => {
             this.productList = res.data.data
             this.productListChild = res.data.data[0].id
@@ -2387,7 +2383,7 @@ export default {
       }
       if (this.bias > 0) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.bias}`)
+          .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.bias}`)
           .then(res => {
             this.biasList = res.data.data
             this.biasListChild = res.data.data[0].id
@@ -2402,7 +2398,7 @@ export default {
     // 获取测点水位数据
     getStage(num, size) {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.stageListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+        .post(`/api/hjDeeppit/getFactorData?factorId=${this.stageListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
         .then(res => {
           if (!size) {
             // this.stageHistoryTable = res.data.data
@@ -2415,7 +2411,7 @@ export default {
     // 获取测点位移数据
     getOffset(num, size) {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.offsetListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+        .post(`/api/hjDeeppit/getFactorData?factorId=${this.offsetListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
         .then(res => {
           if (!size) {
             // this.offsetHistoryTable = res.data.data
@@ -2428,7 +2424,7 @@ export default {
     // 获取测点沉降数据
     getSubside(num, size) {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.subsideListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+        .post(`/api/hjDeeppit/getFactorData?factorId=${this.subsideListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
         .then(res => {
           if (!size) {
             // this.subsideHistoryTable = res.data.data
@@ -2441,7 +2437,7 @@ export default {
     // 获取测点结构数据
     getProduct(num, size) {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.productListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+        .post(`/api/hjDeeppit/getFactorData?factorId=${this.productListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
         .then(res => {
           if (!size) {
             // this.productHistoryTable = res.data.data
@@ -2454,7 +2450,7 @@ export default {
     // 获取测点倾斜数据
     getBias(num, size) {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.biasListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
+        .post(`/api/hjDeeppit/getFactorData?factorId=${this.biasListChild}&date=${this.nowTime}&pageNum=${num || this.pageNum}&pageSize=${size || this.pageSize}`)
         .then(res => {
           if (!size) {
             // this.biasHistoryTable = res.data.data
@@ -2512,7 +2508,7 @@ export default {
     // 获取水位四小时记录
     getStageFourHoverList() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=water_level`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=water_level`)
         .then(res => {
           this.stageFourHoverList = res.data
         })
@@ -2521,22 +2517,22 @@ export default {
     // 获取位移四小时记录
     getOffsetFourHoverList() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_x`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_x`)
         .then(res => {
           this.offsetFourHoverListX = res.data
         })
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_y`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_y`)
         .then(res => {
           this.offsetFourHoverListY = res.data
         })
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_accumulate_x`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_accumulate_x`)
         .then(res => {
           this.offsetHistoryFourHoverListX = res.data
         })
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_accumulate_y`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=level_accumulate_y`)
         .then(res => {
           this.offsetHistoryFourHoverListY = res.data
         })
@@ -2545,7 +2541,7 @@ export default {
     // 获取沉降四小时记录
     getSubsideFourHoverList() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.subsideListChild}&date=${this.nowTime}&param=subside`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.subsideListChild}&date=${this.nowTime}&param=subside`)
         .then(res => {
           this.subsideFourHoverList = res.data
         })
@@ -2554,12 +2550,12 @@ export default {
     // 获取结构四小时记录
     getProductFourHoverList() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=strain_frequency`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=strain_frequency`)
         .then(res => {
           this.productHzFourHoverList = res.data
         })
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=strain_temperature`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.productListChild}&date=${this.nowTime}&param=strain_temperature`)
         .then(res => {
           this.productTempFourHoverList = res.data
         })
@@ -2568,12 +2564,12 @@ export default {
     // 获取倾斜四小时记录
     getBiasFourHoverList() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_x`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_x`)
         .then(res => {
           this.biasFourHoverListX = res.data
         })
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_y`)
+        .post(`/api/hjDeeppit/selectSpecial?factorId=${this.biasListChild}&date=${this.nowTime}&param=tilt_y`)
         .then(res => {
           this.biasFourHoverListY = res.data
         })
@@ -2624,7 +2620,7 @@ export default {
     // 获取地下水位最大值
     getStageMax() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getParmeterAvg?displayId=${this.stage}&factorId=${this.stageListChild}`)
+        .post(`/api/hjDeeppit/getParmeterAvg?displayId=${this.stage}&factorId=${this.stageListChild}`)
         .then(res => {
           this.stageMaxList = res.data.data
         })
@@ -2633,7 +2629,7 @@ export default {
     // 获取周边沉降最大值
     getSubsideMax() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/getParmeterAvg?displayId=${this.subside}&factorId=${this.subsideListChild}`)
+        .post(`/api/hjDeeppit/getParmeterAvg?displayId=${this.subside}&factorId=${this.subsideListChild}`)
         .then(res => {
           this.subsideMaxList = res.data.data
         })
@@ -2642,7 +2638,7 @@ export default {
     // 获取倾斜最大值 倾斜不知道怎么搞，等隆鑫回来 调用已经写了
     getBiasMax() {
       // this.$axios
-      //   .post(`http://192.168.1.117:4524/provider/hjDeeppit/getParmeterAvg?displayId=${this.bias}&factorId=${this.biasListChild}`)
+      //   .post(`/api/hjDeeppit/getParmeterAvg?displayId=${this.bias}&factorId=${this.biasListChild}`)
       //   .then(res => {
       //     this.biasMaxList = res.data.data
       //   })
@@ -2669,12 +2665,12 @@ export default {
         var startTime = this.nowTime + ' 00:00:00'
         var endTime = this.nowTime + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
           .then(res => {
             this.stageHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorDataT?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorDataT?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.stageHistoryTable = res.data.data
             this.historyStageTolal = res.data.sum
@@ -2683,12 +2679,12 @@ export default {
         var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
         var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.stage}`)
           .then(res => {
             this.stageHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorData?factorId=${this.stageListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.stageHistoryTable = res.data.data
             this.historyStageTolal = res.data.sum
@@ -2702,12 +2698,12 @@ export default {
         var startTime = this.nowTime + ' 00:00:00'
         var endTime = this.nowTime + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
           .then(res => {
             this.offsetHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorDataT?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorDataT?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.offsetHistoryTable = res.data.data
             this.historyOffsetTolal = res.data.sum
@@ -2716,12 +2712,12 @@ export default {
         var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
         var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.offset}`)
           .then(res => {
             this.offsetHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorData?factorId=${this.offsetListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.offsetHistoryTable = res.data.data
             this.historyOffsetTolal = res.data.sum
@@ -2735,12 +2731,12 @@ export default {
         var startTime = this.nowTime + ' 00:00:00'
         var endTime = this.nowTime + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.subside}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.subside}`)
           .then(res => {
             this.subsideHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorDataT?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorDataT?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.subsideHistoryTable = res.data.data
             this.historySubsideTolal = res.data.sum
@@ -2749,12 +2745,12 @@ export default {
         var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
         var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.subside}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.subside}`)
           .then(res => {
             this.subsideHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorData?factorId=${this.subsideListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.subsideHistoryTable = res.data.data
             this.historySubsideTolal = res.data.sum
@@ -2768,12 +2764,12 @@ export default {
         var startTime = this.nowTime + ' 00:00:00'
         var endTime = this.nowTime + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
           .then(res => {
             this.productHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorDataT?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorDataT?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.productHistoryTable = res.data.data
             this.historyProductTolal = res.data.sum
@@ -2782,12 +2778,12 @@ export default {
         var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
         var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.product}`)
           .then(res => {
             this.productHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorData?factorId=${this.productListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.productHistoryTable = res.data.data
             this.historyProductTolal = res.data.sum
@@ -2801,12 +2797,12 @@ export default {
         var startTime = this.nowTime + ' 00:00:00'
         var endTime = this.nowTime + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
           .then(res => {
             this.biasHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorDataT?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorDataT?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.biasHistoryTable = res.data.data
             this.historyBiasTolal = res.data.sum
@@ -2815,12 +2811,12 @@ export default {
         var startTime = this.searchTime[0].toLocaleDateString().split('/').join('-') + ' 00:00:00'
         var endTime = this.searchTime[1].toLocaleDateString().split('/').join('-') + ' 23:59:59'
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
+          .post(`/api/hjDeeppit/selectSpecialS?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&displayId=${this.bias}`)
           .then(res => {
             this.biasHistoryEcharts = res.data
           })
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/getFactorData?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
+          .post(`/api/hjDeeppit/getFactorData?factorId=${this.biasListChild}&startTime=${startTime}&endTime=${endTime}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             this.biasHistoryTable = res.data.data
             this.historyBiasTolal = res.data.sum
@@ -2867,17 +2863,19 @@ export default {
     selectUserAlarms(today) {
       if (today) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
+          .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
           .then(res => {
             this.alarmList = res.data.data
             this.alarmListTotal = res.data.sum
           })
       } else {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=100&pageNum=1&date=`)
+          .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=100&pageNum=1&date=${this.nowTime.split('-')[0]}`)
           .then(res => {
-            this.allAlarmList = res.data.data
-            this.allOfAlarm = res.data.sum
+            if (res.data.code == 0) {
+              this.allAlarmList = res.data.data
+              this.allOfAlarm = res.data.sum
+            }
           })
       }
     },
@@ -2886,14 +2884,14 @@ export default {
     searchUserAlarms(today) {
       if (today) {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectUserAlarmsByFactor?factorName=${this.searchValue}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
+          .post(`/api/hjDeeppit/selectUserAlarmsByFactor?factorName=${this.searchValue}&date=${this.nowTime}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}`)
           .then(res => {
             this.alarmList = res.data.data.rows
             this.alarmListTotal = res.data.total
           })
       } else {
         this.$axios
-          .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectUserAlarmsByFactor?factorName=${this.searchValue}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
+          .post(`/api/hjDeeppit/selectUserAlarmsByFactor?factorName=${this.searchValue}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=${this.nowTime.split('-')[0]}`)
           .then(res => {
             this.alarmList = res.data.data.rows
             this.alarmListTotal = res.data.total
@@ -2935,9 +2933,8 @@ export default {
           this.searchUserAlarms()
         } else {
           this.$axios
-            .post(`http://192.168.1.117:4524/provider/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=`)
+            .post(`/api/hjDeeppit/selectUserAlarms?structureId=${this.structureId}&pageSize=${this.alarmSize}&pageNum=${this.alarmNum}&date=${this.nowTime.split('-')[0]}`)
             .then(res => {
-              // debugger
               this.alarmList = res.data.data
               this.alarmListTotal = res.data.sum
             })
@@ -2954,7 +2951,7 @@ export default {
     // 报警图表
     getAlarmEchats() {
       this.$axios
-        .post(`http://192.168.1.117:4524/provider/hjDeeppit/statisticsAlertor?structureId=${this.structureId}`)
+        .post(`/api/hjDeeppit/statisticsAlertor?structureId=${this.structureId}`)
         .then(res => {
           // this.alarmEchats = res.data.data
           for (let i = 0; i < res.data.data.length; i++) {
@@ -4128,19 +4125,19 @@ export default {
     // 渲染当前选中模块的ECharts图
     ifCart() {
       if (this.selectShow == 1 && !this.historyShow) {
-        if (document.getElementById("oneChart")) {
+        if (document.getElementById("oneChart") && this.stageFourHoverList.length>0) {
           this.oneChart(this.stageFourHoverList);
         }
       }
       if (this.selectShow == 2 && !this.historyShow) {
         // this.twoChart();
-        if (document.getElementById("twoChart")) {
+        if (document.getElementById("twoChart") && this.offsetFourHoverListX.length>0 && this.offsetFourHoverListY.length>0) {
           this.twoChart(this.offsetFourHoverListX, this.offsetFourHoverListY);
         }
       }
       if (this.selectShow == 3 && !this.historyShow) {
         // this.threeChart();
-        if (document.getElementById("threeChart")) {
+        if (document.getElementById("threeChart") && this.subsideFourHoverList.length>0) {
           this.threeChart(this.subsideFourHoverList);
         }
       }
@@ -4151,7 +4148,7 @@ export default {
         // }
       }
       if (this.selectShow == 5 && !this.historyShow) {
-        if (document.getElementById('structureFrequency')) {
+        if (document.getElementById('structureFrequency') && this.productHzFourHoverList.length>0 && this.productTempFourHoverList.length>0) {
           this.structureFrequency(this.productHzFourHoverList);
           this.structureTemperature(this.productTempFourHoverList);
         }
@@ -4159,7 +4156,7 @@ export default {
         // this.structureTemperature();
       }
       if (this.selectShow == 6 && !this.historyShow) {
-        if (document.getElementById("slantX")) {
+        if (document.getElementById("slantX") && this.biasFourHoverListX.length>0 && this.biasFourHoverListY.length>0) {
           this.slantX(this.biasFourHoverListX);
           this.slantY(this.biasFourHoverListY)
         }
@@ -4167,33 +4164,37 @@ export default {
       // 历史记录
       if (this.selectShow == 1 && this.historyShow) {
         // this.historyOne();
-        if (document.getElementById("historyOne")) {
+        if (document.getElementById("historyOne") && this.stageHistoryEcharts.length>0) {
           this.historyOne(this.stageHistoryEcharts);
         }
       }
       if (this.selectShow == 2 && this.historyShow) {
         // this.historyTwo();
-        if (document.getElementById("historyTwo")) {
+        if (document.getElementById("historyTwo") && this.offsetHistoryEcharts.length>0) {
           this.historyTwo(this.offsetHistoryEcharts);
         }
       }
       if (this.selectShow == 3 && this.historyShow) {
         // this.historyThree();
-        if (document.getElementById("historyThree")) {
+        if (document.getElementById("historyThree") && this.subsideHistoryEcharts.length>0) {
           this.historyThree(this.subsideHistoryEcharts);
         }
       }
       if (this.selectShow == 4 && this.historyShow) {
         // this.historyFour();
-        if (document.getElementById("historyFour")) {
+        if (document.getElementById("historyFour") && this.stageFourHoverList.length>0) {
           this.historyFour();
         }
       }
       if (this.selectShow == 5 && this.historyShow) {
-        this.historyFive(this.productHistoryEcharts);
+        if (document.getElementById("historyFive") && this.productHistoryEcharts.length>0) {
+          this.historyFive(this.productHistoryEcharts);
+        }
       }
       if (this.selectShow == 6 && this.historyShow) {
-        this.historySix(this.biasHistoryEcharts);
+        if (document.getElementById("historySix") && this.biasHistoryEcharts.length>0) {
+          this.historySix(this.biasHistoryEcharts);
+        }
       }
     },
 

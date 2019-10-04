@@ -29,11 +29,19 @@
                 <span>设备SN：</span>
                 {{item.electricityBoxId}}
               </div>
+              <div class="subcontract">
+                <span>设备厂商：</span>
+                {{ getManufacturerName(item.manufacturerId) }}
+              </div>
+              <div class="subcontract">
+                <span>上传平台：</span>
+                {{ geScznlName(item.scznl) }}
+              </div>
             </div>
             <div class="right-box">
               <!-- <a>人员设置</a> -->
               <a @click="getEdit(item.id)">编辑</a>
-              <a @click="removeClick(item.id)">删除</a>
+              <a @click="deleteTower(item)">删除</a>
             </div>
           </li>
         </ul>
@@ -100,17 +108,117 @@
           <ul>
             <li>
               <span>
+                对接平台
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="scznl"> -->
+              <el-select v-model="scznl" @change="getCay">
+                <el-option
+                  v-for="item in scznlList"
+                  :key="item.tag"
+                  :label="item.name"
+                  :value="item.tag"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
+                设备厂商
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="manufacturerId"> -->
+              <el-select v-model="manufacturerId">
+                <el-option
+                  v-for="item in manufacturerIdList"
+                  :key="item.id"
+                  :label="item.manufacturerName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
                 设备名称
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="addComments" />
+              <input type="text" v-model="comments">
             </li>
             <li>
               <span>
                 设备SN
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="addElectricityBoxId" />
+              <input type="text" v-model="electricityBoxId">
+            </li>
+            <li>
+              <span>
+                设备类型
+                <div class="required">*</div>
+              </span>
+              <el-select v-model="devType">
+                <el-option
+                  v-for="item in devTypeList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
+                安装位置
+                <div class="required">*</div>
+              </span>
+              <el-select v-model="installAddrtype">
+                <el-option
+                  v-for="item in installAddrtypeList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
+            <li>
+              <span>
+                安装单位
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="companyName">
+            </li>
+            <li>
+              <span>
+                安装地址
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="installAddress">
+            </li>
+            <li>
+              <span>
+                电缆温度限值
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="tempLimit" placeholder="单位为A">
+            </li>
+            <li>
+              <span>
+                漏电限值
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="elecLimit" placeholder="单位为A">
+            </li>
+            <li>
+              <span>
+                周围温度限值
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="aroundTemp" placeholder="单位为℃">
             </li>
           </ul>
         </div>
@@ -130,17 +238,117 @@
           <ul>
             <li>
               <span>
+                对接平台
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="scznl"> -->
+              <el-select v-model="editObject.scznl" @change="getCay">
+                <el-option
+                  v-for="item in scznlList"
+                  :key="item.tag"
+                  :label="item.name"
+                  :value="item.tag"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
+                设备厂商
+                <div class="required">*</div>
+              </span>
+              <!-- <input type="number" v-model="manufacturerId"> -->
+              <el-select v-model="editObject.manufacturerId">
+                <el-option
+                  v-for="item in manufacturerIdList"
+                  :key="item.id"
+                  :label="item.manufacturerName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
                 设备名称
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="editComments" />
+              <input type="text" v-model="editObject.comments">
             </li>
             <li>
               <span>
                 设备SN
                 <div class="required">*</div>
               </span>
-              <input type="text" v-model="editElectricityBoxId" />
+              <input type="text" v-model="editObject.electricityBoxId">
+            </li>
+            <li>
+              <span>
+                设备类型
+                <div class="required">*</div>
+              </span>
+              <el-select v-model="editObject.devType">
+                <el-option
+                  v-for="item in devTypeList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </li>
+            <li>
+              <span>
+                安装位置
+                <div class="required">*</div>
+              </span>
+              <el-select v-model="editObject.installAddrtype">
+                <el-option
+                  v-for="item in installAddrtypeList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </li>
+            <li v-if="editObject.scznl == 'CAY' || editObject.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
+            </li>
+            <li>
+              <span>
+                安装单位
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editObject.companyName">
+            </li>
+            <li>
+              <span>
+                安装地址
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editObject.installAddress">
+            </li>
+            <li>
+              <span>
+                电缆温度限值
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="editObject.tempLimit">
+            </li>
+            <li>
+              <span>
+                漏电限值
+                <div class="required">*</div>
+              </span>
+              <input type="number" v-model="editObject.elecLimit">
+            </li>
+            <li>
+              <span>
+                周围温度限值
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editObject.aroundTemp">
             </li>
           </ul>
         </div>
@@ -186,8 +394,28 @@
           <a class="button">保存</a>
         </div>
       </div>
+      <!-- 移除时间 -->
+      <div class="dialog-box" v-show="deleteShow" style="width:5rem">
+        <div class="title">
+          移除时间
+          <a class="close" @click="deleteShow=false,deleteTime=''">
+            <i class="el-icon-close"></i>
+          </a>
+        </div>
+        <div class="form3">
+          <el-date-picker
+            v-model="deleteTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期">
+          </el-date-picker>
+        </div>
+        <div class="confirm">
+          <a class="button" @click="deleteCAY">移除</a>
+        </div>
+      </div>
       <!-- 遮罩层 -->
-      <div class="shade-box" v-show="dialogShow || compileShow || personnelShow"></div>
+      <div class="shade-box" v-show="dialogShow || compileShow || personnelShow || deleteShow"></div>
     </div>
   </div>
 </template>
@@ -287,7 +515,7 @@
         min-height: 5.6rem;
         li {
           width: 100%;
-          height: 0.95rem;
+          height: 1.6rem;
           padding-top: 0.05rem;
           padding-left: 0.2rem;
           margin-bottom: 0.2rem;
@@ -316,7 +544,7 @@
               color: #0090ff;
               font-size: 0.18rem;
               margin-right: 0.3rem;
-              line-height: 0.88rem;
+              line-height: 1.6rem;
             }
           }
         }
@@ -371,7 +599,7 @@
     }
     .dialog-box {
       left: 50%;
-      top: 2.14rem;
+      top: -0.5rem;
       z-index: 200;
       width: 6.84rem;
       overflow: hidden;
@@ -520,6 +748,16 @@
           }
         }
       }
+      .form3 {
+        padding: 0.4rem;
+        .el-date-editor.el-input, .el-date-editor.el-input__inner {
+          width: 100%;
+          input {
+            border: 1px solid rgb(146, 146, 146);
+            border-radius: 5px;
+          }
+        }
+      }
       .confirm {
         height: 0.8rem;
         background-color: #f8f8f8;
@@ -542,6 +780,13 @@
             background-color: #d9b759;
           }
         }
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      input[type="number"]{
+        -moz-appearance: textfield;
       }
     }
     .shade-box {
@@ -609,20 +854,71 @@ export default {
       pageTotal: 2, // 总条数
       pageNum2: 1, // 每页条数
       pageTotal2: 2, // 总条数
-      pageSize3: 5, // 设备列表每页条数
+      pageSize3: 3, // 设备列表每页条数
       pageNum3: 1, // 设备列表当前页
       pageTotal3: 0, // 设备列表总条数
       equipmentListData: [], // 设备列表
-      addComments: "", // 添加设备名称
-      addElectricityBoxId: "", // 添加设备编号
-      editComments: "", // 编辑设备名称
-      editElectricityBoxId: "", // 编辑设备编号
-      selectId: "" // 当前编辑设备的id
+      comments: "", // 添加设备名称
+      electricityBoxId: "", // 添加设备编号
+      devType: '', // 电箱设备类型
+      devTypeList: [ // 电箱设备类型
+        {
+          label: '复合型漏电流探测器(漏电流+温感)',
+          value: '00'
+        },{
+          label: '三相电流表',
+          value: '02'
+        },{
+          label: '空气开关',
+          value: '03'
+        },{
+          label: '烟感探测器',
+          value: '04'
+        },{
+          label: '防火门探测器',
+          value: '05'
+        }
+      ],
+      companyName: '', // 设备安装单位
+      installAddress: '', // 设备安装地址
+      installAddrtype: '', // 设备安装位置
+      installAddrtypeList: [ // 设备安装位置列表
+        {
+          label: '生活区',
+          value: '生活区'
+        },{
+          label: '施工现场',
+          value: '施工现场'
+        },{
+          label: '配电房',
+          value: '配电房'
+        },
+      ],
+      tempLimit: '', // 电缆温度
+      elecLimit: '', // 漏电流限值
+      aroundTemp: '', // 周围环境温度限值
+      xmid: '', // 项目ID
+      subId: '', // 工程ID
+      jdbh: '', // 项目监督ID
+      xmid: '', // 项目ID
+      subId: '', // 工程ID
+      scznl: '', // 上传平台
+      manufacturerId: '', // 设备厂家
+      selectId: "", // 当前编辑设备的id
+      scznlList: [], // 上传平台列表
+      manufacturerIdList: [], // 厂家列表
+      deleteTime: '', // 设备删除时间
+      deleteShow: false, // 删除弹窗
+      deleteId: '', // 删除的ID
+      editObject: {}, // 编辑的对象
+
     };
   },
   created() {
     this.getProjectId();
     this.getEquipmentList();
+    this.getMerchantList()
+    this.getManufacturersList()
   },
   methods: {
     // 获取项目id
@@ -658,8 +954,17 @@ export default {
     // 新增对话框状态切换
     dialogClick() {
       this.dialogShow = !this.dialogShow;
-      this.addComments = "";
-      this.addElectricityBoxId = "";
+      this.scznl = ''
+      this.manufacturerId = ''
+      this.comments = ''
+      this.electricityBoxId = ''
+      this.devType = ''
+      this.installAddrtype = ''
+      this.companyName = ''
+      this.installAddress = ''
+      this.tempLimit = ''
+      this.elecLimit = ''
+      this.aroundTemp = ''
     },
 
     // 获取电箱设备列表
@@ -677,113 +982,226 @@ export default {
 
     // 添加设备
     addSave() {
-      if (this.addComments && this.addElectricityBoxId) {
-        this.$axios
-          .post(
-            `/api/ProjectElectricityBox/addElectricityBox?projectId=${this.projectId}&electricityBoxName=${this.addComments}&electricityBoxId=${this.addElectricityBoxId}`
-          )
-          .then(res => {
-            // console.log(res.data)
-            if (res.data.code == 0) {
-              this.$message({
-                message: "添加成功",
-                type: "success"
-              });
-              this.dialogShow = false;
-              this.pageNum3 = 1;
-              this.getEquipmentList();
-            } else {
-              this.$message({
-                message: `${res.data.msg}`,
-                type: "warning"
-              });
-            }
-          });
-      } else {
+      var temp = true
+      if (!this.scznl || !this.manufacturerId || !this.comments || !this.electricityBoxId || !this.devType || !this.installAddrtype || !this.companyName || !this.installAddress || !this.tempLimit || !this.elecLimit || !this.aroundTemp) {
+        temp = false
         this.$message({
-          message: "带 * 号的输入框不得为空",
-          type: "warning"
+          message: '*号项为必填项',
+          type: 'warning'
         });
       }
-    },
-
-    // 删除设备
-    removeClick(ids) {
-      this.$confirm("是否要删除选中的参建单位？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$axios
-            .post(`/api/ProjectElectricityBox/remove?ids=${ids}`)
-            .then(res => {
-              // console.log(res.data)
-              if (res.data.code == 0) {
-                this.$message({
-                  type: "success",
-                  message: "删除成功"
-                });
-                this.pageNum3 = 1;
-                this.getEquipmentList();
-              } else {
-                this.$message({
-                  message: "删除失败，请重试",
-                  type: "error"
-                });
-              }
-            });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+      if (this.scznl == 'CAY' && !this.jdbh) {
+        temp = false
+        this.$message({
+          message: '未在诚安院查询到该项目信息，请先进行备案',
+          type: 'warning'
         });
+      }
+      if (this.scznl == 'RCAJ' && !this.jdbh) {
+        temp = false
+        this.$message({
+          message: '*号项为必填项',
+          type: 'warning'
+        });
+      }
+      if (temp) {
+        this.$axios
+          .post(`/api/ProjectElectricityBox/addSave?scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&projectId=${this.projectId}&comments=${this.comments}&electricityBoxId=${this.electricityBoxId}&devType=${this.devType}&installAddrtype=${this.installAddrtype}&jdbh=${this.jdbh}&companyName=${this.companyName}&installAddress=${this.installAddress}&tempLimit=${this.tempLimit}&elecLimit=${this.elecLimit}&aroundTemp=${this.aroundTemp}&xmid=${this.xmid}&subId=${this.subId}`)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$message({
+                message: '添加成功',
+                type: 'success'
+              });
+              this.pageNum3 = 1;
+              this.getEquipmentList()
+              this.dialogClick()
+            } else {
+              this.$message({
+                message: '添加失败',
+                type: 'warning'
+              });
+            }
+          })
+      }
     },
 
     // 获取编辑设备信息
     getEdit(id) {
       this.$axios.post(`/api/ProjectElectricityBox/edit?id=${id}`).then(res => {
-        // console.log(res.data)
-        this.editComments = res.data.data.electricityBoxName;
-        this.editElectricityBoxId = res.data.data.electricityBoxId;
-        this.selectId = id;
+        var temp = Object.assign({}, res.data.data)
+        Object.keys(temp).forEach(item => {
+          if (temp[item] == null) {
+            temp[item] = ''
+          }
+        })
+        this.editObject = temp
         this.compileShow = true;
       });
     },
 
     // 编辑设备
     editClick() {
-      if (this.editComments && this.editElectricityBoxId) {
+      var temp = true
+      if (!this.editObject.scznl || !this.editObject.manufacturerId || !this.editObject.comments || !this.editObject.electricityBoxId || !this.editObject.devType || !this.editObject.installAddrtype || !this.editObject.companyName || !this.editObject.installAddress || !this.editObject.tempLimit || !this.editObject.elecLimit || !this.editObject.aroundTemp) {
+        temp = false
+      }
+      if (this.editObject.scznl == 'CAY' && !this.editObject.jdbh) {
+        this.$message({
+          message: '未在诚安院查询到该项目信息，请先进行备案',
+          type: 'warning'
+        });
+        return
+      }
+      if (this.editObject.scznl == 'RCAJ' && !this.editObject.jdbh) {
+        temp = false
+      }
+      if (temp) {
         this.$axios
-          .post(
-            `/api/ProjectElectricityBox/editSave?electricityBoxName=${this.editComments}&electricityBoxId=${this.editElectricityBoxId}&id=${this.selectId}`
-          )
+          .post(`/api/ProjectElectricityBox/editSave?editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
           .then(res => {
-            // console.log(res.data)
             if (res.data.code == 0) {
               this.$message({
-                message: "修改成功",
-                type: "success"
+                message: '修改成功',
+                type: 'success'
               });
               this.compileShow = false;
-              // this.pageNum3 = 1
+              this.pageNum3 = 1
               this.getEquipmentList();
             } else {
               this.$message({
-                message: `${res.data.msg}`,
-                type: "warning"
+                message: '修改失败',
+                type: 'warning'
               });
             }
-          });
+          })
       } else {
         this.$message({
-          message: "带 * 号的输入框不得为空",
-          type: "warning"
+          message: '*号项为必填项',
+          type: 'warning'
         });
       }
-    }
+    },
+
+    // 获取上传平台列表
+    getMerchantList() {
+      this.$axios
+        .post(`/api/dictionariesApi/cxdjpt?category=PLATFORM`)
+        .then(res => {
+          this.scznlList = res.data.data
+        })
+    },
+
+    // 获取厂家列表
+    getManufacturersList() {
+      this.$axios
+        .post(`/api/manufacturer/list`)
+        .then(res => {
+          this.manufacturerIdList = res.data.data
+        })
+    },
+
+
+    // 获取项目监督编号
+    getCay() {
+      this.jdbh = ''
+      this.xmid = ''
+      this.subId = ''
+      this.editObject.jdbh = ''
+      if (this.editObject.scznl == 'CAY' || this.scznl == 'CAY') {
+        this.$axios
+          .post(`/api/cay?projectId=${this.projectId}`)
+          .then(res => {
+            this.jdbh = res.data.jdbh
+            this.xmid = res.data.xmid
+            this.subId = res.data.subId
+            this.editObject.jdbh = res.data.jdbh
+          })
+      }
+    },
+
+    // 删除塔吊
+    deleteTower(item) {
+      if (item.scznl == 'CAY') {
+        this.deleteShow = !this.deleteShow
+        this.deleteId = item.id
+      } else {
+        this.$confirm('此操作将永久删除该电箱, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios
+              .post(`/api/ProjectElectricityBox/remove?id=${item.id}`)
+              .then(res => {
+                if (res.data.code == 0) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  this.getEquipmentList()
+                } else {
+                  this.$message({
+                    message: '删除失败',
+                    type: 'warning'
+                  });
+                }
+              })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+      }
+    },
+
+    // 删除诚安院
+    deleteCAY(id) {
+      if (this.deleteTime) {
+        this.$axios
+          .post(`/api/ProjectElectricityBox/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.deleteTime = ''
+              this.deleteShow = false
+              this.getEquipmentList()
+            } else {
+              this.$message({
+                message: '删除失败',
+                type: 'warning'
+              });
+            }
+          })
+      } else {
+        this.$message({
+          message: '请选择移除时间',
+          type: 'warning'
+        });
+      }
+    },
+
+    // 设备厂商名称
+    getManufacturerName(id) {
+      for (let i = 0; i < this.manufacturerIdList.length; i++) {
+        if (this.manufacturerIdList[i].id == id) {
+          return this.manufacturerIdList[i].manufacturerName
+        }
+      }
+    },
+
+    // 上传平台名称
+    geScznlName(id) {
+      for (let i = 0; i < this.scznlList.length; i++) {
+        if (this.scznlList[i].tag == id) {
+          return this.scznlList[i].name
+        }
+      }
+    },
   }
 };
 </script>
