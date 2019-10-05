@@ -1257,11 +1257,11 @@ export default {
         this.$axios
           .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.superviseNum = res.data.jdbh
-            this.itemsId = res.data.xmid
-            this.subId = res.data.subId
-            this.editSuperviseNum = res.data.jdbh
-            this.editItemsId = res.data.xmid
+            this.superviseNum = res.data.jdbh || ''
+            this.itemsId = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editSuperviseNum = res.data.jdbh || ''
+            this.editItemsId = res.data.xmid || ''
           })
       }
     },
@@ -1308,7 +1308,7 @@ export default {
       // }
       this.$axios
         .post(
-          `/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&sub_id=${this.sub_id}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
+          `/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&subId=${this.subId}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
         )
         .then(res => {
           // console.log(res.data)

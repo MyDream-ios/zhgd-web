@@ -134,6 +134,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -190,13 +197,6 @@
               </span>
               <input type="text" v-model="installCompany">
             </li>
-            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
-            </li>
           </ul>
         </div>
         <div class="confirm">
@@ -242,6 +242,13 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
+            </li>
+            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
             </li>
             <li>
               <span>
@@ -298,13 +305,6 @@
                 <div class="required">*</div>
               </span>
               <input type="text" v-model="editTower.installCompany">
-            </li>
-            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
             </li>
           </ul>
         </div>
@@ -911,10 +911,10 @@ export default {
         this.$axios
           .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.jdbh = res.data.jdbh
-            this.xmid = res.data.xmid
-            this.subId = res.data.subId
-            this.editTower.jdbh = res.data.jdbh
+            this.jdbh = res.data.jdbh || ''
+            this.xmid = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editTower.jdbh = res.data.jdbh || ''
           })
       }
     },
@@ -1037,7 +1037,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&${this.serialNum}&tcMaxScope=${this.tcMaxScope}&tcMaxHeight=${this.tcMaxHeight}&tcLoadCapacity=${this.tcLoadCapacity}&tcLoadMoment=${this.tcLoadMoment}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}`)
+          .post(`/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&serialNum=${this.serialNum}&tcMaxScope=${this.tcMaxScope}&tcMaxHeight=${this.tcMaxHeight}&tcLoadCapacity=${this.tcLoadCapacity}&tcLoadMoment=${this.tcLoadMoment}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&installCompany=${this.installCompany}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({

@@ -2265,7 +2265,8 @@ export default {
     getTime() {
       var now = new Date()
       var month = (parseInt(now.getMonth()) + parseInt(1)) < 10 ? '0' + (parseInt(now.getMonth()) + parseInt(1)) : (parseInt(now.getMonth()) + parseInt(1))
-      this.nowTime = now.getFullYear() + '-' + month + '-' + now.getDate()
+      var day = parseInt(now.getDate()) < 10 ? '0' + parseInt(now.getDate()) : parseInt(now.getDate())
+      this.nowTime = now.getFullYear() + '-' + month + '-' + day
       // this.nowTime = '2019-09-08'
       // this.nowTime = '2019-08-28'
     },
@@ -2339,58 +2340,68 @@ export default {
         this.$axios
           .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.stage}`)
           .then(res => {
-            this.stageList = res.data.data
-            this.stageListChild = res.data.data[0].id
-            // this.stageListChild = 4
-            this.getStage(1, 4)
-            this.getStageFourHoverList()
-            this.getStageMax()
+            if (res.data.code == 0) {
+              this.stageList = res.data.data
+              this.stageListChild = res.data.data[0].id
+              // this.stageListChild = 4
+              this.getStage(1, 4)
+              this.getStageFourHoverList()
+              this.getStageMax()
+            }
           })
       }
       if (this.offset > 0) {
         this.$axios
           .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.offset}`)
           .then(res => {
-            this.offsetList = res.data.data
-            this.offsetListChild = res.data.data[0].id
-            // this.offsetListChild = 1
-            this.getOffset(1, 4)
-            this.getOffsetFourHoverList()
+            if (res.data.code == 0) {
+              this.offsetList = res.data.data
+              this.offsetListChild = res.data.data[0].id
+              // this.offsetListChild = 1
+              this.getOffset(1, 4)
+              this.getOffsetFourHoverList()
+            }
           })
       }
       if (this.subside > 0) {
         this.$axios
           .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.subside}`)
           .then(res => {
-            this.subsideList = res.data.data
-            this.subsideListChild = res.data.data[0].id
-            // this.subsideListChild = 17092
-            this.getSubside(1, 4)
-            this.getSubsideFourHoverList()
-            this.getSubsideMax()
+            if (res.data.code == 0) {
+              this.subsideList = res.data.data
+              this.subsideListChild = res.data.data[0].id
+              // this.subsideListChild = 17092
+              this.getSubside(1, 4)
+              this.getSubsideFourHoverList()
+              this.getSubsideMax()
+            }
           })
       }
       if (this.product > 0) {
         this.$axios
           .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.product}`)
           .then(res => {
-            this.productList = res.data.data
-            this.productListChild = res.data.data[0].id
-            // this.productListChild = 3
-            this.getProduct(1, 4)
-            this.getProductFourHoverList()
+              if (res.data.code == 0) {
+                this.productList = res.data.data
+                this.productListChild = res.data.data[0].id
+                // this.productListChild = 3
+                this.getProduct(1, 4)
+                this.getProductFourHoverList()
+              }
           })
       }
       if (this.bias > 0) {
         this.$axios
           .post(`/api/hjDeeppit/getFactorList?structureId=${this.structureId}&displayId=${this.bias}`)
           .then(res => {
-            this.biasList = res.data.data
-            this.biasListChild = res.data.data[0].id
-            // this.biasListChild = 2
-            this.getBias(1, 4)
-            this.getBiasFourHoverList()
-            this.getBiasMax()
+            if (res.data.code == 0) {
+              this.biasList = res.data.data
+              this.biasListChild = res.data.data[0].id
+              // this.biasListChild = 2
+              this.getBias(1, 4)
+              this.getBiasFourHoverList()
+              this.getBiasMax()
+            }
           })
       }
     },

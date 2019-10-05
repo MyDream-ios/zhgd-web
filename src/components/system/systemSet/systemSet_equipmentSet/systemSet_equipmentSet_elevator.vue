@@ -130,6 +130,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -164,13 +171,6 @@
                 <div class="required">*</div>
               </span>
               <input type="number" v-model="height"  placeholder="单位为m">
-            </li>
-            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
             </li>
             <!-- <li>
               <span>
@@ -225,6 +225,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -259,13 +266,6 @@
                 <div class="required">*</div>
               </span>
               <input type="number" v-model="editTower.height" placeholder="单位为m">
-            </li>
-            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
             </li>
             <!-- <li>
               <span>
@@ -873,10 +873,10 @@ export default {
         this.$axios
           .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.jdbh = res.data.jdbh
-            this.xmid = res.data.xmid
-            this.subId = res.data.subId
-            this.editTower.jdbh = res.data.jdbh
+            this.jdbh = res.data.jdbh || ''
+            this.xmid = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editTower.jdbh = res.data.jdbh || ''
           })
       }
     },

@@ -136,6 +136,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -177,13 +184,6 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-            </li>
-            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
             </li>
             <li>
               <span>
@@ -266,6 +266,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="editObject.scznl == 'CAY' || editObject.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -307,13 +314,6 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-            </li>
-            <li v-if="editObject.scznl == 'CAY' || editObject.scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
             </li>
             <li>
               <span>
@@ -864,19 +864,19 @@ export default {
       devTypeList: [ // 电箱设备类型
         {
           label: '复合型漏电流探测器(漏电流+温感)',
-          value: '00'
+          value: 0
         },{
           label: '三相电流表',
-          value: '02'
+          value: 2
         },{
           label: '空气开关',
-          value: '03'
+          value: 3
         },{
           label: '烟感探测器',
-          value: '04'
+          value: 4
         },{
           label: '防火门探测器',
-          value: '05'
+          value: 5
         }
       ],
       companyName: '', // 设备安装单位
@@ -1112,10 +1112,10 @@ export default {
         this.$axios
           .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.jdbh = res.data.jdbh
-            this.xmid = res.data.xmid
-            this.subId = res.data.subId
-            this.editObject.jdbh = res.data.jdbh
+            this.jdbh = res.data.jdbh || ''
+            this.xmid = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editObject.jdbh = res.data.jdbh || ''
           })
       }
     },
