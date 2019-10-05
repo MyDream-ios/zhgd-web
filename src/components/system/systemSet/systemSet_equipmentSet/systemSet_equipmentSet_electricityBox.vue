@@ -24,7 +24,7 @@
         <ul>
           <li v-for="(item,index) in equipmentListData" :key="index">
             <div class="left-box">
-              <div class="name">{{item.electricityBoxName}}</div>
+              <div class="name">{{item.comments}}</div>
               <div class="subcontract">
                 <span>设备SN：</span>
                 {{item.electricityBoxId}}
