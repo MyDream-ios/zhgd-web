@@ -643,7 +643,7 @@ export default {
             type: "value",
             // max: this.curveMax,
             min: 0,
-            // interval: 30,
+            interval: 1,
             axisLabel: {
               textStyle: {
                 color: "#fff"
@@ -1010,8 +1010,8 @@ export default {
           let day = []
           for (let i = 0; i < res.data.hour.length; i++) {
             for (let key in res.data.hour[i]) {
-              zc.push(res.data.hour[i][key])
-              day.push(key.split(' ')[1])
+              zc.unshift(res.data.hour[i][key])
+              day.unshift(key.split(' ')[1])
             }
           }
           setTimeout(()=>{

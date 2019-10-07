@@ -24,7 +24,7 @@
         <ul>
           <li v-for="(item,index) in equipmentListData" :key="index">
             <div class="left-box">
-              <div class="name">{{item.electricityBoxName}}</div>
+              <div class="name">{{item.comments}}</div>
               <div class="subcontract">
                 <span>设备SN：</span>
                 {{item.electricityBoxId}}
@@ -136,6 +136,14 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
+
             <li>
               <span>
                 设备名称
@@ -177,13 +185,6 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-            </li>
-            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
             </li>
             <li>
               <span>
@@ -266,6 +267,14 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="editObject.scznl == 'CAY' || editObject.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
+            </li>
+
             <li>
               <span>
                 设备名称
@@ -307,13 +316,6 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-            </li>
-            <li v-if="editObject.scznl == 'CAY' || editObject.scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
             </li>
             <li>
               <span>
@@ -864,19 +866,19 @@ export default {
       devTypeList: [ // 电箱设备类型
         {
           label: '复合型漏电流探测器(漏电流+温感)',
-          value: '00'
+          value: 0
         },{
           label: '三相电流表',
-          value: '02'
+          value: 2
         },{
           label: '空气开关',
-          value: '03'
+          value: 3
         },{
           label: '烟感探测器',
-          value: '04'
+          value: 4
         },{
           label: '防火门探测器',
-          value: '05'
+          value: 5
         }
       ],
       companyName: '', // 设备安装单位
@@ -1006,7 +1008,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/ProjectElectricityBox/addSave?scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&projectId=${this.projectId}&comments=${this.comments}&electricityBoxId=${this.electricityBoxId}&devType=${this.devType}&installAddrtype=${this.installAddrtype}&jdbh=${this.jdbh}&companyName=${this.companyName}&installAddress=${this.installAddress}&tempLimit=${this.tempLimit}&elecLimit=${this.elecLimit}&aroundTemp=${this.aroundTemp}&xmid=${this.xmid}&subId=${this.subId}`)
+          .post(`/api/ProjectElectricityBox/addSave?scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&projectId=${this.projectId}&comments=${this.comments}&electricityBoxId=${this.electricityBoxId}&devType=${this.devType}&installAddrtype=${this.installAddrtype}&jdbh=${this.jdbh}&companyName=${this.companyName}&installAddress=${this.installAddress}&tempLimit=${this.tempLimit}&elecLimit=${this.elecLimit}&aroundTemp=${this.aroundTemp}&xmid=${this.xmid}&subId=${this.subId}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1028,7 +1030,7 @@ export default {
 
     // 获取编辑设备信息
     getEdit(id) {
-      this.$axios.post(`http://192.168.1.22:8080/api/ProjectElectricityBox/edit?id=${id}`).then(res => {
+      this.$axios.post(`/api/ProjectElectricityBox/edit?id=${id}`).then(res => {
         var temp = Object.assign({}, res.data.data)
         Object.keys(temp).forEach(item => {
           if (temp[item] == null) {
@@ -1058,7 +1060,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/ProjectElectricityBox/editSave?editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
+          .post(`/api/ProjectElectricityBox/editSave?editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1086,7 +1088,7 @@ export default {
     // 获取上传平台列表
     getMerchantList() {
       this.$axios
-        .post(`http://192.168.1.22:8083/provider/dictionariesApi/cxdjpt?category=PLATFORM`)
+        .post(`/api/dictionariesApi/cxdjpt?category=PLATFORM`)
         .then(res => {
           this.scznlList = res.data.data
         })
@@ -1095,7 +1097,7 @@ export default {
     // 获取厂家列表
     getManufacturersList() {
       this.$axios
-        .post(`http://192.168.1.22:8083/provider/manufacturer/list`)
+        .post(`/api/manufacturer/list`)
         .then(res => {
           this.manufacturerIdList = res.data.data
         })
@@ -1110,12 +1112,12 @@ export default {
       this.editObject.jdbh = ''
       if (this.editObject.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
-          .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
+          .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.jdbh = res.data.jdbh
-            this.xmid = res.data.xmid
-            this.subId = res.data.subId
-            this.editObject.jdbh = res.data.jdbh
+            this.jdbh = res.data.jdbh || ''
+            this.xmid = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editObject.jdbh = res.data.jdbh || ''
           })
       }
     },
@@ -1132,7 +1134,7 @@ export default {
             type: 'warning'
           }).then(() => {
             this.$axios
-              .post(`http://192.168.1.22:8080/api/ProjectElectricityBox/remove?id=${item.id}`)
+              .post(`/api/ProjectElectricityBox/remove?id=${item.id}`)
               .then(res => {
                 if (res.data.code == 0) {
                   this.$message({
@@ -1160,7 +1162,7 @@ export default {
     deleteCAY(id) {
       if (this.deleteTime) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/ProjectElectricityBox/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
+          .post(`/api/ProjectElectricityBox/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({

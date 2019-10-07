@@ -1219,7 +1219,7 @@ export default {
     getEquipmentList() {
       this.$axios
         .post(
-          `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionList?projectId=${this.projectId}&pageSize=${this.pageSize3}&pageNum=${this.pageNum3}`
+          `/api/ProjectDustEmission/projectDustEmissionList?projectId=${this.projectId}&pageSize=${this.pageSize3}&pageNum=${this.pageNum3}`
         )
         .then(res => {
           // console.log(res.data)
@@ -1231,7 +1231,7 @@ export default {
     // 获取上传单位列表
     initChange() {
       this.$axios
-        .post(`http://192.168.1.22:8083/provider/dictionariesApi/cxdjpt?category=PLATFORM`)
+        .post(`/api/dictionariesApi/cxdjpt?category=PLATFORM`)
         .then(res => {
           this.uploadUnit = res.data.data
         })
@@ -1240,7 +1240,7 @@ export default {
     // 获取厂家列表
     getManufacturer() {
       this.$axios
-        .post(`http://192.168.1.22:8083/provider/manufacturer/list`)
+        .post(`/api/manufacturer/list`)
         .then(res => {
           this.manufacturersList = res.data.data
         })
@@ -1248,20 +1248,24 @@ export default {
 
     // 获取项目监督编号
     getCay() {
+
       this.superviseNum = ''
       this.itemsId = ''
       this.subId = ''
       this.editSuperviseNum = ''
       this.editItemsId = ''
+
       if (this.editChangeUnit == 'CAY' || this.changeUnit == 'CAY') {
         this.$axios
-          .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
+          .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.superviseNum = res.data.jdbh
-            this.itemsId = res.data.xmid
-            this.subId = res.data.subId
-            this.editSuperviseNum = res.data.jdbh
-            this.editItemsId = res.data.xmid
+
+            this.superviseNum = res.data.jdbh || ''
+            this.itemsId = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editSuperviseNum = res.data.jdbh || ''
+            this.editItemsId = res.data.xmid || ''
+
           })
       }
     },
@@ -1308,7 +1312,7 @@ export default {
       // }
       this.$axios
         .post(
-          `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&subId=${this.subId}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
+          `/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&subId=${this.subId}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
         )
         .then(res => {
           // console.log(res.data)
@@ -1342,7 +1346,7 @@ export default {
         })
           .then(() => {
             this.$axios
-              .post(`http://192.168.1.22:8080/api/ProjectDustEmission/remove?id=${item.id}`)
+              .post(`/api/ProjectDustEmission/remove?id=${item.id}`)
               .then(res => {
                 // console.log(res.data)
                 if (res.data.code == 0) {
@@ -1374,7 +1378,7 @@ export default {
       // console.log(this.deleteTime)
       if (this.deleteTime) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/ProjectDustEmission/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
+          .post(`/api/ProjectDustEmission/remove?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1420,7 +1424,7 @@ export default {
     // 获取编辑设备信息
     getEdit(id) {
       this.$axios
-        .post(`http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionById?id=${id}`)
+        .post(`/api/ProjectDustEmission/projectDustEmissionById?id=${id}`)
         .then(res => {
           // console.log(res.data);
           this.editChangeUnit = res.data.data.scznl

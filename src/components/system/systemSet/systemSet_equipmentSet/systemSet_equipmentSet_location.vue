@@ -996,7 +996,6 @@ export default {
         this.$axios
           .post(`/api/OptionsLocationApi/updateArea?areaName=${this.editList.areaName}&areaId=${this.editList.areaId}&areaAddress=${this.editList.areaAddress}&constructionId=${this.editList.constructionId}&constructionName=${this.editList.constructionName}`)
           .then( res => {
-            debugger
             if (res.data.code == 0) {
               this.$message({
                 message: '修改成功',

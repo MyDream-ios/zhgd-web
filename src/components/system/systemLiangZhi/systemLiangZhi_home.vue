@@ -11,8 +11,8 @@
                         </router-link>
                     </div>
                     <!-- 完工=accomplish 正常=normal 停工=lockout -->
-                    <div class="state" :class="indexData.status=='ABUILDING'?'normal':indexData.status=='LOCKOUT'?'accomplish':'lockout'">
-                        {{indexData.status=='ABUILDING'?'在建':indexData.status=='LOCKOUT'?'竣工':'停工'}}
+                    <div class="state" :class="indexData.status==0?'normal':indexData.status==2?'accomplish':'lockout'">
+                        {{indexData.status==0?'在建':indexData.status==2?'竣工':'停工'}}
                     </div>
                 </div>
                 <div class="condition">

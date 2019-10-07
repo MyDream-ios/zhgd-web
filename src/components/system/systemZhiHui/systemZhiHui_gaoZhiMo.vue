@@ -268,9 +268,9 @@
                   <div class="name">{{filterOffset(offsetListChild)}}</div>
                   <ul>
                     <li>高支模：{{deviceName}}</li>
-                    <li>最大值：{{offsetList.max}}mm</li>
-                    <li>最小值：{{offsetList.min}}mm</li>
-                    <li>平均值：{{offsetList.avg}}mm</li>
+                    <li>最大值：{{offsetMaxList.max}}mm</li>
+                    <li>最小值：{{offsetMaxList.min}}mm</li>
+                    <li>平均值：{{offsetMaxList.avg}}mm</li>
                   </ul>
                 </div>
                 <!-- 当日数据趋势图 -->
@@ -2223,7 +2223,9 @@ export default {
         parseInt(now.getMonth()) + parseInt(1) < 10
           ? "0" + (parseInt(now.getMonth()) + parseInt(1))
           : parseInt(now.getMonth()) + parseInt(1);
-      this.nowTime = now.getFullYear() + "-" + month + "-" + now.getDate();
+
+      var day = parseInt(now.getDate()) < 10 ? '0' + parseInt(now.getDate()) : parseInt(now.getDate())
+      this.nowTime = now.getFullYear() + '-' + month + '-' + day
       // this.nowTime = '2019-09-08'
       // this.nowTime = '2019-08-28'
       // this.nowTime = "2019-09-28";
@@ -2311,11 +2313,13 @@ export default {
             `/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.stage}`
           )
           .then(res => {
-            this.stageList = res.data.data;
-            this.stageListChild = res.data.data[0].id;
-            this.getStage(1, 4);
-            this.getStageFourHoverList();
-            this.getStageMax();
+            if (res.data.code == 0) {
+              this.stageList = res.data.data;
+              this.stageListChild = res.data.data[0].id;
+              this.getStage(1, 4);
+              this.getStageFourHoverList();
+              this.getStageMax();
+            }
           });
       }
       if (this.offset > 0) {
@@ -2324,11 +2328,13 @@ export default {
             `/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.offset}`
           )
           .then(res => {
-            this.offsetList = res.data.data;
-            this.offsetListChild = res.data.data[0].id;
-            this.getOffset(1, 4);
-            this.getOffsetFourHoverList();
-            this.getOffsetMax();
+            if (res.data.code == 0) {
+              this.offsetList = res.data.data;
+              this.offsetListChild = res.data.data[0].id;
+              this.getOffset(1, 4);
+              this.getOffsetFourHoverList();
+              this.getOffsetMax();
+            }
           });
       }
       if (this.subside > 0) {
@@ -2337,11 +2343,13 @@ export default {
             `/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.subside}`
           )
           .then(res => {
-            this.subsideList = res.data.data;
-            this.subsideListChild = res.data.data[0].id;
-            this.getSubside(1, 4);
-            this.getSubsideFourHoverList();
-            this.getSubsideMax();
+            if (res.data.code == 0) {
+              this.subsideList = res.data.data;
+              this.subsideListChild = res.data.data[0].id;
+              this.getSubside(1, 4);
+              this.getSubsideFourHoverList();
+              this.getSubsideMax();
+            }
           });
       }
       if (this.product > 0) {
@@ -2350,10 +2358,12 @@ export default {
             `/api/HjGhformworktApi/getFactorList?structureId=${this.structureId}&displayId=${this.product}`
           )
           .then(res => {
-            this.productList = res.data.data;
-            this.productListChild = res.data.data[0].id;
-            this.getProduct(1, 4);
-            this.getProductFourHoverList();
+            if (res.data.code == 0) {
+              this.productList = res.data.data;
+              this.productListChild = res.data.data[0].id;
+              this.getProduct(1, 4);
+              this.getProductFourHoverList();
+            }
             // this.getBiasMax()
           });
       }
@@ -2509,7 +2519,7 @@ export default {
     getOffsetFourHoverList() {
       this.$axios
         .post(
-          `/api/HjGhformworktApi/selectSpecial?factorId=${this.stageListChild}&date=${this.nowTime}&param=displacement`
+          `/api/HjGhformworktApi/selectSpecial?factorId=${this.offsetListChild}&date=${this.nowTime}&param=displacement`
         )
         .then(res => {
           this.offsetFourHoverListX = res.data;
@@ -2613,7 +2623,6 @@ export default {
         )
         .then(res => {
           if (res.data.code == 0) {
-            debugger
             this.stageMaxList = res.data.data;
           }
         });
@@ -3729,6 +3738,7 @@ export default {
                 color: "#132e6d"
               }
             },
+
             splitLine: {
               show: true,
               lineStyle: {

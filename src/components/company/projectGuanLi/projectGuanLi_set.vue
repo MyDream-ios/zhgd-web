@@ -23,8 +23,8 @@
             <el-table-column prop="state" label="状态" width="200">
               <template slot-scope="scope">
                 <div
-                  :class="scope.row.state=='0'?'green-color':scope.row.state=='2'?'yellow-color':'red-color'"
-                >{{ scope.row.state=='0'?'在建':scope.row.state=='2'?'竣工':'停工' }}</div>
+                  :class="scope.row.state==0?'green-color':scope.row.state==2?'yellow-color':'red-color'"
+                >{{ scope.row.state==0?'在建':scope.row.state==2?'竣工':'停工' }}</div>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="400">

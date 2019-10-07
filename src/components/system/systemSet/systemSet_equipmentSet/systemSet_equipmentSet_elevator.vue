@@ -130,6 +130,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -164,13 +171,6 @@
                 <div class="required">*</div>
               </span>
               <input type="number" v-model="height"  placeholder="单位为m">
-            </li>
-            <li v-if="scznl == 'CAY' || scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
             </li>
             <!-- <li>
               <span>
@@ -225,6 +225,13 @@
                 ></el-option>
               </el-select>
             </li>
+            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
+              <span>
+                项目监督编号
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
+            </li>
             <li>
               <span>
                 设备名称
@@ -259,13 +266,6 @@
                 <div class="required">*</div>
               </span>
               <input type="number" v-model="editTower.height" placeholder="单位为m">
-            </li>
-            <li v-if="editTower.scznl == 'CAY' || editTower.scznl == 'RCAJ'">
-              <span>
-                项目监督编号
-                <div class="required">*</div>
-              </span>
-              <input type="text" v-model="editTower.jdbh" :disabled="editTower.scznl == 'CAY'">
             </li>
             <!-- <li>
               <span>
@@ -871,12 +871,12 @@ export default {
       this.editTower.jdbh = ''
       if (this.editTower.scznl == 'CAY' || this.scznl == 'CAY') {
         this.$axios
-          .post(`http://192.168.1.22:8083/provider/cay?projectId=${this.projectId}`)
+          .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
-            this.jdbh = res.data.jdbh
-            this.xmid = res.data.xmid
-            this.subId = res.data.subId
-            this.editTower.jdbh = res.data.jdbh
+            this.jdbh = res.data.jdbh || ''
+            this.xmid = res.data.xmid || ''
+            this.subId = res.data.subId || ''
+            this.editTower.jdbh = res.data.jdbh || ''
           })
       }
     },
@@ -920,7 +920,7 @@ export default {
             type: 'warning'
           }).then(() => {
             this.$axios
-              .post(`http://192.168.1.22:8080/api/OptionsElevatorApi/deleteElevator?id=${item.id}`)
+              .post(`/api/OptionsElevatorApi/deleteElevator?id=${item.id}`)
               .then(res => {
                 if (res.data.code == 0) {
                   this.$message({
@@ -948,7 +948,7 @@ export default {
     deleteCAY(id) {
       if (this.deleteTime) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/OptionsElevatorApi/deleteElevator?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
+          .post(`/api/OptionsElevatorApi/deleteElevator?id=${this.deleteId}&devCcrq=${this.deleteTime}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -999,7 +999,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/OptionsElevatorApi/insertElevator?elevatorName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&serialNum=${this.serialNum}&capacity=${this.capacity}&height=${this.height}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}`)
+          .post(`/api/OptionsElevatorApi/insertElevator?elevatorName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&serialNum=${this.serialNum}&capacity=${this.capacity}&height=${this.height}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1045,7 +1045,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`http://192.168.1.22:8080/api/OptionsElevatorApi/updateElevator?id=${this.editTower.id}&elevatorName=${this.editTower.elevatorName}&hxzId=${this.editTower.hxzId}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&serialNum=${this.editTower.serialNum}&capacity=${this.editTower.capacity}&height=${this.editTower.height}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}`)
+          .post(`/api/OptionsElevatorApi/updateElevator?id=${this.editTower.id}&elevatorName=${this.editTower.elevatorName}&hxzId=${this.editTower.hxzId}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&serialNum=${this.editTower.serialNum}&capacity=${this.editTower.capacity}&height=${this.editTower.height}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}`)
           .then(res => {
             if (res.data.code == 0) {
               this.messageBox('修改成功', 1)
@@ -1120,7 +1120,7 @@ export default {
     // 获取上传平台列表
     getMerchantList() {
       this.$axios
-        .post(`http://192.168.1.22:8083/provider/dictionariesApi/cxdjpt?category=PLATFORM`)
+        .post(`/api/dictionariesApi/cxdjpt?category=PLATFORM`)
         .then(res => {
           this.scznlList = res.data.data
         })
@@ -1129,7 +1129,7 @@ export default {
     // 获取厂家列表
     getManufacturersList() {
       this.$axios
-        .post(`http://192.168.1.22:8083/provider/manufacturer/list`)
+        .post(`/api/manufacturer/list`)
         .then(res => {
           this.manufacturerIdList = res.data.data
         })
