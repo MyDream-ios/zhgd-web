@@ -1498,7 +1498,7 @@ export default {
       if (temp) {
         this.$axios
           .post(
-            `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${
+            `/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${
               this.projectId
             }&comments=${this.editComments}&sn=${this.editSn}&videoAddress=${
               this.editVideoAddress ? this.editVideoAddress : ""
