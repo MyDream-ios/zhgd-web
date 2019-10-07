@@ -2223,6 +2223,7 @@ export default {
         parseInt(now.getMonth()) + parseInt(1) < 10
           ? "0" + (parseInt(now.getMonth()) + parseInt(1))
           : parseInt(now.getMonth()) + parseInt(1);
+
       var day = parseInt(now.getDate()) < 10 ? '0' + parseInt(now.getDate()) : parseInt(now.getDate())
       this.nowTime = now.getFullYear() + '-' + month + '-' + day
       // this.nowTime = '2019-09-08'
@@ -3737,6 +3738,7 @@ export default {
                 color: "#132e6d"
               }
             },
+
             splitLine: {
               show: true,
               lineStyle: {

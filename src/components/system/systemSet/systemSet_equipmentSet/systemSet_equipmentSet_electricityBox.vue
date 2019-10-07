@@ -143,6 +143,7 @@
               </span>
               <input type="text" v-model="jdbh" :disabled="scznl == 'CAY'">
             </li>
+
             <li>
               <span>
                 设备名称
@@ -273,6 +274,7 @@
               </span>
               <input type="text" v-model="editObject.jdbh" :disabled="editObject.scznl == 'CAY'">
             </li>
+
             <li>
               <span>
                 设备名称
@@ -971,7 +973,7 @@ export default {
     getEquipmentList() {
       this.$axios
         .post(
-          `/api/ProjectElectricityBox/list?projectId=${this.projectId}&pageNum=${this.pageNum3}&pageSize=${this.pageSize3}`
+          `http://192.168.1.22:8080/api/ProjectElectricityBox/list?projectId=${this.projectId}&pageNum=${this.pageNum3}&pageSize=${this.pageSize3}`
         )
         .then(res => {
           // console.log(res.data)

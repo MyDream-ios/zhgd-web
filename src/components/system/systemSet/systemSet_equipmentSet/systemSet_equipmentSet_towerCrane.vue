@@ -922,7 +922,7 @@ export default {
     // 获取塔吊列表
     getCraneList() {
       this.$axios
-        .post(`/api/OptionsCraneApi/getCraneList?projectId=${this.projectId}`)
+        .post(`http://192.168.1.22:8080/api/OptionsCraneApi/getCraneList?projectId=${this.projectId}`)
         .then(res => {
           this.craneList = res.data.data
         })
@@ -1014,7 +1014,9 @@ export default {
     // 添加设备提交
     insertCrane() {
       var temp = true
+
       if (!this.scznl || !this.manufacturerId || !this.craneName || !this.hxzId || !this.serialNum || !this.tcMaxScope || !this.tcLoadCapacity || !this.tcLoadMoment) {
+
         temp = false
         this.$message({
           message: '*号项为必填项',

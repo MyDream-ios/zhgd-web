@@ -902,7 +902,7 @@ export default {
     // 获取塔吊列表
     getCraneList() {
       this.$axios
-        .post(`/api/OptionsElevatorApi/getElevatorList?projectId=${this.projectId}`)
+        .post(`http://192.168.1.22:8080/api/OptionsElevatorApi/getElevatorList?projectId=${this.projectId}`)
         .then(res => {
           this.craneList = res.data.data
         })

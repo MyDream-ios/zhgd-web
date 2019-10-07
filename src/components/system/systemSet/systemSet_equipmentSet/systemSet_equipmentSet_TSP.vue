@@ -1248,20 +1248,24 @@ export default {
 
     // 获取项目监督编号
     getCay() {
-        this.superviseNum = ''
-        this.itemsId = ''
-        this.subId = ''
-        this.editSuperviseNum = ''
-        this.editItemsId = ''
+
+      this.superviseNum = ''
+      this.itemsId = ''
+      this.subId = ''
+      this.editSuperviseNum = ''
+      this.editItemsId = ''
+
       if (this.editChangeUnit == 'CAY' || this.changeUnit == 'CAY') {
         this.$axios
           .post(`/api/cay?projectId=${this.projectId}`)
           .then(res => {
+
             this.superviseNum = res.data.jdbh || ''
             this.itemsId = res.data.xmid || ''
             this.subId = res.data.subId || ''
             this.editSuperviseNum = res.data.jdbh || ''
             this.editItemsId = res.data.xmid || ''
+
           })
       }
     },
@@ -1494,7 +1498,7 @@ export default {
       if (temp) {
         this.$axios
           .post(
-            `/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${
+            `http://192.168.1.22:8080/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${
               this.projectId
             }&comments=${this.editComments}&sn=${this.editSn}&videoAddress=${
               this.editVideoAddress ? this.editVideoAddress : ""
