@@ -51,7 +51,7 @@
             <div class="main-box">
                 <!-- 功能栏 -->
                 <div class="button-box">
-                    <a class="new">
+                    <a class="new" @click="dialogClick">
                         <i class="icon"></i>
                         新增
                     </a>
@@ -128,24 +128,46 @@
                     </el-pagination>
                 </div>
             </div>
-            <!-- 新增班组 -->
+            <!-- 新增设备 -->
             <div class="dialog-box" v-show="dialogShow">
                 <div class="title">
-                    新增班组
+                    新增考勤设备
                     <a class="close" @click="dialogClick">
                         <i class="el-icon-close"></i>
                     </a>
                 </div>
                 <div class="form">
                     <ul>
-                        <li>
+                       
+                       <li>
                             <span>
-                                所属参建单位
+                                设备序列号
                                 <div class="required">*</div>
                             </span>
-                            <el-select v-model="contractorValue" placeholder="请选择">
+                            <input type="text" v-model="deviceNo">
+                        </li>
+                          <li>
+                            <span>
+                                设备名字
+                                <div class="required">*</div>
+                            </span>
+                            <input type="text" v-model="deviceName">
+                        </li>
+                          <li>
+                            <span>
+                                设备厂家
+                                <div class="required">*</div>
+                            </span>
+                            <input type="text" v-model="deviceFactory">
+                        </li>
+                        <li>
+                            <span>
+                                进出方向
+                                <div class="required">*</div>
+                            </span>
+                            <el-select v-model="direction" placeholder="请选择">
                                 <el-option
-                                v-for="item in contractor"
+                                v-for="item in directionOptions"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
@@ -154,25 +176,31 @@
                         </li>
                         <li>
                             <span>
-                                班组名称
+                                是否上传
                                 <div class="required">*</div>
                             </span>
-                            <input type="text">
+                            <el-select v-model="status" placeholder="请选择">
+                                <el-option
+                                v-for="item in statusOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
                         </li>
-                        <li>
+
+                          <li>
                             <span>
-                                入场日期
+                                设备ip
                                 <div class="required">*</div>
                             </span>
-                            <el-date-picker
-                            v-model="startDate"
-                            type="date"
-                            placeholder="选择日期">
-                            </el-date-picker>
+                            <input type="text" v-model="deviceIp">
                         </li>
+
+                        
                         <li>
                             <span>备注</span>
-                            <input type="text">
+                            <input type="text" v-model="remark">
                         </li>
                     </ul>
                 </div>
@@ -376,7 +404,7 @@
                 top: 2.14rem;
                 z-index: 200;
                 width: 6.84rem;
-                height: 4.92rem;
+                // height: 4.92rem;
                 overflow: hidden;
                 position: absolute;
                 border-radius: .1rem;
@@ -400,7 +428,7 @@
                     }
                 }
                 .form {
-                    height: 3.52rem;
+                    // height: 3.52rem;
                     ul{
                         li {
                             display: flex;
@@ -480,43 +508,100 @@
 export default {
     data() {
         return {
-            tableData: [
-            //     {
-            //     number: 1, // 序号
-            //     deviceNumber: 1, // 设备号
-            //     deviceName: '油松项目部', // 设备名称
-            //     serialNumber: '深圳市市政工程总公司', // 序列号
-            //     IP: '127.0.0.1', // IP地址
-            //     recently: '2019-05-15 16：35：11', // 最近连接时间
-            //     type: '汉王人脸考勤机', // 产品类型
-            //     use: '考勤', // 设备用途
-            // }
-            ], // 表格数据
-            currentPage: 1, // 当前页码
-            dialogShow: false, // 新增单位对话框状态
-            contractor: [{
-                value: '选项1',
-                label: '深圳市市政工程总公司'
-            }], // 所属参建单位选项
-            contractorValue: '', // 所属参建单位
-            startDate: '', // 入场日期
-            professionOptions: [], // 工种选项
-            professionValue: '', // 工种值
-            contractorOptions: [], // 所属参建单位选项
-            contractorValue: '', // 所属参建单位值
-            dateValue: '', // 日期
+            // tableData: [
+            // //     {
+            // //     number: 1, // 序号
+            // //     deviceNumber: 1, // 设备号
+            // //     deviceName: '油松项目部', // 设备名称
+            // //     serialNumber: '深圳市市政工程总公司', // 序列号
+            // //     IP: '127.0.0.1', // IP地址
+            // //     recently: '2019-05-15 16：35：11', // 最近连接时间
+            // //     type: '汉王人脸考勤机', // 产品类型
+            // //     use: '考勤', // 设备用途
+            // // }
+            // ], // 表格数据
+            // currentPage: 1, // 当前页码
+            // dialogShow: false, // 新增单位对话框状态
+            // contractor: [{
+            //     value: '选项1',
+            //     label: '深圳市市政工程总公司'
+            // }], // 所属参建单位选项
+            // contractorValue: '', // 所属参建单位
+            // startDate: '', // 入场日期
+            // professionOptions: [], // 工种选项
+            // professionValue: '', // 工种值
+            // contractorOptions: [], // 所属参建单位选项
+            // contractorValue: '', // 所属参建单位值
+            // dateValue: '', // 日期
+            tableData: [], // 表格数据
+            pageNum: 1, // 当前页码
+            pageSize: 15, // 每页显示条数
+            pageTotal: 0, // 总条数
+            dialogShow: false, // 新增对话框状态
+            compileShow: false, // 编辑对话框状态
+            deviceNo:'',//设备序列号
+            deviceName:'',//设备名称
+            deviceFactory:'',//设备厂家
+            direction:'',//进场方向
+            status:'',//是否上传
+            projectId:'',//项目ID
+            deviceIp:'',//设备ip
+            connectTime:'',//最近连接时间
+            remark:'',//备注
+            directionOptions: [{
+                value:'in',
+                label: '进'
+            }, {
+                value: 'out',
+                label: '出'
+            }],
+             statusOptions: [{
+                value:1,
+                label: '是'
+            }, {
+                value: '0',
+                label: '否'
+            }],
         }
     },
     methods: {
-        handleSizeChange(val) {
-            console.log(`每页${val}条`)
+      // 获取项目id
+        getProjectId() {
+            this.projectId = sessionStorage.getItem('pid')
         },
+
+        // 每页条数切换
+        handleSizeChange(val) {
+            // console.log(`每页 ${val} 条`)
+            this.pageSize = val
+            this.pageClick()
+        },
+
+        // 当前页
         handleCurrentChange(val) {
-            console.log(`当前页：${val}`)
+            // console.log(`当前页: ${val}`)
+            this.pageNum = val
+            this.pageClick()
+        },
+
+        // 当前选中的行数
+        handleSelectionChange(val) {
+            // console.log(val)
+            let temp = ''
+            for (let i = 0; i < val.length; i++) {
+                if (i == val.length-1) {
+                    temp+=(val[i].id)
+                } else {
+                    temp+=(val[i].id+',')
+                }
+            }
+            this.selectionId = temp
+            console.log(this.selectionId)
         },
 
         // 新增对话框状态切换
         dialogClick() {
+
             this.dialogShow = !this.dialogShow
         },
     }
