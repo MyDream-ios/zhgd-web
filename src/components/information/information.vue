@@ -804,7 +804,7 @@ export default {
                         if (this.fileDataList[i].folderId == this.folderId) {
                             tempTableData.push({
                                 name: this.fileDataList[i].fileName,
-                                size: this.fileDataList[i].fileSize+'kb',
+                                size: (Number(this.fileDataList[i].fileSize) / (1024*1024)).toFixed(2)+'MB',
                                 uploader: '项目管理员',
                                 uploadTime: this.fileDataList[i].createTime,
                                 download: '下载',

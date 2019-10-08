@@ -530,9 +530,9 @@ export default {
         // 新增班组
         insertHjTeam() {
             if (this.contractorValue && this.teamName) {
-                this.$axios.post(`/api/pcCompanyLibrary/insertHjTeam?projectId=${this.pid}&teamName=${this.teamName}&constructionId=${this.contractorValue}&remark=${this.remark}`).then(
-                    res => {
-                        // console.log(res.data)
+                this.$axios
+                    .post(`/api/pcCompanyLibrary/insertHjTeam?projectId=${this.pid}&teamName=${this.teamName}&constructionId=${this.contractorValue}&remark=${this.remark}`)
+                    .then(res => {
                         if (res.data.code == 0) {
                             this.$message({
                                 message: '新增成功',
