@@ -172,6 +172,13 @@
               </span>
               <input type="number" v-model="height"  placeholder="单位为m">
             </li>
+            <li>
+              <span>
+                设备安装单位
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="installCompany">
+            </li>
             <!-- <li>
               <span>
                 设备SN(32位)
@@ -266,6 +273,13 @@
                 <div class="required">*</div>
               </span>
               <input type="number" v-model="editTower.height" placeholder="单位为m">
+            </li>
+            <li>
+              <span>
+                设备安装单位
+                <div class="required">*</div>
+              </span>
+              <input type="text" v-model="editTower.installCompany">
             </li>
             <!-- <li>
               <span>
@@ -823,6 +837,7 @@ export default {
       deleteShow: false, // 删除弹窗
       deleteTime: '', // 删除的时间
       deleteId: '', // 删除的ID
+      installCompany: '' // 设备安装单位
     };
   },
   mounted() {
@@ -976,7 +991,7 @@ export default {
     // 添加设备提交
     insertCrane() {
       var temp = true
-      if (!this.scznl || !this.manufacturerId || !this.craneName || !this.hxzId || !this.serialNum || !this.capacity || !this.height) {
+      if (!this.scznl || !this.manufacturerId || !this.craneName || !this.hxzId || !this.serialNum || !this.capacity || !this.height || !this.installCompany) {
         temp = false
         this.$message({
           message: '*号项为必填项',
@@ -999,7 +1014,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`/api/OptionsElevatorApi/insertElevator?elevatorName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&serialNum=${this.serialNum}&capacity=${this.capacity}&height=${this.height}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}`)
+          .post(`/api/OptionsElevatorApi/insertElevator?elevatorName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&serialNum=${this.serialNum}&capacity=${this.capacity}&height=${this.height}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&installCompany=${this.installCompany}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({
@@ -1018,7 +1033,7 @@ export default {
       }
     },
 
-    // 点击编辑塔吊
+    // 点击编辑升降机
     clickEdit1(item) {
       // this.editTower = Object.assign({}, item)
       var temp = Object.assign({}, item)
@@ -1030,10 +1045,10 @@ export default {
       this.editTower = temp
     },
 
-    // 编辑塔吊提交
+    // 编辑升降机提交
     saveEdit() {
       var temp = true
-      if (!this.editTower.scznl || !this.editTower.manufacturerId || !this.editTower.elevatorName || !this.editTower.hxzId || !this.editTower.serialNum || !this.editTower.capacity || !this.editTower.height) {
+      if (!this.editTower.scznl || !this.editTower.manufacturerId || !this.editTower.elevatorName || !this.editTower.hxzId || !this.editTower.serialNum || !this.editTower.capacity || !this.editTower.height || !this.editTower.installCompany) {
         temp = false
       }
       if (this.editTower.scznl == 'CAY' && !this.editTower.jdbh) {
@@ -1045,7 +1060,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`/api/OptionsElevatorApi/updateElevator?id=${this.editTower.id}&elevatorName=${this.editTower.elevatorName}&hxzId=${this.editTower.hxzId}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&serialNum=${this.editTower.serialNum}&capacity=${this.editTower.capacity}&height=${this.editTower.height}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}`)
+          .post(`/api/OptionsElevatorApi/updateElevator?id=${this.editTower.id}&elevatorName=${this.editTower.elevatorName}&hxzId=${this.editTower.hxzId}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&serialNum=${this.editTower.serialNum}&capacity=${this.editTower.capacity}&height=${this.editTower.height}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}&installCompany=${this.editTower.installCompany}`)
           .then(res => {
             if (res.data.code == 0) {
               this.messageBox('修改成功', 1)
