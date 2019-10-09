@@ -70,29 +70,19 @@
                         </el-table-column>
                         <el-table-column
                         prop="userName"
-                        label="姓名"
+                        label="名称"
                         width="200">
                         </el-table-column>
                         <el-table-column
                         prop="loggingTag"
-                        label="对接平台"
+                        label="异常来源"
                         width="200">
                         </el-table-column>
-                        <el-table-column
-                        prop="loggingType"
-                        label="异常类型"
-                        width="100">
-                        <template slot-scope="scope">
-                            {{scope.row.loggingType==0?'考勤':scope.row.loggingType==1?'进场':scope.row.loggingType==2?'退场':''}}
-                        </template>
-                        </el-table-column>
+            
                         <el-table-column
                         prop="inOut"
-                        label="考勤类型"
-                        width="100">
-                        <template slot-scope="scope">
-                            {{scope.row.inOut=='in'?'上班':scope.row.inOut=='out'?'下班':''}}
-                        </template>
+                        label="执行动作"
+                        width="200">
                         </el-table-column>
                         <el-table-column
                         prop="loggingMessage"
@@ -104,7 +94,7 @@
                         </el-table-column>
                     </el-table>
                 </div>
-                <!-- 分页 -->
+                <!-- 分页- -->
                 <div class="paging-box">
                     <el-pagination
                         @size-change="handleSizeChange"
