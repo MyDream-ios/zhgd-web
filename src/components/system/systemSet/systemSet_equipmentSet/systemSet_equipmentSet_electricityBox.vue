@@ -985,7 +985,8 @@ export default {
     // 添加设备
     addSave() {
       var temp = true
-      if (!this.scznl || !this.manufacturerId || !this.comments || !this.electricityBoxId || !this.devType || !this.installAddrtype || !this.companyName || !this.installAddress || !this.tempLimit || !this.elecLimit || !this.aroundTemp) {
+      var devBoolean = this.devType == null ? true : false
+      if (!this.scznl || !this.manufacturerId || !this.comments || !this.electricityBoxId || devBoolean || !this.installAddrtype || !this.companyName || !this.installAddress || !this.tempLimit || !this.elecLimit || !this.aroundTemp) {
         temp = false
         this.$message({
           message: '*号项为必填项',
@@ -1045,7 +1046,8 @@ export default {
     // 编辑设备
     editClick() {
       var temp = true
-      if (!this.editObject.scznl || !this.editObject.manufacturerId || !this.editObject.comments || !this.editObject.electricityBoxId || !this.editObject.devType || !this.editObject.installAddrtype || !this.editObject.companyName || !this.editObject.installAddress || !this.editObject.tempLimit || !this.editObject.elecLimit || !this.editObject.aroundTemp) {
+      var devBoolean = this.editObject.devType == null ? true : false
+      if (!this.editObject.scznl || !this.editObject.manufacturerId || !this.editObject.comments || !this.editObject.electricityBoxId || devBoolean || !this.editObject.installAddrtype || !this.editObject.companyName || !this.editObject.installAddress || !this.editObject.tempLimit || !this.editObject.elecLimit || !this.editObject.aroundTemp) {
         temp = false
       }
       if (this.editObject.scznl == 'CAY' && !this.editObject.jdbh) {
@@ -1060,7 +1062,7 @@ export default {
       }
       if (temp) {
         this.$axios
-          .post(`/api/ProjectElectricityBox/editSave?editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
+          .post(`/api/ProjectElectricityBox/editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
           .then(res => {
             if (res.data.code == 0) {
               this.$message({

@@ -51,12 +51,22 @@
             </div>
             <router-link to="/safety">设备管理</router-link>
           </li>
-          <li  v-on:click="isActive('/monitoring');personnelClick5()">
-            <div class="Lactive-box" v-show="active=='/monitoring'" style="left:-.04rem">
+          <li  v-on:click="personnelClick6">
+            <div class="Lactive-box" v-show="active=='/monitoring' || active=='/aiDiscern'" style="left:-.04rem">
               <img src="../../../static/images/Lactive.png" alt="" class="Lactive-img">
               <span>视频监控</span>
             </div>
-            <router-link to="/monitoring">视频监控</router-link>
+            <a>视频监控</a>
+            <div class="drop-down5">
+              <ul>
+                <li v-on:click="isActive('/monitoring')">
+                  <router-link to="/monitoring">视频监控</router-link>
+                </li>
+                <li v-on:click="isActive('/aiDiscern')">
+                  <router-link to="/aiDiscern">AI识别</router-link>
+                </li>
+              </ul>
+            </div>
           </li>
           <li @click="personnelClick2">
             <div class="Lactive-box" v-show="active.includes('/quality')||active.includes('/gaoZhiMo')" style="left:.04rem">
@@ -174,6 +184,7 @@ export default {
       dropDownState2: true, // 安全管理下拉框状态
       dropDownState3: true, // 智能应用下拉框状态
       dropDownState4: true, // 绿色施工下拉框状态
+      dropDownState5: true, // 视频监控下拉框状态
       projectName: '', // 项目名称
     };
   },
@@ -240,9 +251,13 @@ export default {
       $('.drop-down4').animate({
         height:'0'
       },500)
+      $('.drop-down5').animate({
+        height:'0'
+      },500)
       this.dropDownState2 = true
       this.dropDownState3 = true
       this.dropDownState4 = true
+      this.dropDownState5 = true
 
       if (this.dropDownState) {
         $('.drop-down1').animate({
@@ -268,9 +283,13 @@ export default {
       $('.drop-down4').animate({
         height:'0'
       },500)
+      $('.drop-down5').animate({
+        height:'0'
+      },500)
       this.dropDownState = true
       this.dropDownState3 = true
       this.dropDownState4 = true
+      this.dropDownState5 = true
 
       if (this.dropDownState2) {
         $('.drop-down2').animate({
@@ -296,9 +315,13 @@ export default {
       $('.drop-down4').animate({
         height:'0'
       },500)
+      $('.drop-down5').animate({
+        height:'0'
+      },500)
       this.dropDownState = true
       this.dropDownState2 = true
       this.dropDownState4 = true
+      this.dropDownState5 = true
 
       if (this.dropDownState3) {
         $('.drop-down3').animate({
@@ -324,9 +347,13 @@ export default {
       $('.drop-down3').animate({
         height:'0'
       },500)
+      $('.drop-down5').animate({
+        height:'0'
+      },500)
       this.dropDownState = true
       this.dropDownState2 = true
       this.dropDownState3 = true
+      this.dropDownState5 = true
 
       if (this.dropDownState4) {
         $('.drop-down4').animate({
@@ -355,10 +382,46 @@ export default {
       $('.drop-down4').animate({
         height:'0'
       },500)
+      $('.drop-down5').animate({
+        height:'0'
+      },500)
       this.dropDownState = true
       this.dropDownState2 = true
       this.dropDownState3 = true
       this.dropDownState4 = true
+      this.dropDownState5 = true
+    },
+
+    // 视频监控点击
+    personnelClick6() {
+      $('.drop-down1').animate({
+        height:'0'
+      },500)
+      $('.drop-down2').animate({
+        height:'0'
+      },500)
+      $('.drop-down3').animate({
+        height:'0'
+      },500)
+      $('.drop-down4').animate({
+        height:'0'
+      },500)
+      this.dropDownState = true
+      this.dropDownState2 = true
+      this.dropDownState3 = true
+      this.dropDownState4 = true
+
+      if (this.dropDownState5) {
+        $('.drop-down5').animate({
+          height:'2.4rem'
+        },500)
+        this.dropDownState5 = false
+      } else {
+        $('.drop-down5').animate({
+          height:'0'
+        },500)
+        this.dropDownState5 = true
+      }
     },
 
     // 功能未开发
@@ -585,6 +648,30 @@ export default {
             ul {
               width: 1.28rem;
               height: 1.92rem;              
+              overflow: hidden;
+              border: .01rem solid #0f1f53;
+              background-color: #020521;
+              li {
+                a {
+                  color: #fff;
+                  width: 1.28rem;
+                  height: .48rem;
+                  margin: 0;
+                  padding: 0;
+                  border-bottom: .01rem solid #0f1f53;
+                }
+              }
+            }
+          }
+          .drop-down5 {
+            position: absolute;
+            left: .19rem;
+            top: .48rem;
+            height: 0;
+            overflow: hidden;
+            ul {
+              width: 1.28rem;
+              height: 0.96rem;              
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;

@@ -261,6 +261,7 @@ const router = new VueRouter({
         {path:'/labour',meta:{needLogin:true},component:resolve => require(['../components/labour/labour.vue'],resolve)},
         {path:'/unopen',meta:{needLogin:true},component:resolve => require(['../components/unopen/unopen.vue'],resolve)},
         {path:'/monitoring',meta:{needLogin:true},component:resolve => require(['../components/monitoring/monitoring.vue'],resolve)},
+        {path:'/aiDiscern',meta:{needLogin:true},component:resolve => require(['../components/aiDiscern/aiDiscern.vue'],resolve)},
         {path:'/information',meta:{needLogin:true},component:resolve => require(['../components/information/information.vue'],resolve)},
         // {path:'/quality',meta:{needLogin:true},component:quality},
         {path:'/schedule',meta:{needLogin:true},component:resolve => require(['../components/schedule/schedule.vue'],resolve)},
