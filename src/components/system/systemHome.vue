@@ -90,7 +90,7 @@
     <div class="centent">
       <div class="content-box">
         <el-collapse v-model="activeNames">
-          <el-collapse-item title="政府要求项" name="1">
+          <el-collapse-item title="政府要求项" name="1" class="img-big">
             <!-- 两制 -->
             <div class="flex systemCard_bg" v-if="open">
               <router-link to="/systemLiangZhi">
@@ -146,7 +146,7 @@
             <i></i>
             <i></i>
           </el-collapse-item>
-          <el-collapse-item title="可选购项" name="2">
+          <el-collapse-item title="可选购项" name="2" class="img-big">
             <!-- 资料管理 -->
             <div class="flex dataCard_bg" v-if="open">
               <router-link to="/systemInformation">
@@ -245,7 +245,7 @@
             <i></i>
           </el-collapse-item>
 
-          <el-collapse-item title="待开发项目" name="3">
+          <el-collapse-item title="待开发项目" name="3" class="img-small">
             <div class="flex bgc">
               <img src="../../../static/images/3DCard.png" alt="">
               <p>3D打印应用</p>
@@ -454,6 +454,7 @@
         display: inline-block;
         margin-bottom: 0.5rem;
         position: relative;
+        background-size: cover;
         img {
           position: absolute;
           top: 50%;
@@ -606,6 +607,16 @@
       }
       .workerCard_black {
         background-image: url('../../../static/images/workerCard_black.png');
+      }
+    }
+    .img-big {
+      img {
+        width: 75%;
+      }
+    }
+    .img-small {
+      img {
+        width: 10%;
       }
     }
     .el-collapse-item__content {
