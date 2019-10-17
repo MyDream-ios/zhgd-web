@@ -100,10 +100,7 @@
           </li>
           <li class="ul-list" v-for="(item,index) in nodeList" :key="index">
             <div class="ul-list-father">
-              <!-- <a class="relevance" @click="selectZhPreposeList(item.id)" v-if="item.relevance==1"></a> -->
-
-              <a class="relevance" @click="selectZhPreposeList(item.id)"></a>
-
+              <a class="relevance" @click="selectZhPreposeList(item.id)" v-if="item.relevance || item.preposition"></a>
               <div class="number">{{index+1}}</div>
               <div class="node" @click="itemClicked(index)">
                 <a v-if="showAdd(item.id)">
@@ -504,7 +501,7 @@
               style="padding-left:0"
               v-for="(item, index) in nodeList"
               :key="index"
-              v-if="item.id==activeMainPlan"
+              v-if="item.id==activeMainPlan && item.associatedNode.length>0"
             >
               <!-- 循环所有的关联列表 -->
               <div v-for="(item2, index2) in item.associatedNode" :key="index2">
@@ -1006,7 +1003,7 @@
     box-shadow: 0 0 0.5rem -0.3rem #666;
     min-height: 5.6rem;
     max-height: 9rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
     .top-button {
       height: 0.7rem;
@@ -2149,11 +2146,10 @@ export default {
     selectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?creatorId=${this.creatorId}&state=${this.stateValue}&controlRank=${this.rankValue}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}&state=${this.stateValue}&controlRank=${this.rankValue}`
         )
         .then(res => {
           this.nodeList = res.data.data;
-          // console.log(this.nodeList)
           this.selectRelevanceNode();
           this.getGantt();
         });
@@ -2163,7 +2159,7 @@ export default {
     searchSelectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?creatorId=${this.creatorId}&state=${this.stateValue}&controlRank=${this.rankValue}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}&state=${this.stateValue}&controlRank=${this.rankValue}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
         )
         .then(res => {
           this.nodeList = res.data.data;
@@ -2176,9 +2172,8 @@ export default {
     // 查询计划列表
     selectZhProgressPlanList() {
       this.$axios
-        .post(`/api/Node/selectZhProgressPlanList?creatorId=${this.creatorId}`)
+        .post(`/api/Node/selectZhProgressPlanList?projectId=${this.projectId}`)
         .then(res => {
-          // console.log(res.data.data)
           this.schedulePlan = res.data.data;
         });
     },
@@ -2193,7 +2188,7 @@ export default {
       ) {
         this.$axios
           .post(
-            `/api/Node/addNode?creatorId=${this.creatorId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&principal=${this.principal}&content=${this.radio}`
+            `/api/Node/addNode?projectId=${this.projectId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&principal=${this.principal}&content=${this.radio}`
           )
           .then(res => {
             // console.log(res.data)
@@ -2273,7 +2268,7 @@ export default {
     editNode() {
       this.$axios
         .post(
-          `/api/Node/editNode?creatorId=${this.creatorId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&id=${this.activeId}&principal=${this.principal}&content=${this.radio}`
+          `/api/Node/editNode?creatorId=${this.creatorId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&id=${this.activeId}&principal=${this.principal}&crux=${this.radio}`
         )
         .then(res => {
           // console.log(res.data)
@@ -2304,19 +2299,24 @@ export default {
             `/api/Node/selectZhProgressNodeList?nodeId=${this.nodeList[i].id}`
           )
           .then(res => {
-            // console.log(res.data.data)
             this.nodeList[i]["associatedNode"] = res.data.data;
             if (res.data.data.length == 0) {
-              // this.nodeList[i]["relevance"] = 0;
               this.$set(this.nodeList[i], "relevance", 0);
             } else {
-              // this.nodeList[i]["relevance"] = 1;
               this.$set(this.nodeList[i], "relevance", 1);
             }
-            // console.log(this.nodeList[i]["relevance"])
           });
+        this.$axios
+        .post(`/api/Node/selectZhPreposeList?mainPlan=${this.nodeList[i].id}`)
+        .then(res => {
+          if (res.data.data.length == 0) {
+              this.$set(this.nodeList[i], "preposition", 0);
+            } else {
+              this.$set(this.nodeList[i], "preposition", 1);
+            }
+        });
       }
-      // console.log(this.nodeList);
+      console.log(this.nodeList);
       // console.log(this.parentIdList)
     },
 
@@ -2353,7 +2353,6 @@ export default {
       this.$axios
         .post(`/api/Node/selectZhPreposeList?mainPlan=${mainPlan}`)
         .then(res => {
-          console.log(res.data);
           this.preposeList = res.data.data;
         });
     },
@@ -2362,7 +2361,7 @@ export default {
     removePrepose(id) {
       // console.log(id)
       this.$axios
-        .post(`/api/Node/removePrepose?id=${id}`)
+        .post(`/api/Node/removePreposeById?id=${id}`)
         .then(res => {
           // console.log(res.data)
           if (res.data.code == 0) {
@@ -2596,6 +2595,7 @@ export default {
           this.itemClick = index;
         }
       }
+      console.log(this.itemClick)
     },
 
     // 加号是否显示
@@ -2605,7 +2605,7 @@ export default {
         if (item == id) {
           temp = true;
         }
-      });
+      })
       return temp;
     }
   }

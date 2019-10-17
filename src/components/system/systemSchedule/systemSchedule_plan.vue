@@ -586,7 +586,7 @@
     min-height: 9rem;
     box-sizing: border-box;
     max-height: 9rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
     .top-button {
       height: 0.7rem;
@@ -1485,7 +1485,7 @@ export default {
     selectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?creatorId=${this.creatorId}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}`
           // '/api/Node/selectZhNodeList', {
           //   creatorId: this.creatorId
           // }
@@ -1504,7 +1504,7 @@ export default {
     selectZhProgressPlanList() {
       this.$axios
         .post(
-          `/api/Node/selectZhProgressPlanList?creatorId=${this.creatorId}`
+          `/api/Node/selectZhProgressPlanList?projectId=${this.projectId}`
           // '/api/Node/selectZhProgressPlanList', {
           //   creatorId: this.creatorId,
           //   predictStart: this.startTime,
@@ -1522,7 +1522,7 @@ export default {
     searchSelectZhProgressPlanList() {
       this.$axios
         .post(
-          `/api/Node/selectZhProgressPlanList?creatorId=${this.creatorId}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
+          `/api/Node/selectZhProgressPlanList?projectId=${this.projectId}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
           // '/api/Node/selectZhProgressPlanList', {
           //   creatorId: this.creatorId,
           //   predictStart: this.startTime,
@@ -1587,7 +1587,7 @@ export default {
       } else {
         this.$axios
           .post(
-            `/api/Node/addProgressPlan?name=${this.name}&creatorId=${this.creatorId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}`
+            `/api/Node/addProgressPlan?projectId=${this.projectId}&name=${this.name}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}`
             // '/api/Node/addProgressPlan', {
             //   "name": this.name,
             //   "creatorId": this.creatorId,
