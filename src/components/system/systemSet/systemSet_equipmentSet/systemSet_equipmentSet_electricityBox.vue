@@ -1008,6 +1008,9 @@ export default {
         });
       }
       if (temp) {
+        if (this.comments.indexOf('#') != -1) {
+          this.comments = this.comments.replace(/#/, '%23')
+        }
         this.$axios
           .post(`/api/ProjectElectricityBox/addSave?scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&projectId=${this.projectId}&comments=${this.comments}&electricityBoxId=${this.electricityBoxId}&devType=${this.devType}&installAddrtype=${this.installAddrtype}&jdbh=${this.jdbh}&companyName=${this.companyName}&installAddress=${this.installAddress}&tempLimit=${this.tempLimit}&elecLimit=${this.elecLimit}&aroundTemp=${this.aroundTemp}&xmid=${this.xmid}&subId=${this.subId}`)
           .then(res => {
@@ -1061,6 +1064,9 @@ export default {
         temp = false
       }
       if (temp) {
+        if (this.editObject.comments.indexOf('#') != -1) {
+          this.editObject.comments = this.editObject.comments.replace(/#/, '%23')
+        }
         this.$axios
           .post(`/api/ProjectElectricityBox/editSave?id=${this.editObject.id}&projectId=${this.editObject.projectId}&scznl=${this.editObject.scznl}&manufacturerId=${this.editObject.manufacturerId}&comments=${this.editObject.comments}&electricityBoxId=${this.editObject.electricityBoxId}&devType=${this.editObject.devType}&installAddrtype=${this.editObject.installAddrtype}&companyName=${this.editObject.companyName}&installAddress=${this.editObject.installAddress}&tempLimit=${this.editObject.tempLimit}&elecLimit=${this.editObject.elecLimit}&aroundTemp=${this.editObject.aroundTemp}&jdbh=${this.editObject.jdbh}&subId=${this.editObject.subId}&xmid=${this.editObject.xmid}&id=${this.editObject.id}`)
           .then(res => {

@@ -126,12 +126,14 @@
                   >{{percentage(item.progress)}}</div>
                 </div>
               </div>
-              <div class="status" style="color:#3ada76" v-if="item.state == 0">正常开始</div>
-              <div class="status" style="color:#c0bfbf" v-else-if="item.state == 1">未开始</div>
-              <div class="status" style="color:#ff7a81" v-else-if="item.state == 2">延期未开始</div>
-              <div class="status" style="color:#feb37f" v-else-if="item.state == 3">延期开始</div>
-              <div class="status" style="color:#ff7a81" v-else-if="item.state == 4">延期完成</div>
-              <div class="status" style="color:#3ada76" v-else>正常完成</div>
+              <div class="status" style="color:#3ada76" v-if="item.status == 0">正常开始</div>
+              <div class="status" style="color:#c0bfbf" v-else-if="item.status == 1">未开始</div>
+              <div class="status" style="color:#ff7a81" v-else-if="item.status == 2">延期未开始</div>
+              <div class="status" style="color:#feb37f" v-else-if="item.status == 3">延期开始</div>
+              <div class="status" style="color:#ff7a81" v-else-if="item.status == 4">延期完成</div>
+              <div class="status" style="color:#3ada76" v-else-if="item.status == 5">正常开始</div>
+              <div class="status" style="color:#3ada76" v-else-if="item.status == 6">提前开始</div>
+              <div class="status" style="color:#3ada76" v-else-if="item.status == 7">提前完成</div>
               <div class="rank">{{item.controlRank==1?'一级':item.controlRank==2?'二级':'三级'}}</div>
               <!-- <div class="plan-time">-</div> -->
               <div class="plan-time">{{ getPlanDays(item) }}天</div>
@@ -196,12 +198,14 @@
                         <div class="sub-schedule" :style="subSchedule">{{percentage(item2.ratio)}}</div>
                       </div>
                     </div>
-                    <div class="status" style="color:#3ada76" v-if="item2.state == 0">正常开始</div>
-                    <div class="status" style="color:#c0bfbf" v-else-if="item2.state == 1">未开始</div>
-                    <div class="status" style="color:#ff7a81" v-else-if="item2.state == 2">延期未开始</div>
-                    <div class="status" style="color:#feb37f" v-else-if="item2.state == 3">延期开始</div>
-                    <div class="status" style="color:#ff7a81" v-else-if="item2.state == 4">延期完成</div>
-                    <div class="status" style="color:#3ada76" v-else>正常完成</div>
+                    <div class="status" style="color:#3ada76" v-if="item2.status == 0">正常开始</div>
+                    <div class="status" style="color:#c0bfbf" v-else-if="item2.status == 1">未开始</div>
+                    <div class="status" style="color:#ff7a81" v-else-if="item2.status == 2">延期未开始</div>
+                    <div class="status" style="color:#feb37f" v-else-if="item2.status == 3">延期开始</div>
+                    <div class="status" style="color:#ff7a81" v-else-if="item2.status == 4">延期完成</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item2.status == 5">正常完成</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item2.status == 6">提前开始</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item2.status == 7">提前完成</div>
                     <div class="rank">{{item2.controlRank==1?'一级':item2.controlRank==2?'二级':'三级'}}</div>
                     <!-- <div class="plan-time">-</div> -->
                     <div class="plan-time">{{ getPlanDays(item2) }}天</div>
@@ -581,7 +585,7 @@
               >
                 <div class="number">{{index+1}}</div>
                 <div class="node">{{item2.name}}</div>
-                <div class="name">{{item2.state==0?'正常开始':item2.state==1?'未开始':''}}</div>
+                <div class="name">{{item2.status==0?'正常开始':item2.status==1?'未开始':''}}</div>
                 <div class="preposition">{{item2.predictStart.split(' ')[0]}}</div>
                 <div class="interval">{{item2.predictEnd.split(' ')[0]}}</div>
                 <div class="interval">
@@ -1001,8 +1005,7 @@
     border-radius: 0.04rem;
     background-color: #fff;
     box-shadow: 0 0 0.5rem -0.3rem #666;
-    min-height: 5.6rem;
-    max-height: 9rem;
+    min-height: 9rem;
     overflow-y: auto;
     position: relative;
     .top-button {
@@ -2079,39 +2082,6 @@ export default {
     this.getPersonnelList();
     this.selectZhProgressPlanList();
   },
-  // mounted() {
-  //   // 初始化甘特图
-  //   gantt.init(this.$refs.gantt);
-  //   // 修改表格
-  //   gantt.config.scales = [
-  //     {unit: "month", step: 1, format: "%F, %Y"},
-  //     {unit: "day", step: 1, format: "%d"}
-  //   ];
-  //   // 表格左侧宽度
-  //   gantt.config.grid_width = 200;
-  //   // 表头高度
-  //   gantt.config.scale_height = 50;
-  //   // 表格每栏的宽度
-  //   gantt.autosize_max_width = 1;
-  //   // 是否显示依赖线
-  //   gantt.config.show_links = false;
-  //   // 行高
-  //   gantt.config.row_height = 30;
-  //   // 滚动
-  //   gantt.config.autoscroll = true;
-  //   // 表格属性
-  //   gantt.config.columns = [
-  //     { name:"text", label:"节点名称", tree: false, max_width:'200' }
-  //   ]
-  //   // 拖拽图形
-  //   gantt.config.drag_move = false;
-  //   // 拖拽百分比
-  //   gantt.config.drag_progress = false;
-  //   // 改变工期
-  //   gantt.config.drag_resize = false;
-  //   // 数据解析
-  //   // gantt.parse(this.test);
-  // },
   methods: {
     // 获取开始时间与结束时间
     getTime() {
@@ -2146,7 +2116,7 @@ export default {
     selectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?projectId=${this.projectId}&state=${this.stateValue}&controlRank=${this.rankValue}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}&status=${this.stateValue}&controlRank=${this.rankValue}`
         )
         .then(res => {
           this.nodeList = res.data.data;
@@ -2159,7 +2129,7 @@ export default {
     searchSelectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?projectId=${this.projectId}&state=${this.stateValue}&controlRank=${this.rankValue}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}&status=${this.stateValue}&controlRank=${this.rankValue}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
         )
         .then(res => {
           this.nodeList = res.data.data;
@@ -2188,7 +2158,7 @@ export default {
       ) {
         this.$axios
           .post(
-            `/api/Node/addNode?projectId=${this.projectId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&principal=${this.principal}&content=${this.radio}`
+            `/api/Node/addNode?projectId=${this.projectId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&principal=${this.principal}&crux=${this.radio}`
           )
           .then(res => {
             // console.log(res.data)
@@ -2250,8 +2220,9 @@ export default {
             }
             this.predictStart = this.nodeList[i].predictStart;
             this.predictEnd = this.nodeList[i].predictEnd;
-            this.principal = this.nodeList[i].principal.toString();
-            // console.log(typeof this.principal)
+            if (this.nodeList[i].principal) {
+              this.principal = this.nodeList[i].principal.toString();
+            }
             this.controlRank = this.nodeList[i].controlRank;
           }
         }

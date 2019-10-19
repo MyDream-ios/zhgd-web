@@ -26,9 +26,9 @@
             <div class="title">
               <span>进度计划对比图</span>
               <div class="label">
-                <div>
+                <!-- <div>
                   <div class="line" style="background-color:#0090ff"></div>计划完成
-                </div>
+                </div> -->
                 <div>
                   <div class="line" style="background-color:#3ada76"></div>实际完成
                 </div>
@@ -50,7 +50,7 @@
               <span style="width:1.2rem">计划完成时间</span>
               <span style="width:.9rem">状态</span>
             </div>
-            <ul v-if="tab==1 && selectWarningZhNodeList.length>0">
+            <ul v-if="tab==1 && selectWarningZhNodeList.length>0" ref="scr1">
               <li v-for="item in selectWarningZhNodeList" :key="item.id">
                 <span style="width:1.4rem">
                   {{item.name}}
@@ -60,7 +60,7 @@
                 <span style="width:.9rem">{{obtainState(item)}}</span>
               </li>
             </ul>
-            <ul v-if="tab==2 && selectBeginZhNodeList.length>0">
+            <ul v-if="tab==2 && selectBeginZhNodeList.length>0" ref="scr2">
               <li v-for="item in selectBeginZhNodeList" :key="item.id">
                 <span style="width:1.4rem">
                   {{item.name}}
@@ -70,7 +70,7 @@
                 <span style="width:.9rem">距离开始时间还有{{getDelay(item.predictStart)}}天</span>
               </li>
             </ul>
-            <ul v-if="tab==3 && selectEndZhNodeList.length>0">
+            <ul v-if="tab==3 && selectEndZhNodeList.length>0" ref="scr3">
               <li v-for="item in selectEndZhNodeList" :key="item.id">
                 <span style="width:1.4rem">
                   {{item.name}}
@@ -88,7 +88,7 @@
         <div class="title">工程进度</div>
         <div class="day" style="left:.5rem;top:1rem">
           <div class="top-text">已施工（天）</div>
-          <div class="bottom-text">1304</div>
+          <div class="bottom-text">{{alreadyTime}}</div>
         </div>
         <div class="body">
           <a class="btn" style="left:30px" @click="addRight">
@@ -116,7 +116,7 @@
         </div>
         <div class="day" style="right:.5rem;top:1rem">
           <div class="top-text">总工期（天）</div>
-          <div class="bottom-text">2000</div>
+          <div class="bottom-text">{{totalTime}}</div>
         </div>
       </div>
     </div>
@@ -396,6 +396,12 @@ export default {
       selectBeginZhNodeListTotal: 0, // 即将开始节点数量
       selectEndZhNodeList: [], // 即将结束节点列表
       selectEndZhNodeListTotal: 0, // 即将结束节点数量
+      alreadyTime: 0, // 已施工天数
+      totalTime: 0, // 	总工期
+      echatsX: [], // echatsX轴
+      echatsY: [], // echatsY轴
+      scrollStart: 0, // 滚动开始位置
+      clearScroll: '', // 清除滚动
     };
   },
   mounted() {
@@ -404,10 +410,11 @@ export default {
     this.selectWarningZhNode();
     this.selectBeginZhNode();
     this.selectEndZhNode();
+    this.selectZhProgressPlan()
   },
   methods: {
     // 进度计划对比图：ECharts图渲染
-    planECharts() {
+    planECharts(echatsX, echatsY) {
       let plan = this.$echarts.init(document.getElementById("plan"));
       plan.setOption({
         // backgroundColor: "#FBFBFB",
@@ -436,22 +443,14 @@ export default {
             },
             type: "category",
             boundaryGap: false,
-            data: [
-              "1月计划",
-              "2月计划",
-              "3月计划",
-              "4月计划",
-              "5月计划",
-              "6月计划",
-              "7月计划",
-              "8月计划"
-            ]
+            data: echatsX
           }
         ],
         yAxis: [
           {
             type: "value",
             min: 0,
+            max: 100,
             interval: 20,
             axisLabel: {
               textStyle: {
@@ -476,20 +475,12 @@ export default {
         ],
         series: [
           {
-            name: "计划完成",
-            type: "line",
-            symbolSize: 10,
-            smooth: 0.2,
-            color: ["#0090ff"],
-            data: [90, 60, 70, 40, 80, 60, 70, 50]
-          },
-          {
             name: "实际完成",
             type: "line",
             symbolSize: 10,
             smooth: 0.2,
             color: ["#3ada76"],
-            data: [70, 50, 40, 40, 60, 55, 50, 45]
+            data: echatsY
           }
         ]
       });
@@ -508,7 +499,7 @@ export default {
     // 查询关键节点列表
     selectZhNodeList() {
       this.$axios
-        .post(`/api/Node/selectZhNodeList?projectId=${this.projectId}`)
+        .post(`/api/Node/selectCruxZhNode?projectId=${this.projectId}`)
         .then(res => {
           if (res.data.code == 0) {
             this.selectZhNodeLists = res.data.data
@@ -529,6 +520,14 @@ export default {
     // 表格切换tab
     clickTab(num) {
       this.tab = num
+      if (this.clearScroll) clearInterval(this.clearScroll)
+      if (num == 1 && this.selectWarningZhNodeListTotal>3) {
+        this.getRoll('scr' + num)
+      } else if (num == 2 && this.selectBeginZhNodeListTotal>3) {
+        this.getRoll('scr' + num)
+      } else if (num == 3 && this.selectEndZhNodeListTotal>3) {
+        this.getRoll('scr' + num)
+      }
     },
 
     // 查询预警节点列表接口
@@ -539,6 +538,7 @@ export default {
           if (res.data.code == 0) {
             this.selectWarningZhNodeList = res.data.data
             this.selectWarningZhNodeListTotal = res.data.data.length
+            this.getRoll('scr1')
           }
         })
     },
@@ -570,19 +570,54 @@ export default {
     // 计算延迟天数
     getDelay(time) {
       let temp = new Date(time).getTime()
-      return Math.floor((temp - this.nowDay) / ( 1000 * 60 * 60 * 24 ))
+      return Math.ceil((temp - this.nowDay) / ( 1000 * 60 * 60 * 24 ))
     },
 
     // 节点预警返回值
     obtainState(item) {
       if (item.state == 1) {
         let temp = new Date(item.predictStart).getTime()
-        return '未按时启动，延期' + Math.floor((temp - this.nowDay) / ( 1000 * 60 * 60 * 24 )) + '天'
+        return '未按时启动，延期' + Math.floor((this.nowDay - temp) / ( 1000 * 60 * 60 * 24 )) + '天'
       } else {
         let temp = new Date(item.predictEnd).getTime()
         return '未按时完成，延期' + Math.floor((this.nowDay - temp) / ( 1000 * 60 * 60 * 24 )) + '天'
       }
+    },
+
+    // 查询进度计划数据接口（图表数据）
+    selectZhProgressPlan() {
+      this.$axios
+        .post(`/api/Node/selectZhProgressPlan?projectId=${this.projectId}`)
+        .then(res => {
+          if (res.data.code == 0) {
+            this.alreadyTime = res.data.alreadyTime
+            this.totalTime = res.data.totalTime
+            let list = res.data.data
+            for (let i = 0; i < list.length; i++) {
+              this.echatsX.push(list[i].name)
+              this.echatsY.push(list[i].progress)
+            }
+            this.planECharts(this.echatsX, this.echatsY)
+          }
+        })
+    },
+
+    // 滚动
+    getRoll(ele) {
+      this.scrollStart = 0
+      if (this.clearScroll) clearInterval(this.clearScroll)
+      this.clearScroll = setInterval(() => {
+        this.$refs[`${ele}`].scrollTop += 1
+        if (this.$refs[`${ele}`].scrollTop == this.scrollStart) {
+          this.$refs[`${ele}`].scrollTop = 0
+        } else {
+          this.scrollStart = this.$refs[`${ele}`].scrollTop
+        }
+      }, 50);
     }
+  },
+  beforeDestroy() {
+    if (this.clearScroll) clearInterval(this.clearScroll)
   }
 };
 </script>

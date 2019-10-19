@@ -119,12 +119,14 @@
                       </a>
                     </div>
                     <!-- <div class="status">{{item3.state==0?'正常开始':item3.state==1?'未开始':item3.state==2?'延期未开始':item3.state==3?'延期开始':item3.state==4?'延期完成':'正常完成'}}</div> -->
-                    <div class="status" style="color:#3ada76" v-if="item3.state == 0">正常开始</div>
-                    <div class="status" style="color:#c0bfbf" v-else-if="item3.state == 1">未开始</div>
-                    <div class="status" style="color:#ff7a81" v-else-if="item3.state == 2">延期未开始</div>
-                    <div class="status" style="color:#feb37f" v-else-if="item3.state == 3">延期开始</div>
-                    <div class="status" style="color:#ff7a81" v-else-if="item3.state == 4">延期完成</div>
-                    <div class="status" style="color:#3ada76" v-else>正常完成</div>
+                    <div class="status" style="color:#3ada76" v-if="item3.status == 0">正常开始</div>
+                    <div class="status" style="color:#c0bfbf" v-else-if="item3.status == 1">未开始</div>
+                    <div class="status" style="color:#ff7a81" v-else-if="item3.status == 2">延期未开始</div>
+                    <div class="status" style="color:#feb37f" v-else-if="item3.status == 3">延期开始</div>
+                    <div class="status" style="color:#ff7a81" v-else-if="item3.status == 4">延期完成</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item3.status == 5">正常完成</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item3.status == 6">提前开始</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item3.status == 7">提前完成</div>
 
 
                     <div class="rank">{{item3.controlRank==1?'一级':item3.controlRank==2?'二级':'三级'}}</div>
@@ -358,9 +360,9 @@
                 </template>
               </el-table-column>
               <!-- <el-table-column prop="parentId" label="父节点"></el-table-column> -->
-              <el-table-column label="计划所占进度">
+              <el-table-column label="计划占节点百分比">
                 <template slot-scope="scope">
-                  <el-input placeholder="节点占进度的百分比" :disabled="disableInput(scope.row)" v-model="scope.row.nodeProgressRatio" type="number" name="input" @keyup.enter.native="inputBlur(scope.row)" @focus="inoutFocus(scope.row)"></el-input>
+                  <el-input placeholder="计划占节点百分比" :disabled="disableInput(scope.row)" v-model="scope.row.nodeProgressRatio" type="number" name="input" @keyup.enter.native="inputBlur(scope.row)" @focus="inoutFocus(scope.row)"></el-input>
                   <!-- <input type="number" v-model="scope.row.nodeProgressRatio"  @blur="inputBlur(scope.row)" @focus="inoutFocus(scope.row)"> -->
                 </template>
               </el-table-column>
@@ -1010,7 +1012,7 @@
           max-height: 6rem;
           padding-left: 0.3rem;
           padding-right: 0.3rem;
-          overflow-y: scroll;
+          overflow-y: auto;
           .el-table {
             width: 16.28rem;
             // width: 100%;
@@ -1505,16 +1507,12 @@ export default {
       this.$axios
         .post(
           `/api/Node/selectZhProgressPlanList?projectId=${this.projectId}`
-          // '/api/Node/selectZhProgressPlanList', {
-          //   creatorId: this.creatorId,
-          //   predictStart: this.startTime,
-          //   predictEnd: this.endTime
-          // }
         )
         .then(res => {
-          // console.log(res.data)
-          this.planList = res.data.data;
-          this.selectZhProgressNodeList();
+          if (res.data.code == 0) {
+            this.planList = res.data.data;
+            this.selectZhProgressNodeList();
+          }
         });
     },
 
@@ -1523,51 +1521,37 @@ export default {
       this.$axios
         .post(
           `/api/Node/selectZhProgressPlanList?projectId=${this.projectId}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
-          // '/api/Node/selectZhProgressPlanList', {
-          //   creatorId: this.creatorId,
-          //   predictStart: this.startTime,
-          //   predictEnd: this.endTime
-          // }
         )
         .then(res => {
-          // console.log(res.data)
-          this.planList = res.data.data;
-          this.selectZhProgressNodeList();
+          if (res.data.code == 0) {
+            this.planList = res.data.data;
+            this.selectZhProgressNodeList();
+          }
         });
     },
 
     // 查询计划节点关联列表
     selectZhProgressNodeList() {
       for (let i = 0; i < this.planList.length; i++) {
-        // console.log(this.planList[i].id)
         this.$axios
           .post(
             `/api/Node/selectZhProgressNodeList?progressId=${this.planList[i].id}`
-            // '/api/Node/selectZhProgressNodeList', {
-            //   progressId: this.planList[i].id
-            // }
           )
           .then(res => {
-            console.log(res.data.data)
-            // this.planList[i].nodeList = res.data.data;
-
-            this.$set(this.planList[i], 'nodeList', res.data.data)
-
-
-            let temp = 0;
-            for (let j = 0; j < res.data.data.length; j++) {
-              // console.log(res.data.data[j].nodeId)
-              for (let z = 0; z < this.nodeList.length; z++) {
-                // console.log(this.nodeList[z].id)
-                if (res.data.data[j].nodeId == this.nodeList[z].id) {
-                  if (this.nodeList[z].progress == 100) {
-                    temp += 1
+            if (res.data.code == 0) {
+              this.$set(this.planList[i], 'nodeList', res.data.data)
+              let temp = 0;
+              for (let j = 0; j < res.data.data.length; j++) {
+                for (let z = 0; z < this.nodeList.length; z++) {
+                  if (res.data.data[j].nodeId == this.nodeList[z].id) {
+                    if (this.nodeList[z].progress == 100) {
+                      temp += 1
+                    }
                   }
                 }
-                // console.log(this.nodeList[z].progress)
               }
+              this.planList[i].done = temp;
             }
-            this.planList[i].done = temp;
           });
       }
     },
@@ -1904,12 +1888,10 @@ export default {
     clickProgress(item) {
       this.notStart = false
       this.editNode = true;
-      console.log(item);
       this.nodeName = item.name;
       this.progress = item.progress;
       this.submitProgressNodeId = item.id
-      // console.log(item.state)
-      if (item.state == 1  || item.state == 2) {
+      if (item.status == 1  || item.status == 2) {
         this.notStart = true
       }
       if (item.progress == 100) {
@@ -1941,7 +1923,7 @@ export default {
                 now = now.split('/')
                 now = now[0] + '-' + (Number(now[1])<10 ? ('0' + now[1]) : now[1]) + '-' + now[2]
                 this.$axios
-                  .post(`/api/Node/editNode?id=${this.submitProgressNodeId}&end=${now}`)
+                  .post(`/api/Node/editNode?id=${this.submitProgressNodeId}&end=${now}&state=2`)
                   .then(res => {
                     // console.log(res.data.data)
                     if (res.data.code == 0) {
@@ -2184,7 +2166,7 @@ export default {
     now = now[0] + '-' + (Number(now[1])<10 ? ('0' + now[1]) : now[1]) + '-' + now[2]
     // console.log(now)
       this.$axios
-        .post(`/api/Node/editNode?id=${id}&start=${now}`)
+        .post(`/api/Node/editNode?id=${id}&start=${now}&state=0`)
         .then(res => {
           console.log(res.data.data)
           if (res.data.code == 0) {

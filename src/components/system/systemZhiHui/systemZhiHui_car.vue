@@ -78,7 +78,7 @@
             <div class="infoBox">
               <ul>
                 <li>
-                  <span>驾驶员：</span>{{newData.name}}
+                  <span>驾驶员：</span>{{newData.operatorin}}
                 </li>
                 <li>
                   <span>车牌号：</span>{{newData.vehicleNo}}
@@ -123,7 +123,7 @@
                             label="序号"
                             width="80"
                             :index="indexMethod2"></el-table-column>
-                <el-table-column prop="name" label="驾驶员" width="195"></el-table-column>
+                <el-table-column prop="operatorin" label="驾驶员" width="195"></el-table-column>
                 <el-table-column prop="vehicleNo" label="车牌号" width="173"></el-table-column>
                 <el-table-column prop="gateinname" label="通道名称" width="179"></el-table-column>
                 <el-table-column label="进出类型" width="193">
@@ -148,7 +148,7 @@
                             label="序号"
                             width="80"
                             :index="indexMethod2"></el-table-column>
-                <el-table-column prop="name" label="驾驶员" width="195"></el-table-column>
+                <el-table-column prop="operatorin" label="驾驶员" width="195"></el-table-column>
                 <el-table-column prop="vehicleNo" label="车牌号" width="173"></el-table-column>
                 <el-table-column prop="gateinname" label="通道名称" width="179"></el-table-column>
                 <el-table-column label="进出类型" width="193">

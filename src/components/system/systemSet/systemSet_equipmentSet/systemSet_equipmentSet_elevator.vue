@@ -1013,6 +1013,9 @@ export default {
         });
       }
       if (temp) {
+        if (this.craneName.indexOf('#') != -1) {
+          this.craneName = this.craneName.replace(/#/, '%23')
+        }
         this.$axios
           .post(`/api/OptionsElevatorApi/insertElevator?elevatorName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&serialNum=${this.serialNum}&capacity=${this.capacity}&height=${this.height}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&installCompany=${this.installCompany}`)
           .then(res => {
@@ -1059,6 +1062,9 @@ export default {
         temp = false
       }
       if (temp) {
+        if (this.editTower.elevatorName.indexOf('#') != -1) {
+          this.editTower.elevatorName = this.editTower.elevatorName.replace(/#/, '%23')
+        }
         this.$axios
           .post(`/api/OptionsElevatorApi/updateElevator?id=${this.editTower.id}&elevatorName=${this.editTower.elevatorName}&hxzId=${this.editTower.hxzId}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&serialNum=${this.editTower.serialNum}&capacity=${this.editTower.capacity}&height=${this.editTower.height}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}&installCompany=${this.editTower.installCompany}`)
           .then(res => {

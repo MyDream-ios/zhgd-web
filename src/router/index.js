@@ -366,6 +366,7 @@ const router = new VueRouter({
             {path:'/systemSet_equipmentSet_TSP',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet/systemSet_equipmentSet/systemSet_equipmentSet_TSP.vue'],resolve)},
             {path:'/systemSet_equipmentSet_quality',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet/systemSet_equipmentSet/systemSet_equipmentSet_quality.vue'],resolve)},
             {path:'/systemSet_equipmentSet_safety',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet/systemSet_equipmentSet/systemSet_equipmentSet_safety.vue'],resolve)},
+            {path:'/systemSet_equipmentSet_spectaculars',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet/systemSet_equipmentSet/systemSet_equipmentSet_spectaculars.vue'],resolve)},
             {path:'/systemSet_permission_user',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet/systemSet_permission_user.vue'],resolve)},
             {path:'/systemSet_permission_role',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet/systemSet_permission_role.vue'],resolve)},
             {path:'/systemSet_unit',meta:{needLogin:true},component:resolve => require(['../components/system/systemSet//systemSet_unit.vue'],resolve)},
