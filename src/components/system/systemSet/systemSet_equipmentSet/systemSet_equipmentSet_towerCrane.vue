@@ -1038,6 +1038,9 @@ export default {
         });
       }
       if (temp) {
+        if (this.craneName.indexOf('#') != -1) {
+          this.craneName = this.craneName.replace(/#/, '%23')
+        }
         this.$axios
           .post(`/api/OptionsCraneApi/insertCrane?craneName=${this.craneName}&hxzId=${this.hxzId}&projectId=${this.projectId}&scznl=${this.scznl}&manufacturerId=${this.manufacturerId}&serialNum=${this.serialNum}&tcMaxScope=${this.tcMaxScope}&tcMaxHeight=${this.tcMaxHeight}&tcLoadCapacity=${this.tcLoadCapacity}&tcLoadMoment=${this.tcLoadMoment}&jdbh=${this.jdbh}&xmid=${this.xmid}&subId=${this.subId}&installCompany=${this.installCompany}`)
           .then(res => {
@@ -1086,6 +1089,9 @@ export default {
         temp = false
       }
       if (temp) {
+        if (this.editTower.craneName.indexOf('#') != -1) {
+          this.editTower.craneName = this.editTower.craneName.replace(/#/, '%23')
+        }
         this.$axios
           .post(`/api/OptionsCraneApi/updateCrane?id=${this.editTower.id}&scznl=${this.editTower.scznl}&manufacturerId=${this.editTower.manufacturerId}&craneName=${this.editTower.craneName}&hxzId=${this.editTower.hxzId}&serialNum=${this.editTower.serialNum}&tcMaxScope=${this.editTower.tcMaxScope}&tcMaxHeight=${this.editTower.tcMaxHeight}&tcLoadCapacity=${this.editTower.tcLoadCapacity}&tcLoadMoment=${this.editTower.tcLoadMoment}&jdbh=${this.editTower.jdbh}&xmid=${this.editTower.xmid}&subId=${this.editTower.subId}&installCompany=${this.editTower.installCompany}`)
           .then(res => {

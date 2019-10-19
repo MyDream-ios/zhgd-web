@@ -1421,7 +1421,7 @@ export default {
         this.getProjectId()
         this.getPersonnelList()
         this.getContractorList()
-        this.getTeamList()
+            this.getTeamList()
         this.getWorkList()
         this.getJobTypeName()
         this.getJobName()
@@ -1888,7 +1888,7 @@ export default {
             // console.log(this.file.get('file')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
             // console.log(`123`)
             $(`.faceA`).text('上传中')
-            // this.getAliOcrIdCardFace()
+            this.getAliOcrIdCardFace()
         },
         // 拿到身份证反面上传的图片
         updateBack(e) {
@@ -1918,7 +1918,7 @@ export default {
                     // console.log(res.data)
                     let temp = []
                     for (let i = 0; i < res.data.data.length; i++) {
-                        this.$axios.post(`/api/teamApi/app/selectTeam?constructionId=${res.data.data[i].id}`).then(
+                        this.$axios.post(`http://192.168.1.39:8083/api/teamApi/app/selectTeam?constructionId=${res.data.data[i].id}`).then(
                             res2 => {
                                 if (res2.data) {
                                     let temp2 = []

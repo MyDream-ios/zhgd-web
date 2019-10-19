@@ -152,6 +152,7 @@
               <li>
                 <span class="leftName">塔吊数量：</span>
                 <span class="sub" v-if="towerCraneData">{{towerCraneData.length}}座</span>
+                <span class="sub" v-else>0座</span>
               </li>
               <li>
                 <span class="leftName">违规操作：</span>
@@ -462,7 +463,7 @@ export default {
         ]
       })
     },
-    
+
     // 初始化温度检测数据图
     temperaturePic(tPH,tPV) {
       // hours.push("h");
@@ -823,8 +824,7 @@ export default {
     getTowerCrane() {
         this.$axios.post(`/api/appCraneAddRecord/kanban?pid=${this.projectId}`).then(
             res => {
-                console.log(res.data.sjjlist)
-                if (res.data.sjjlist) {
+                if (res.data.sjjlist && res.data.sjjlist[0].sb.length>0) {
                   this.towerCraneData = res.data.sjjlist
                 }
             }

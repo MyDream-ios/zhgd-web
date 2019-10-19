@@ -44,7 +44,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-    </div> 
+    </div>
     <!-- 内容 -->
     <div class="main">
       <!-- 地图 -->
@@ -59,7 +59,8 @@
           class="amap-demo"
         >
           <!-- <el-amap-marker vid="component-marker" position="[114.083372, 22.544146]" ></el-amap-marker> -->
-          <el-amap-marker v-if="markerList.length !== 0" v-for="(marker, index) in markerList" :key="index" :position="marker.position"></el-amap-marker>
+          <el-amap-marker v-if="markerList.length != 0" v-for="(marker, index) in markerList" :key="index" :position="marker.position"></el-amap-marker>
+          <!-- <el-amap-marker v-if="star" v-for="(marker, index) in markerList" :key="index" :position="marker.position"></el-amap-marker> -->
         </el-amap>
       </div>
       <!-- 搜索框 -->
@@ -379,10 +380,9 @@ export default {
       statisticsData: '', // 统计数据
       projectListData: '', // 项目列表数据
       allItems: [], // 获取全部项目列表
-      markerList: [{
-        position: [114.02769, 22.655081]
-      }], //经纬度坐标
-      pid: '' // 公司id
+      markerList: [], //经纬度坐标
+      pid: '', // 公司id
+      star: false
     }
   },
   created() {
@@ -509,13 +509,15 @@ export default {
           this.allItems = res.data.data;
           for (let i = 0; i < this.allItems.length; i++) {
             // this.allItems[i]
+            if (this.allItems[i].longitude == '' || this.allItems[i].latitude == '') {
+              continue
+            }
             var marker = {
-              position: [this.allItems[i].longitude, this.allItems[i].latitude]
+              position: [this.allItems[i].longitude*1, this.allItems[i].latitude*1]
             };
             this.markerList.push(marker)
           }
           this.projectSum = this.allItems.length
-          // console.log(this.markerList);
           // this.map.add(markerList);
         })
     },
@@ -915,6 +917,8 @@ export default {
     //   }
     // }
     >.main-list {
+      overflow: auto;
+      height: calc( 100% - 1.26rem);
       >li {
         cursor: pointer;
         height: 1rem;

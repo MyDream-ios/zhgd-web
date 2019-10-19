@@ -1310,6 +1310,9 @@ export default {
       // if (this.itemsId == undefined) {
       //   this.itemsId = ''
       // }
+      if (this.addComments.indexOf('#') != -1) {
+        this.addComments = this.addComments.replace(/#/, '%23')
+      }
       this.$axios
         .post(
           `/api/ProjectDustEmission/projectDustEmissionAddSave?projectId=${this.projectId}&comments=${this.addComments}&sn=${this.addSn}&videoAddress=${this.addVideoAddress}&meOption=${this.meOption}&installAddress=${this.installAddress}&installCompany=${this.installCompany}&deviceInstallationDate=${this.deviceInstallationDate}&jdbh=${this.superviseNum}&xmid=${this.itemsId}&subId=${this.subId}&manufacturerId=${this.manufacturers}&scznl=${this.changeUnit}`
@@ -1496,6 +1499,9 @@ export default {
       }
 
       if (temp) {
+        if (this.editComments.indexOf('#') != -1) {
+          this.editComments = this.editComments.replace(/#/, '%23')
+        }
         this.$axios
           .post(
             `/api/ProjectDustEmission/projectDustEmissionEditSave?projectId=${

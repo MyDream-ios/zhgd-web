@@ -643,7 +643,8 @@ export default {
             type: "value",
             // max: this.curveMax,
             min: 0,
-            interval: 1,
+            minInterval: 1,
+            // interval: 1,
             axisLabel: {
               textStyle: {
                 color: "#fff"

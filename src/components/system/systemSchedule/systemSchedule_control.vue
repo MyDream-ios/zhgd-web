@@ -100,10 +100,7 @@
           </li>
           <li class="ul-list" v-for="(item,index) in nodeList" :key="index">
             <div class="ul-list-father">
-              <!-- <a class="relevance" @click="selectZhPreposeList(item.id)" v-if="item.relevance==1"></a> -->
-
-              <a class="relevance" @click="selectZhPreposeList(item.id)"></a>
-
+              <a class="relevance" @click="selectZhPreposeList(item.id)" v-if="item.relevance || item.preposition"></a>
               <div class="number">{{index+1}}</div>
               <div class="node" @click="itemClicked(index)">
                 <a v-if="showAdd(item.id)">
@@ -129,12 +126,14 @@
                   >{{percentage(item.progress)}}</div>
                 </div>
               </div>
-              <div class="status" style="color:#3ada76" v-if="item.state == 0">正常开始</div>
-              <div class="status" style="color:#c0bfbf" v-else-if="item.state == 1">未开始</div>
-              <div class="status" style="color:#ff7a81" v-else-if="item.state == 2">延期未开始</div>
-              <div class="status" style="color:#feb37f" v-else-if="item.state == 3">延期开始</div>
-              <div class="status" style="color:#ff7a81" v-else-if="item.state == 4">延期完成</div>
-              <div class="status" style="color:#3ada76" v-else>正常完成</div>
+              <div class="status" style="color:#3ada76" v-if="item.status == 0">正常开始</div>
+              <div class="status" style="color:#c0bfbf" v-else-if="item.status == 1">未开始</div>
+              <div class="status" style="color:#ff7a81" v-else-if="item.status == 2">延期未开始</div>
+              <div class="status" style="color:#feb37f" v-else-if="item.status == 3">延期开始</div>
+              <div class="status" style="color:#ff7a81" v-else-if="item.status == 4">延期完成</div>
+              <div class="status" style="color:#3ada76" v-else-if="item.status == 5">正常开始</div>
+              <div class="status" style="color:#3ada76" v-else-if="item.status == 6">提前开始</div>
+              <div class="status" style="color:#3ada76" v-else-if="item.status == 7">提前完成</div>
               <div class="rank">{{item.controlRank==1?'一级':item.controlRank==2?'二级':'三级'}}</div>
               <!-- <div class="plan-time">-</div> -->
               <div class="plan-time">{{ getPlanDays(item) }}天</div>
@@ -199,12 +198,14 @@
                         <div class="sub-schedule" :style="subSchedule">{{percentage(item2.ratio)}}</div>
                       </div>
                     </div>
-                    <div class="status" style="color:#3ada76" v-if="item2.state == 0">正常开始</div>
-                    <div class="status" style="color:#c0bfbf" v-else-if="item2.state == 1">未开始</div>
-                    <div class="status" style="color:#ff7a81" v-else-if="item2.state == 2">延期未开始</div>
-                    <div class="status" style="color:#feb37f" v-else-if="item2.state == 3">延期开始</div>
-                    <div class="status" style="color:#ff7a81" v-else-if="item2.state == 4">延期完成</div>
-                    <div class="status" style="color:#3ada76" v-else>正常完成</div>
+                    <div class="status" style="color:#3ada76" v-if="item2.status == 0">正常开始</div>
+                    <div class="status" style="color:#c0bfbf" v-else-if="item2.status == 1">未开始</div>
+                    <div class="status" style="color:#ff7a81" v-else-if="item2.status == 2">延期未开始</div>
+                    <div class="status" style="color:#feb37f" v-else-if="item2.status == 3">延期开始</div>
+                    <div class="status" style="color:#ff7a81" v-else-if="item2.status == 4">延期完成</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item2.status == 5">正常完成</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item2.status == 6">提前开始</div>
+                    <div class="status" style="color:#3ada76" v-else-if="item2.status == 7">提前完成</div>
                     <div class="rank">{{item2.controlRank==1?'一级':item2.controlRank==2?'二级':'三级'}}</div>
                     <!-- <div class="plan-time">-</div> -->
                     <div class="plan-time">{{ getPlanDays(item2) }}天</div>
@@ -504,7 +505,7 @@
               style="padding-left:0"
               v-for="(item, index) in nodeList"
               :key="index"
-              v-if="item.id==activeMainPlan"
+              v-if="item.id==activeMainPlan && item.associatedNode.length>0"
             >
               <!-- 循环所有的关联列表 -->
               <div v-for="(item2, index2) in item.associatedNode" :key="index2">
@@ -584,7 +585,7 @@
               >
                 <div class="number">{{index+1}}</div>
                 <div class="node">{{item2.name}}</div>
-                <div class="name">{{item2.state==0?'正常开始':item2.state==1?'未开始':''}}</div>
+                <div class="name">{{item2.status==0?'正常开始':item2.status==1?'未开始':''}}</div>
                 <div class="preposition">{{item2.predictStart.split(' ')[0]}}</div>
                 <div class="interval">{{item2.predictEnd.split(' ')[0]}}</div>
                 <div class="interval">
@@ -1004,9 +1005,8 @@
     border-radius: 0.04rem;
     background-color: #fff;
     box-shadow: 0 0 0.5rem -0.3rem #666;
-    min-height: 5.6rem;
-    max-height: 9rem;
-    overflow-y: scroll;
+    min-height: 9rem;
+    overflow-y: auto;
     position: relative;
     .top-button {
       height: 0.7rem;
@@ -2082,39 +2082,6 @@ export default {
     this.getPersonnelList();
     this.selectZhProgressPlanList();
   },
-  // mounted() {
-  //   // 初始化甘特图
-  //   gantt.init(this.$refs.gantt);
-  //   // 修改表格
-  //   gantt.config.scales = [
-  //     {unit: "month", step: 1, format: "%F, %Y"},
-  //     {unit: "day", step: 1, format: "%d"}
-  //   ];
-  //   // 表格左侧宽度
-  //   gantt.config.grid_width = 200;
-  //   // 表头高度
-  //   gantt.config.scale_height = 50;
-  //   // 表格每栏的宽度
-  //   gantt.autosize_max_width = 1;
-  //   // 是否显示依赖线
-  //   gantt.config.show_links = false;
-  //   // 行高
-  //   gantt.config.row_height = 30;
-  //   // 滚动
-  //   gantt.config.autoscroll = true;
-  //   // 表格属性
-  //   gantt.config.columns = [
-  //     { name:"text", label:"节点名称", tree: false, max_width:'200' }
-  //   ]
-  //   // 拖拽图形
-  //   gantt.config.drag_move = false;
-  //   // 拖拽百分比
-  //   gantt.config.drag_progress = false;
-  //   // 改变工期
-  //   gantt.config.drag_resize = false;
-  //   // 数据解析
-  //   // gantt.parse(this.test);
-  // },
   methods: {
     // 获取开始时间与结束时间
     getTime() {
@@ -2149,11 +2116,10 @@ export default {
     selectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?creatorId=${this.creatorId}&state=${this.stateValue}&controlRank=${this.rankValue}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}&status=${this.stateValue}&controlRank=${this.rankValue}`
         )
         .then(res => {
           this.nodeList = res.data.data;
-          // console.log(this.nodeList)
           this.selectRelevanceNode();
           this.getGantt();
         });
@@ -2163,7 +2129,7 @@ export default {
     searchSelectZhNodeList() {
       this.$axios
         .post(
-          `/api/Node/selectZhNodeList?creatorId=${this.creatorId}&state=${this.stateValue}&controlRank=${this.rankValue}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
+          `/api/Node/selectZhNodeList?projectId=${this.projectId}&status=${this.stateValue}&controlRank=${this.rankValue}&predictStart=${this.startTime}&predictEnd=${this.endTime}`
         )
         .then(res => {
           this.nodeList = res.data.data;
@@ -2176,9 +2142,8 @@ export default {
     // 查询计划列表
     selectZhProgressPlanList() {
       this.$axios
-        .post(`/api/Node/selectZhProgressPlanList?creatorId=${this.creatorId}`)
+        .post(`/api/Node/selectZhProgressPlanList?projectId=${this.projectId}`)
         .then(res => {
-          // console.log(res.data.data)
           this.schedulePlan = res.data.data;
         });
     },
@@ -2193,7 +2158,7 @@ export default {
       ) {
         this.$axios
           .post(
-            `/api/Node/addNode?creatorId=${this.creatorId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&principal=${this.principal}&content=${this.radio}`
+            `/api/Node/addNode?projectId=${this.projectId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&principal=${this.principal}&crux=${this.radio}`
           )
           .then(res => {
             // console.log(res.data)
@@ -2255,8 +2220,9 @@ export default {
             }
             this.predictStart = this.nodeList[i].predictStart;
             this.predictEnd = this.nodeList[i].predictEnd;
-            this.principal = this.nodeList[i].principal.toString();
-            // console.log(typeof this.principal)
+            if (this.nodeList[i].principal) {
+              this.principal = this.nodeList[i].principal.toString();
+            }
             this.controlRank = this.nodeList[i].controlRank;
           }
         }
@@ -2273,7 +2239,7 @@ export default {
     editNode() {
       this.$axios
         .post(
-          `/api/Node/editNode?creatorId=${this.creatorId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&id=${this.activeId}&principal=${this.principal}&content=${this.radio}`
+          `/api/Node/editNode?creatorId=${this.creatorId}&name=${this.nodeName}&parentId=${this.parentId}&predictStart=${this.predictStart}&predictEnd=${this.predictEnd}&controlRank=${this.controlRank}&id=${this.activeId}&principal=${this.principal}&crux=${this.radio}`
         )
         .then(res => {
           // console.log(res.data)
@@ -2304,19 +2270,24 @@ export default {
             `/api/Node/selectZhProgressNodeList?nodeId=${this.nodeList[i].id}`
           )
           .then(res => {
-            // console.log(res.data.data)
             this.nodeList[i]["associatedNode"] = res.data.data;
             if (res.data.data.length == 0) {
-              // this.nodeList[i]["relevance"] = 0;
               this.$set(this.nodeList[i], "relevance", 0);
             } else {
-              // this.nodeList[i]["relevance"] = 1;
               this.$set(this.nodeList[i], "relevance", 1);
             }
-            // console.log(this.nodeList[i]["relevance"])
           });
+        this.$axios
+        .post(`/api/Node/selectZhPreposeList?mainPlan=${this.nodeList[i].id}`)
+        .then(res => {
+          if (res.data.data.length == 0) {
+              this.$set(this.nodeList[i], "preposition", 0);
+            } else {
+              this.$set(this.nodeList[i], "preposition", 1);
+            }
+        });
       }
-      // console.log(this.nodeList);
+      console.log(this.nodeList);
       // console.log(this.parentIdList)
     },
 
@@ -2353,7 +2324,6 @@ export default {
       this.$axios
         .post(`/api/Node/selectZhPreposeList?mainPlan=${mainPlan}`)
         .then(res => {
-          console.log(res.data);
           this.preposeList = res.data.data;
         });
     },
@@ -2362,7 +2332,7 @@ export default {
     removePrepose(id) {
       // console.log(id)
       this.$axios
-        .post(`/api/Node/removePrepose?id=${id}`)
+        .post(`/api/Node/removePreposeById?id=${id}`)
         .then(res => {
           // console.log(res.data)
           if (res.data.code == 0) {
@@ -2596,6 +2566,7 @@ export default {
           this.itemClick = index;
         }
       }
+      console.log(this.itemClick)
     },
 
     // 加号是否显示
@@ -2605,7 +2576,7 @@ export default {
         if (item == id) {
           temp = true;
         }
-      });
+      })
       return temp;
     }
   }
