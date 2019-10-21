@@ -281,6 +281,7 @@ const router = new VueRouter({
             {path:"l_history",meta:{needLogin:true},component:resolve => require(['../components/location/l_history.vue'],resolve)},
             {path:"l_set",meta:{needLogin:true},component:resolve => require(['../components/location/l_set.vue'],resolve)},
             {path:"l_rail",meta:{needLogin:true},component:resolve => require(['../components/location/l_rail.vue'],resolve)},
+            {path:"l_alarmInformation",meta:{needLogin:true},component:resolve => require(['../components/location/l_alarmInformation.vue'],resolve)},
         ]},
         {path:'/quality',meta:{needLogin:true},component:resolve => require(['../components/quality/quality.vue'],resolve),children:[
             {path:"",meta:{needLogin:true},component:resolve => require(['../components/quality/q_statistics.vue'],resolve)},
@@ -385,6 +386,7 @@ const router = new VueRouter({
             {path:'/systemLocation_home',meta:{needLogin:true},component:resolve => require(['../components/system/systemPersonnel/systemLocation/systemLocation_home.vue'],resolve)},
             {path:'/systemLocation_search',meta:{needLogin:true},component:resolve => require(['../components/system/systemPersonnel/systemLocation/systemLocation_search.vue'],resolve)},
             {path:'/systemLocation_history',meta:{needLogin:true},component:resolve => require(['../components/system/systemPersonnel/systemLocation/systemLocation_history.vue'],resolve)},
+            {path:'/systemLocation_alarm',meta:{needLogin:true},component:resolve => require(['../components/system/systemPersonnel/systemLocation/systemLocation_alarm.vue'],resolve)},
         ]},
         {path:'/systemSafety',meta:{needLogin:true},component:resolve => require(['../components/system/systemSafety/systemSafety.vue'],resolve),children:[
             {path:'',meta:{needLogin:true},component:resolve => require(['../components/system/systemSafety/systemSafety_home.vue'],resolve)},

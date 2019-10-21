@@ -63,11 +63,11 @@
         <div class="alarmList" v-show="alarmClick">
           <div class="corner"></div>
           <ul ref="scroll">
-            <li v-for="item in alarmList" :key="item.id">
+            <li v-for="item in alarmList" :key="item.id" @click="examine(item)">
               <i
                 :class="item.warningType==0?'spectacularsSOS':item.warningType==1?'spectacularsTumble':item.warningType==2?'spectacularsStand':'spectacularsElectricity'"
               ></i>
-              {{item.label}}
+              {{item.userName}}{{getWarningName(item.warningType)}}
             </li>
           </ul>
         </div>
@@ -183,6 +183,7 @@
         width: 100%;
         height: 3.2rem;
         overflow-y: auto;
+        position: relative;
         li {
           border-bottom: 1px solid #949197;
           width: 100%;
@@ -195,6 +196,7 @@
             height: .24rem;
             background-size: 100% 100%;
             vertical-align: sub;
+            margin-right: .1rem;
           }
           .spectacularsSOS {
             background-image: url('../../../static/images/spectacularsSOS.png')
@@ -219,8 +221,10 @@
 </style>
 
 <script>
+import mixin from '@/utils/mixin.js'
 let amapManager = new VueAMap.AMapManager();
 export default {
+  mixins: [mixin],
   data() {
     return {
       polygon: "",
@@ -345,52 +349,33 @@ export default {
       projectId: "", // 项目id
       workAreaList: "", // 工区列表
       alarmClick: false, // 报警弹窗显示
-      alarmList: [
-        {
-          label: 'SOS报警',
-          id: 1,
-          warningType : 0
-        },{
-          label: '李媛久站不动',
-          id: 2,
-          warningType : 2
-        },{
-          label: '李媛摔倒报警',
-          id: 3,
-          warningType : 1
-        },{
-          label: '佳超电池报警',
-          id: 4,
-          warningType : 3
-        },{
-          label: 'SOS报警',
-          id: 5,
-          warningType : 0
-        },{
-          label: '佳超电池报警',
-          id: 6,
-          warningType : 3
-        },{
-          label: '李媛摔倒报警',
-          id: 7,
-          warningType : 1
-        },{
-          label: 'SOS报警',
-          id: 8,
-          warningType : 0
-        },{
-          label: '李媛摔倒报警',
-          id: 9,
-          warningType : 1
-        },
-      ], // 报警列表
+      alarmList: [], // 报警列表
       scrollPlace: 0, // 滚动的位置
       clearScroll: '', // 清除滚动
+      warningTypeList: [
+        {
+          label: 'SOS报警',
+          value: 0
+        },
+        {
+          label: '摔跌报警',
+          value: 1
+        },
+        {
+          label: '久站不动报警',
+          value: 2
+        },
+        {
+          label: '低电量报警',
+          value: 3
+        }
+      ], // 报警搜索列表
     };
   },
   created() {
     this.getProjectId();
     this.getMonitoringData();
+    this.getDay()
   },
   methods: {
     // 导航栏点击事件
@@ -438,10 +423,16 @@ export default {
     dialog() {
       this.alarmClick = !this.alarmClick
       if (this.alarmClick) {
-        //请求数据
-        setTimeout(() => {
-          this.startScroll()
-        }, 500);
+        this.$axios
+          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&warningTime=${this.nowTime}`)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.alarmList = res.data.data
+              setTimeout(() => {
+                this.startScroll()
+              }, 500);
+            }
+          })
       } else {
         clearInterval(this.clearScroll)
         this.$refs.scroll.scrollTop = 0
@@ -459,6 +450,26 @@ export default {
           this.scrollPlace = this.$refs.scroll.scrollTop
         }
       }, 50);
+    },
+
+    // 返回报警名称
+    getWarningName(id) {
+      for (let i = 0; i < this.warningTypeList.length; i++) {
+        if (this.warningTypeList[i].value == id) {
+          return this.warningTypeList[i].label
+        }
+      }
+    },
+
+    //查看详情
+    examine(item) {
+      this.$router.push({
+        path: '/location/l_alarmInformation',
+        query: {
+          userName: item.userName,
+          warningType: item.warningType
+        }
+      })
     }
   },
   beforeDestroy() {

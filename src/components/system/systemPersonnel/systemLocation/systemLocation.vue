@@ -27,6 +27,12 @@
                         <span>历史轨迹</span>
                     </router-link>
                 </li>
+                <li @click="activeShow='/systemLocation_alarm'">
+                    <router-link to="/systemLocation_alarm" :class="activeShow=='/systemLocation_alarm'?'active':''">
+                        <div class="icon alarm"></div>
+                        <span>报警信息</span>
+                    </router-link>
+                </li>
             </ul>
         </div>
         <!-- 内容 -->
@@ -93,6 +99,9 @@
                         }
                         .searchIcon {
                             background-image: url('../../../../../static/images/systemLocation-search.png');
+                        }
+                        .alarm {
+                            background-image: url('../../../../../static/images/systemSpectacularsSOS.png');
                         }
                     }
                     a:hover {
