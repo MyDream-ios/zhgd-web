@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "api": "node app.js",
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --fix"
@@ -14,9 +15,11 @@
     "dhtmlx-gantt": "^6.2.2",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.6.1",
+    "express": "^4.17.1",
     "js-md5": "^0.7.3",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "mockjs": "^1.0.1-beta3",
     "moment": "^2.24.0",
     "vue": "^2.6.9",
     "vue-amap": "^0.5.8",

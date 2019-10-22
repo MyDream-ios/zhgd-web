@@ -424,7 +424,7 @@ export default {
       this.alarmClick = !this.alarmClick
       if (this.alarmClick) {
         this.$axios
-          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&warningTime=${this.nowTime}`)
+          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&startTime=${this.nowTime + ' 00:00:00'}&endTime=${this.nowTime + ' 23:59:59'}`)
           .then(res => {
             if (res.data.code == 0) {
               this.alarmList = res.data.data

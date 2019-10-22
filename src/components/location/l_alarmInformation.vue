@@ -14,6 +14,7 @@
             type="daterange"
             align="center"
             unlink-panels
+            value-format="yyyy-MM-dd"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -33,7 +34,7 @@
         </div>
       </div>
       <div class="search-button">
-        <div class="confirm" @click="search">搜索</div>
+        <div class="confirm" @click="search(),pageNum=1">搜索</div>
       </div>
     </div>
     <!-- 表格主体 -->
@@ -143,6 +144,7 @@ export default {
     // 翻页
     handleCurrentChange(val) {
       this.pageNum = val
+      this.search()
     },
 
     //查看详情
@@ -155,16 +157,17 @@ export default {
 
     //获取列表数据
     getList() {
-      if (this.$route.query.userName && this.$route.query.warningType) {
+      if (this.$route.query.userName && (this.$route.query.warningType || this.$route.query.warningType === 0)) {
         this.searchUserName = this.$route.query.userName
         this.searchWarningType = this.$route.query.warningType
         this.search()
       } else {
         this.$axios
-          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&warningTime=${this.nowTime}`)
+          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&pageSize=${this.pageSize}&pageNum=${this.pageNum}&start=${this.nowTime + ' 00:00:00'}&end=${this.nowTime + ' 23:59:59'}`)
           .then(res => {
             if (res.data.code == 0) {
               this.tableData = res.data.data
+              this.total = res.data.total
             }
           })
       }
@@ -172,12 +175,18 @@ export default {
 
     //搜索
     search() {
-      this.searchObject = this.notNull(this.searchObject)
+      let start = ''
+      let end = ''
+      if (this.searchTime) {
+        start = this.searchTime[0] + ' 00:00:00'
+        end = this.searchTime[1] + ' 23:59:59'
+      }
       this.$axios
-        .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&warningTime=${this.searchTime}&username=${this.searchUserName}&warningType=${this.searchWarningType}`)
+        .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&username=${this.searchUserName}&warningType=${this.searchWarningType}&pageSize=${this.pageSize}&pageNum=${this.pageNum}&start=${start}&end=${end}`)
         .then(res => {
           if (res.data.code == 0) {
             this.tableData = res.data.data
+            this.total = res.data.total
           }
         })
     }

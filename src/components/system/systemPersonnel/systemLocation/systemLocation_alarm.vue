@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="search-button">
-          <div class="confirm" @click="search">搜索</div>
+          <div class="confirm" @click="search(),pageNum=1">搜索</div>
         </div>
       </div>
       <!-- 表格主体 -->
@@ -101,7 +101,7 @@ export default {
       ], // 报警搜索列表
       tableData: [], //列表数据
       total: 0, // 总条目数
-      pageSize: 15, // 每页显示条数
+      pageSize: 14, // 每页显示条数
       pageNum: 1, // 当前页数
       firstSearch: false, // 是否使用搜索搜索
     }
@@ -130,28 +130,30 @@ export default {
     // 翻页
     handleCurrentChange(val) {
       this.pageNum = val
+      this.search()
     },
 
     //查看详情
     examine(id) {
       this.$router.push({
-        path: '/location/l_search',
+        path: '/systemLocation_search',
         query: {orderId: id}
         })
     },
 
     //获取列表数据
     getList() {
-      if (this.$route.query.userName && this.$route.query.warningType) {
-        this.searchUserName = this.$route.query.userName
+      if (this.$route.query.warningType || this.$route.query.warningType === 0) {
         this.searchWarningType = this.$route.query.warningType
+        this.pageNum = 1
         this.search()
       } else {
         this.$axios
-          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&warningTime=${this.nowTime}`)
+          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&start=${this.nowTime + ' 00:00:00'}&end=${this.nowTime + ' 23:59:59'}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             if (res.data.code == 0) {
               this.tableData = res.data.data
+              this.total = res.data.total
             }
           })
       }
@@ -159,12 +161,18 @@ export default {
 
     //搜索
     search() {
-      this.searchObject = this.notNull(this.searchObject)
+      let start = ''
+      let end = ''
+      if (this.searchTime) {
+        start = this.searchTime[0] + ' 00:00:00'
+        end = this.searchTime[1] + ' 23:59:59'
+      }
       this.$axios
-        .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&warningTime=${this.searchTime}&username=${this.searchUserName}&warningType=${this.searchWarningType}`)
+        .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&username=${this.searchUserName}&warningType=${this.searchWarningType}&pageSize=${this.pageSize}&pageNum=${this.pageNum}&start=${start}&end=${end}`)
         .then(res => {
           if (res.data.code == 0) {
             this.tableData = res.data.data
+            this.total = res.data.total
           }
         })
     }
