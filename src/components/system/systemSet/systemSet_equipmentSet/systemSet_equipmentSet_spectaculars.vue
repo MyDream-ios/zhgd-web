@@ -35,7 +35,13 @@
           </div>
         </div>
         <!-- 图片显示位置 -->
-        <div class="img"></div>
+        <div class="img">
+          <div class="add-warp" v-show="imgAdd">
+            <i class="add"></i>
+            <p class="fs-20">点击添加</p>
+            <p>jpg、png、psd格式</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -46,7 +52,7 @@ export default {
   data() {
     return {
       switchModule: 1, // 切换模块选项
-      switchModuleList: [
+      switchModuleList: [ // 切换模块
         {
           label: '设备管理',
           value: 1
@@ -59,7 +65,8 @@ export default {
           label: '高支模',
           value: 3
         }
-      ]
+      ],
+      imgAdd: true, // 添加图片
     }
   },
   mounted() {},
@@ -128,15 +135,37 @@ export default {
         }
       }
     }
-    .img:before {
+    .nav-wrap:after {
       display: block;
       content: '';
       clear: both;
     }
     .img {
-      width: 100%;
-      height: 100%;
-      border: 1px solid red;
+      width: 1371px;
+      height: 702px;
+      margin: auto;
+      margin-top: 20px;
+      border:1px solid #c5e8ff;
+      position: relative;
+      .add-warp{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        text-align: center;
+        .fs-20 {
+          margin-top: .1rem;
+          font-size: .2rem;
+          font-weight: 600;
+        }
+      }
+      .add {
+        display: inline-block;
+        width: .81rem;
+        height: .81rem;
+        background-image: url('../../../../../static/images/boardAddIcon.png');
+      }
     }
   }
 }
