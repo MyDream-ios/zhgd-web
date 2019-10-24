@@ -1918,7 +1918,7 @@ export default {
                     // console.log(res.data)
                     let temp = []
                     for (let i = 0; i < res.data.data.length; i++) {
-                        this.$axios.post(`http://192.168.1.39:8083/api/teamApi/app/selectTeam?constructionId=${res.data.data[i].id}`).then(
+                        this.$axios.post(`/api/teamApi/app/selectTeam?constructionId=${res.data.data[i].id}`).then(
                             res2 => {
                                 if (res2.data) {
                                     let temp2 = []

@@ -6,6 +6,7 @@ export default {
       pageSizes: [15, 30, 45], // 每页显示条数
       pageSize: 15, // 默认显示条数
       currentPage: 1, // 页码数
+      nowTime: '', // 当前时间
     }
   },
   created() {
@@ -83,6 +84,14 @@ export default {
         message: str,
         type: num ? 'success': 'warning'
       })
-    }
+    },
+
+    // 格式化时间
+    getDay(time) {
+      let temp = time ? new Date(time) : new Date()
+      let month = temp.getMonth() + 1
+      let day = temp.getDate()
+      this.nowTime = temp.getFullYear() + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day)
+    },
   }
 }

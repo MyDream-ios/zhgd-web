@@ -139,17 +139,17 @@
               <div class="plan-time">{{ getPlanDays(item) }}天</div>
               <div class="practical-time" v-if="item.end">{{ getEndDays(item) }}天</div>
               <div class="practical-time" v-else>-</div>
-              <div class="plan-start">{{item.predictStart.split(' ')[0]}}</div>
-              <div class="plan-end">{{item.predictEnd.split(' ')[0]}}</div>
+              <div class="plan-start">{{item.predictStart}}</div>
+              <div class="plan-end">{{item.predictEnd}}</div>
               <div class="practical-start">
                 <div v-if="!item.start">-</div>
                 <!-- <a class="startClick" v-if="!item.start" @click="getStartTime(item)">开始</a> -->
-                <div v-else>{{item.start.split(' ')[0]}}</div>
+                <div v-else>{{item.start}}</div>
               </div>
               <div class="practical-end" v-if="item.start">
                 <div v-if="!item.end">-</div>
                 <!-- <a class="startClick" v-if="!item.end" @click="getEndTime(item)">结束</a> -->
-                <div v-else>{{item.end.split(' ')[0]}}</div>
+                <div v-else>{{item.end}}</div>
               </div>
               <div class="practical-end" v-else>-</div>
               <div class="operation">
@@ -211,16 +211,16 @@
                     <div class="plan-time">{{ getPlanDays(item2) }}天</div>
                     <div class="practical-time" v-if="item2.end">{{ getEndDays(item2) }}天</div>
                     <div class="practical-time" v-else>-</div>
-                    <div class="plan-start">{{item2.predictStart.split(' ')[0]}}</div>
-                    <div class="plan-end">{{item2.predictEnd.split(' ')[0]}}</div>
+                    <div class="plan-start">{{item2.predictStart}}</div>
+                    <div class="plan-end">{{item2.predictEnd}}</div>
                     <div class="practical-start">
                       <div v-if="!item.start">-</div>
                       <!-- <a class="startClick" v-if="!item2.start" @click="getStartTime(item2)">开始</a> -->
-                      <div v-else>{{item2.start.split(' ')[0]}}</div>
+                      <div v-else>{{item2.start}}</div>
                     </div>
                     <div class="practical-end" v-if="item2.start">
                       <a class="startClick" v-if="!item2.end" @click="getEndTime(item2)">结束</a>
-                      <div v-else>{{item2.end.split(' ')[0]}}</div>
+                      <div v-else>{{item2.end}}</div>
                     </div>
                     <div class="practical-end" v-else>-</div>
                     <div class="operation">
@@ -524,8 +524,8 @@
                       <div class="sub-schedule" style="width:50%">50%</div>
                     </div>
                   </div>-->
-                  <div class="plan-start">{{item3.predictStart.split(' ')[0]}}</div>
-                  <div class="plan-end">{{item3.predictEnd.split(' ')[0]}}</div>
+                  <div class="plan-start">{{item3.predictStart}}</div>
+                  <div class="plan-end">{{item3.predictEnd}}</div>
                   <!-- <div class="practical-start">2018-01-01</div>
                   <div class="practical-end">-</div>-->
                 </div>
@@ -586,8 +586,8 @@
                 <div class="number">{{index+1}}</div>
                 <div class="node">{{item2.name}}</div>
                 <div class="name">{{item2.status==0?'正常开始':item2.status==1?'未开始':''}}</div>
-                <div class="preposition">{{item2.predictStart.split(' ')[0]}}</div>
-                <div class="interval">{{item2.predictEnd.split(' ')[0]}}</div>
+                <div class="preposition">{{item2.predictStart}}</div>
+                <div class="interval">{{item2.predictEnd}}</div>
                 <div class="interval">
                   <a @click="removePrepose(item.id)">删除</a>
                 </div>
@@ -2304,8 +2304,9 @@ export default {
               type: "success"
             });
             this.prepositionShow = false;
-            this.selectZhPreposeList(this.activeMainPlan);
-            // this.selectZhNodeList()
+            // this.selectZhPreposeList(this.activeMainPlan);
+            this.selectZhNodeList()
+            this.preposePian = ''
           } else {
             this.$message({
               message: "添加失败",
@@ -2340,7 +2341,9 @@ export default {
               message: "删除成功",
               type: "success"
             });
-            this.selectZhPreposeList(this.activeMainPlan);
+            this.relevanceShow = false;
+            this.selectZhNodeList()
+            // this.selectZhPreposeList(this.activeMainPlan);
           } else {
             this.$message({
               message: "删除失败",
@@ -2486,11 +2489,6 @@ export default {
         // temp.start_date = '15-08-2018';
         this.test.data.push(temp);
       }
-      // console.log('开始时间' + new Date(this.nodeList[0].predictStart.split(' ')[0].split('-').join('/')).getTime());
-      // console.log('结束时间' + new Date(this.nodeList[0].predictEnd.split(' ')[0].split('-').join('/')).getTime());
-      // console.log('天数' + (new Date(this.nodeList[0].predictEnd.split(' ')[0].split('-').join('/')).getTime() - new Date(this.nodeList[0].predictStart.split(' ')[0].split('-').join('/')).getTime()) / (1000*60*60*24))
-      // console.log(this.nodeList[0].predictStart.split(' ')[0].split('-')[2] + '-' + this.nodeList[0].predictStart.split(' ')[0].split('-')[1] + '-' + this.nodeList[0].predictStart.split(' ')[0].split('-')[0])
-      // console.log(this.nodeList[0].name)
       gantt.parse(this.test);
     },
 
