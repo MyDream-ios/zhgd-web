@@ -108,8 +108,8 @@ export default {
     }
   },
   mounted() {
-    this.getList()
     this.getDay()
+    this.getList()
   },
   methods: {
     headerStyle() {
@@ -163,7 +163,7 @@ export default {
         this.search()
       } else {
         this.$axios
-          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&pageSize=${this.pageSize}&pageNum=${this.pageNum}&start=${this.nowTime + ' 00:00:00'}&end=${this.nowTime + ' 23:59:59'}`)
+          .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&pageSize=${this.pageSize}&pageNum=${this.pageNum}`)
           .then(res => {
             if (res.data.code == 0) {
               this.tableData = res.data.data
@@ -182,7 +182,7 @@ export default {
         end = this.searchTime[1] + ' 23:59:59'
       }
       this.$axios
-        .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&username=${this.searchUserName}&warningType=${this.searchWarningType}&pageSize=${this.pageSize}&pageNum=${this.pageNum}&start=${start}&end=${end}`)
+        .post(`/api/pcEquipmentWarning/getWarningList?projectId=${this.projectId}&username=${this.searchUserName}&warningType=${this.searchWarningType}&pageSize=${this.pageSize}&pageNum=${this.pageNum}&startTime=${start}&endTime=${end}`)
         .then(res => {
           if (res.data.code == 0) {
             this.tableData = res.data.data

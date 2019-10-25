@@ -19,7 +19,7 @@
             </el-select>
           </div>
           <div class="right">
-            <div class="button">
+            <div class="button" @click="imgAdd=!imgAdd">
               <!-- <i class="spectaculars_drawing"></i> -->
               <i class="el-icon-picture-outline"></i>
               添加图纸
@@ -43,11 +43,15 @@
           </div>
         </div>
       </div>
+      <dialog-box :show="!imgAdd" :title="'添加图纸'" :button="'保 存'" @confirm="uploadPicture">
+        <div style="width:10rem">123</div>
+      </dialog-box>
     </div>
   </div>
 </template>
 
 <script>
+import dialogBox from '@/base/dialog'
 export default {
   data() {
     return {
@@ -69,10 +73,18 @@ export default {
       imgAdd: true, // 添加图片
     }
   },
+  components: {
+    dialogBox
+  },
   mounted() {},
   methods: {
     back() {
       this.$router.go(-1)
+    },
+
+    uploadPicture(val) {
+      console.log(val)
+      this.imgAdd = !this.imgAdd
     }
   }
 }
