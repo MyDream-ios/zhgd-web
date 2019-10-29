@@ -62,6 +62,28 @@ export default {
   created() {
     this.noHeader();
   },
+  mounted() {
+    window.onresize = () => {
+        return (() => {
+          if(window.screenWidth<=1920) {
+            window.screenWidth = document.body.clientWidth
+
+            var StandardWidth = 1920;
+            var StandardFontSize = 100;
+            var nowWidth = document.documentElement.offsetWidth;
+            var nowFontSize = nowWidth / StandardWidth * StandardFontSize;
+            document.documentElement.style.fontSize = nowFontSize + 'px';
+          }
+        })()
+    }
+        // 分辨率自适应
+          var StandardWidth = 1920;
+          var StandardFontSize = 100;
+          var nowWidth = document.documentElement.offsetWidth;
+          var nowFontSize = nowWidth / StandardWidth * StandardFontSize;
+          document.documentElement.style.fontSize = nowFontSize + 'px';
+          // document.documentElement.style.fontSize = 100 + 'px';
+  },
   updated() {
     this.noHeader();
   }
@@ -82,5 +104,12 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
+  width: 100%;
+  height: 100%;
+  min-width: 1600px;
+  max-width: 1920px;
+  max-height: 1080px;
+  min-height: 900px;
+  overflow-x: auto;
 }
 </style>

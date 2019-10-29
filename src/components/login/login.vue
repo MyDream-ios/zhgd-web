@@ -168,13 +168,13 @@ export default {
 
 <style lang="less">
 #main {
-  height: 9.8rem;
+  // height: 9.8rem;
   background-color: #fff;
   .nav {
-    height: 1.65rem;
-    padding-top: 0.19rem;
+    // height: 1.65rem;
+    height: .9rem;
+    padding: .2rem 0;
   }
-  
   .bottom {
     height: 2.65rem;
     ul{
@@ -206,12 +206,12 @@ export default {
     }
   }
   .content {
-    width: 19.2rem;
+    // width: 19.2rem;
     height: 7.5rem;
     background-image: url("../../../static/images/login_bg.png");
-    background-size: contain;
+    background-size: cover;
     position: relative;
-    margin-top: -0.8rem;
+    // margin-top: -0.8rem;
   }
   /* 登录框样式 */
   .content .login {
@@ -220,8 +220,9 @@ export default {
     background-image: url("../../../static/images/login_border.png");
     background-size: contain;
     position: absolute;
-    right: 4.2rem;
-    top: 1.44rem;
+    right: 15%;
+    top: 50%;
+    transform: translateY(-50%);
     padding-top: 0.38rem;
   }
   .content .login-title {
@@ -301,7 +302,7 @@ export default {
     transform: translate(-50%);
   }
   .content .light {
-    width: 19.2rem;
+    // width: 19.2rem;
     height: 7.5rem;
     background-image: url("../../../static/images/login_light.png");
     background-size: contain;

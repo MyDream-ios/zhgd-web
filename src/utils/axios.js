@@ -4,7 +4,7 @@ var ui = require('element-ui')
 // 测试环境
 
 // 模拟数据
-// axios.defaults.baseURL = "http://localhost:3000"<<<<<<< .mine
+// axios.defaults.baseURL = "http://localhost:3000"
 // 颜通
 // axios.defaults.baseURL = "http://192.168.1.117:8025"
 // 佳超
@@ -15,22 +15,6 @@ var ui = require('element-ui')
 // axios.defaults.baseURL = "http://192.168.1.21:8080"
 // 生产环境
 axios.defaults.baseURL = "http://47.106.71.3:8080"
-// 模拟数据
-// axios.defaults.baseURL = "http://localhost:3000"
-=======
-// 颜通
-// axios.defaults.baseURL = "http://192.168.1.117:8025"
-// 佳超
-// axios.defaults.baseURL = "http://192.168.1.40:8080"
-// 李媛
-// axios.defaults.baseURL = "http://192.168.1.55:8080"
-// 陈吕
-axios.defaults.baseURL = "http://192.168.1.21:8080"
-// 生产环境
-// axios.defaults.baseURL = "http://47.106.71.3:8080"
-// 模拟数据
-// axios.defaults.baseURL = "http://localhost:3000"
->>>>>>> .theirs
 
 // 添加请求拦截器
 // axios.interceptors.request.use(function (config) {
