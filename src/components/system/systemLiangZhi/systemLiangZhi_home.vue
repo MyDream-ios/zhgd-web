@@ -625,7 +625,7 @@ export default {
                     {
                         type: "value",
                         min: 0,
-                        interval: 20,
+                        // interval: 20,
                         axisLabel: {
                             textStyle: {
                                 color: "#000"

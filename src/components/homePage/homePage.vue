@@ -35,7 +35,8 @@
       <div class="user">
         <el-dropdown @command="handleCommand">
           <a class="el-dropdown-link">
-            用户名
+            <!-- 用户名 -->
+            {{userName}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </a>
           <el-dropdown-menu slot="dropdown">
@@ -58,8 +59,8 @@
           :plugin="plugin"
           class="amap-demo"
         >
-          <!-- <el-amap-marker vid="component-marker" position="[114.083372, 22.544146]" ></el-amap-marker> -->
-          <el-amap-marker v-if="markerList.length != 0" v-for="(marker, index) in markerList" :key="index" :position="marker.position"></el-amap-marker>
+          <el-amap-marker v-if="markerList.length != 0" v-for="(marker, index) in markerList" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
+          <el-amap-info-window v-if="markerList.length != 0" v-for="(window, index) in markerList" :position="window.position" :visible="window.visible" :content="window.content" :offset="window.offset"></el-amap-info-window>
           <!-- <el-amap-marker v-if="star" v-for="(marker, index) in markerList" :key="index" :position="marker.position"></el-amap-marker> -->
         </el-amap>
       </div>
@@ -89,7 +90,7 @@
             <i class="el-icon-search"></i>
             <input type="text" placeholder="输入组织名称后回车搜索">
           </div>
-          <div class="collapse-box">
+          <!-- <div class="collapse-box">
             <el-collapse>
               <el-collapse-item v-for="item in companyList" :title="item.companyName" :name="item.id" :key="item.id">
                 <el-collapse>
@@ -107,7 +108,7 @@
                 </el-collapse>
               </el-collapse-item>
             </el-collapse>
-          </div>
+          </div> -->
         </div>
         <div class="district-box" v-show="districtShow">
           <div class="now">
@@ -382,7 +383,9 @@ export default {
       allItems: [], // 获取全部项目列表
       markerList: [], //经纬度坐标
       pid: '', // 公司id
-      star: false
+      star: false,
+      userName: '', // 用戶名
+      window: ''
     }
   },
   created() {
@@ -395,6 +398,7 @@ export default {
     this.selectProjectArea()
     // this.selectAreaProjectList()
     this.getAllItems()
+    this.getName()
   },
   methods: {
     enter() {
@@ -458,7 +462,6 @@ export default {
     getComoanyName() {
       this.$axios.post(`/api/pcCompanyLibrary/selectHjCompanyLibrary?id=${this.companyId}`).then(
         res => {
-          console.log(res.data)
           this.companyName = res.data.data.companyName
         }
       )
@@ -468,7 +471,6 @@ export default {
     getCompanyList() {
       this.$axios.post(`/api/pcCompanyLibrary/selectHjCompanyList?companyId=${this.companyId}`).then(
         res => {
-          // console.log(res.data)
           this.companyList = res.data
         }
       )
@@ -478,7 +480,6 @@ export default {
     getProvinceList() {
       this.$axios.post(`/api/area/getArea?parentId=0`).then(
         res => {
-          // console.log(res.data)
           this.provinceList = res.data.data
         }
       )
@@ -486,7 +487,6 @@ export default {
 
     // 项目看板跳转
     projectClick(id) {
-      // console.log(id)
       sessionStorage.setItem("pid", id)
       this.$router.push({ path: "/spectaculars" })
     },
@@ -507,18 +507,42 @@ export default {
         .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=${this.region}`)
         .then(res => {
           this.allItems = res.data.data;
+          let self = this;
           for (let i = 0; i < this.allItems.length; i++) {
-            // this.allItems[i]
-            if (this.allItems[i].longitude == '' || this.allItems[i].latitude == '') {
+            if (!this.allItems[i].longitude || !this.allItems[i].latitude) {
               continue
             }
-            var marker = {
-              position: [this.allItems[i].longitude*1, this.allItems[i].latitude*1]
+            let marker = {
+              position: [this.allItems[i].longitude*1, this.allItems[i].latitude*1],
+              content: `<div class="prompt">${ this.allItems[i].projectName }</div>`,
+              visible: false,
+              offset:[2,-15],
+              events: {
+                click() {
+                  // debugger
+                  self.center = [self.allItems[i].longitude*1, self.allItems[i].latitude*1]
+                  self.markerList.forEach(item => {
+                    if (item.position[0] == self.center[0] && item.position[1] == self.center[1]) {
+                      item.visible = true;
+                    } else {
+                      item.visible = false;
+                    }
+                    // item.visible = false;
+                  });
+                  // for (let j = 0; j < self.markerList.length; j++) {
+                  //   if (self.markerList[j].position[0] == self.center[0] && self.markerList[j].position[1] == self.center[1]) {
+                  //     self.markerList[j].visible = true;
+                  //   }
+                  // }
+                  // self.markerList[i].visible = true;
+                  // console.log(self.markerList[i])
+                }
+              }
             };
             this.markerList.push(marker)
+            console.log(this.markerList)
           }
           this.projectSum = this.allItems.length
-          // this.map.add(markerList);
         })
     },
 
@@ -538,6 +562,11 @@ export default {
       // console.log(localStorage.getItem('pid'))
       var url = this.$router.resolve({path: '/home'})
       window.open(url .href, '_blank')
+    },
+
+    // 獲取用戶名
+    getName() {
+        this.userName = sessionStorage.getItem('userName')
     }
   }
 };
@@ -555,7 +584,7 @@ export default {
     color: #f00;
   }
   .top {
-    width: 19.2rem;
+    // width: 19.2rem;
     height: 0.8rem;
     padding-top: 0.24rem;
     background-size: cover;

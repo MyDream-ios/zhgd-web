@@ -23,7 +23,8 @@
             <div class="user">
                 <el-dropdown @command="handleCommand">
                     <a class="el-dropdown-link">
-                        用户名
+                        <!-- 用户名 -->
+                        {{userName}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
@@ -69,7 +70,7 @@
 <style lang="less">
     #companyGuanLi {
         .top {
-            width: 19.2rem;
+            // width: 19.2rem;
             height: 0.8rem;
             padding-top: 0.24rem;
             background-size: cover;
@@ -217,11 +218,13 @@ export default {
         return {
             activeShow: "/companyGuanLi_set", // 当前选中的模块
             userType: 1, // 账号状态
+            userName: '', // 用戶名
         }
     },
     created() {
         this.getPath()
         this.getUserType()
+        this.getName()
     },
     methods: {
         // 选择模块
@@ -247,6 +250,11 @@ export default {
                 this.$router.push('login')
             }
         },
+
+        // 獲取用戶名
+        getName() {
+            this.userName = sessionStorage.getItem('userName')
+        }
     }
 }
 </script>

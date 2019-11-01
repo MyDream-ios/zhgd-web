@@ -31,15 +31,15 @@ axios.defaults.baseURL = "http://47.106.71.3:8080"
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   // eslint-disable-next-line no-console
-  if (response && response.data && response.data.code && response.data.code != 0) {
-    ui.Message({
-      message: response.data.msg || '页面加载失败',
-      type: 'warning'
-    })
-  } else {
-    return response;
-  }
-  // return response;
+  // if (response && response.data && response.data.code && response.data.code != 0) {
+  //   ui.Message({
+  //     message: response.data.msg || '页面加载失败',
+  //     type: 'warning'
+  //   })
+  // } else {
+  //   return response;
+  // }
+  return response;
 }, function (error) {
   // 对响应错误做点什么
   // console.log(error)

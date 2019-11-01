@@ -18,7 +18,8 @@
             <a class="user">
                 <el-dropdown @command="handleCommand">
                     <a class="el-dropdown-link">
-                        用户
+                        <!-- 用户 -->
+                        {{userName}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
@@ -97,11 +98,13 @@ export default {
         return {
             pid: '', // 项目id
             projectName: '', // 项目名称
+            userName: '', // 用戶名
         }
     },
     created() {
         this.getProjectId()
         this.selectIndex()
+        this.getName()
     },
     methods: {
         // 获取项目id
@@ -125,6 +128,11 @@ export default {
                 this.$router.push('login')
             }
         },
+
+        // 獲取用戶名
+        getName() {
+            this.userName = sessionStorage.getItem('userName')
+        }
     }
 }
 </script>

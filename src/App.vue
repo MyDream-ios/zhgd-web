@@ -112,4 +112,7 @@ body {
   min-height: 900px;
   overflow-x: auto;
 }
+/* body::-webkit-scrollbar {
+  display: none
+} */
 </style>
