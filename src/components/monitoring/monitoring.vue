@@ -378,6 +378,7 @@ export default {
 #montoring {
   padding: 0.5rem 0.4rem 0 0.38rem;
   display: flex;
+  overflow: hidden;
 }
 /* 选择模块样式 */
 #montoring .select {

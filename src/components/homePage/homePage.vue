@@ -5,6 +5,7 @@
       <div class="nav-logo">
         <a class="logo-box"></a>
         <i class="line"></i>
+        <span class="name">{{companyName}}</span>
       </div>
       <!-- <div class="company">深圳市市政总公司</div> -->
       <div class="company">&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;</div>
@@ -16,14 +17,12 @@
           <!-- <li>
             <router-link to="/projectManagement">项目管理</router-link>
           </li> -->
-
           <li>
             <router-link to="/companyGuanLi">公司管理</router-link>
           </li>
           <li v-if="userType==1">
             <router-link to="/projectGuanLi">项目管理</router-link>
           </li>
-
           <!-- <li>
             <router-link to="/gongsiManagement">公司管理</router-link>
           </li>
@@ -61,21 +60,19 @@
         >
           <el-amap-marker v-if="markerList.length != 0" v-for="(marker, index) in markerList" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
           <el-amap-info-window v-if="markerList.length != 0" v-for="(window, index) in markerList" :position="window.position" :visible="window.visible" :content="window.content" :offset="window.offset"></el-amap-info-window>
-          <!-- <el-amap-marker v-if="star" v-for="(marker, index) in markerList" :key="index" :position="marker.position"></el-amap-marker> -->
         </el-amap>
       </div>
       <!-- 搜索框 -->
-      <div class="search-bar">
+      <!-- <div class="search-bar">
         <input type="text" placeholder="输入信息名称进行搜索">
         <a href="#">
           <i></i>
         </a>
-      </div>
+      </div> -->
       <!-- 公司名称/地区 -->
-      <div class="menu">
+      <div class="menu" style="display:none">
         <a class="company" @click="dropDownClck('company')">
           <span class="text">{{companyName}}</span>
-          <!-- <span class="text">深圳市一指通智能科技有限公司</span> -->
           <i class="icon el-icon-arrow-down"></i>
         </a>
         <a class="district" @click="dropDownClck('district')">
@@ -186,8 +183,7 @@
         <div class="title">
           总共
           <span>{{projectSum}}</span>个智慧工地项目
-          <!-- <span>258</span>个智慧工地项目 -->
-          <a>最新项目</a>
+          <!-- <a>最新项目</a> -->
         </div>
         <div class="data">
           <ul>
@@ -205,7 +201,7 @@
               今日上工：
               <span style="color:#3ada76;">{{statisticsData.numWing}}</span>
               人
-              (<span style="color:#3ada76;">{{Math.floor((statisticsData.numWing/statisticsData.numW)*100)}}</span>%)
+              (<span style="color:#3ada76;">{{getNum}}</span>%)
             </li>
             <li>
               投资金额：
@@ -214,13 +210,28 @@
             </li>
           </ul>
         </div>
-        <ul class="main-list">
+        <!-- <ul class="main-list">
           <li v-for="(item, index) in this.allItems" :key="index"  @click="toHome(item)">
             <div class="projectName">工程名称：<span>{{item.shortName}}</span></div>
             <div class="startingTime">开工时间：{{item.startingTime}}</div>
             <div class="address">地址：{{item.projectAddress}}</div>
           </li>
-        </ul>
+        </ul> -->
+        <div class="main-list">
+          <el-tree
+            :data="companyList"
+            :props="defaultProps"
+            lazy
+            accordion
+            @node-click="handleNodeClick"
+          >
+          </el-tree>
+          <!-- <li v-for="(item, index) in this.companyList" :key="index"  @click="toHome(item)">
+            <div class="projectName">工程名称：<span>{{item.shortName}}</span></div>
+            <div class="startingTime">开工时间：{{item.startingTime}}</div>
+            <div class="address">地址：{{item.projectAddress}}</div>
+          </li> -->
+        </div>
       </div>
       <!-- <div class="info-box">
         <div class="top-box">
@@ -260,93 +271,6 @@ export default {
       marker5: '',
       zoom: 12,
       center: [114.083372, 22.544146],
-      // events: {
-      //   init: o => {
-      //     // console.log(o.getCenter());
-      //     // console.log(this.$refs.map.$$getInstance());
-      //     // o.getCity(result => {
-      //     //     console.log(result)
-      //     // })
-      //     this.marker1 = new AMap.Marker({
-      //       position: [113.983372, 22.644146],
-      //       // title: "深圳湾创新科技中心",
-      //       label: {
-      //   //       content: `<div class="info-box">
-      //   // <div class="top-box">
-      //   //   <span>深圳科伦特大厦项目</span>
-      //   //   <span class="state" style="color:#3ada76;">合格</span>
-      //   // </div>
-      //   // <div class="bottom-box">
-      //   //   <div class="left-box">
-      //   //     <span class="type">在场工人：</span>
-      //   //     <span style="color:#048fe8;">100</span>
-      //   //     <span>人</span>
-      //   //   </div>
-      //   //   <div class="right-box">
-      //   //     <span class="type">在场工人：</span>
-      //   //     <span style="color:#3ada76;">80</span>
-      //   //     <span>人</span>
-      //   //   </div>
-      //   // </div>`,
-      //         content: '',
-      //         offset: new AMap.Pixel(-115, -80)
-      //       }
-      //       // content: ' ',
-      //     });
-      //     this.marker1.setMap(o)
-      //     this.marker1.hide()
-      //     this.marker2 = new AMap.Marker({
-      //       position: [113.983372, 22.644146],
-      //       label: {
-      //         content: '',
-      //         offset: new AMap.Pixel(-115, -80)
-      //       }
-      //     })
-      //     this.marker2.setMap(o)
-      //     this.marker2.hide()
-      //     this.marker3 = new AMap.Marker({
-      //       position: [113.983372, 22.644146],
-      //       label: {
-      //         content: '',
-      //         offset: new AMap.Pixel(-115, -80)
-      //       }
-      //     })
-      //     this.marker3.setMap(o)
-      //     this.marker3.hide()
-      //     this.marker4 = new AMap.Marker({
-      //       position: [113.983372, 22.644146],
-      //       label: {
-      //         content: '',
-      //         offset: new AMap.Pixel(-115, -80)
-      //       }
-      //     })
-      //     this.marker4.setMap(o)
-      //     this.marker4.hide()
-      //     this.marker5 = new AMap.Marker({
-      //       position: [113.983372, 22.644146],
-      //       label: {
-      //         content: '',
-      //         offset: new AMap.Pixel(-115, -80)
-      //       }
-      //     })
-      //     this.marker5.setMap(o)
-      //     this.marker5.hide()
-      //   },
-      //   moveend: () => {},
-      //   zoomchange: () => {},
-      //   // click: e => {
-      //   //   alert("map clicked");
-      //   // }
-      // },
-      // plugin: ['ToolBar', {
-      //     pName: 'MapType',
-      //     // defaultType: 0,
-      //     events: {
-      //         init(o) {
-      //             console.log(o);
-      //         }
-      //     }
-      // }],
       // 插入的搜索框
       plugin: [
         {
@@ -359,18 +283,15 @@ export default {
           }
         }
       ],
-
       // 状态储存
       sideNavState: this.enter,
       sidNavClass: "enter",
-
       userType: 1, // 账号类型
-
       companyShow: false, // 公司下拉框状态
       districtShow: false, // 地区下拉框状态
       companyId: 0, // 公司id
       companyName: '', // 当前公司名
-      companyList: '', // 公司列表
+      companyList: [], // 公司列表
       region: 0, // 区域id
       projectList: [], // 项目列表数据
       projectSum: '', // 项目总数
@@ -385,14 +306,21 @@ export default {
       pid: '', // 公司id
       star: false,
       userName: '', // 用戶名
-      window: ''
+      window: '',
+      defaultProps: {
+        children: 'children',
+        label: 'companyName',
+        isLeaf: 'leaf'
+      }, // 默认显示的数据名称
+      dblclick: 0, // 双击
+      dblclickId: '', // 缓存第一次点击的id
     }
   },
   created() {
     this.getUserType()
     this.getComoanyId()
     // this.getProjectList()
-    // this.getCompanyList()
+    this.getCompanyList()
     this.getComoanyName()
     this.getProvinceList()
     this.selectProjectArea()
@@ -469,11 +397,102 @@ export default {
 
     // 获取公司列表
     getCompanyList() {
-      this.$axios.post(`/api/pcCompanyLibrary/selectHjCompanyList?companyId=${this.companyId}`).then(
+      this.$axios.post(`/api/pcCompanyLibrary/companyLibraryList?companyId=${this.companyId}`).then(
         res => {
-          this.companyList = res.data
+          if (res.data.code == 0 && res.data.data.total >0) {
+            this.companyList = res.data.data.rows
+            this.$axios
+              .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=${this.region}`)
+              .then(res => {
+                for (let i = 0; i < res.data.data.length; i++) {
+                  // 控件prop，显示名称和是否含有下拉三角
+                  res.data.data[i].companyName = res.data.data[i].projectName
+                  res.data.data[i].leaf = true
+                  this.companyList.push(res.data.data[i])
+                }
+              })
+          }
         }
       )
+    },
+
+    // 点击树形控件
+    handleNodeClick(val) {
+      // 双击
+      this.getDblclick(val)
+      // 获取汇总数据
+      this.companyId = val.id
+      this.selectProjectArea()
+      // 判断点击项是否为项目
+      if (!val.projectName) {
+        this.$axios
+          .post(`/api/pcCompanyLibrary/companyLibraryList?companyId=${val.id}`)
+          .then(res => {
+            // 判断公司下时候还有子公司，没有的话就请求项目数据
+            if (res.data.code == 0 && res.data.data.total == 0) {
+              this.$axios
+                .post(`/api/project/selectAreaProjectList?companyId=${val.id}&region=${this.region}`)
+                .then(res => {
+                  // 判断是否有项目
+                  if (res.data.code == 0 && res.data.data.length == 0) {
+                    this.projectSum = 0
+                    this.$message({
+                      type: 'warning',
+                      message: '该公司下没有项目'
+                    })
+                  } else if (res.data.code == 0) {
+                    for (let i = 0; i < res.data.data.length; i++) {
+                      // 控件prop，显示名称和是否含有下拉三角
+                      res.data.data[i].companyName = res.data.data[i].projectName
+                      res.data.data[i].leaf = true
+                    }
+                    // 如果没有子数据在渲染，否则会多次叠加
+                    if (!val.children) {
+                      this.$set(val, 'children', res.data.data)
+                    }
+                    // 渲染公司下的项目
+                    this.mapMarkersList(res.data.data)
+                  }
+                })
+            } else if (res.data.code == 0 && res.data.data.rows.length>0) {
+              // 含有子公司，将子公司添加到列表里
+              // 如果没有子数据在渲染，否则会多次叠加
+              if (!val.children) {
+                this.$set(val, 'children', res.data.data.rows)
+              }
+            }
+          })
+      } else if (val.projectName) {
+        // 这里是点击项目在地图上定位
+        if (val.longitude || val.latitude) {
+          this.markerList = [{
+            position: [val.longitude*1, val.latitude*1],
+            content: `<div class="prompt">${ val.projectName }</div>`,
+            visible: true,
+            offset:[2,-15]
+          }]
+          this.center = [val.longitude*1, val.latitude*1]
+        } else {
+          this.$message({
+            type: 'warning',
+            message: '该项目没有设置经纬度'
+          })
+        }
+      }
+    },
+
+    // 树形控件的双击
+    getDblclick(val) {
+      this.dblclick += 1
+      setTimeout(() => {
+        this.dblclick = 0
+      }, 300);
+      if (this.dblclick>=2 && this.dblclickId == val.id && val.leaf) {
+        sessionStorage.setItem("pid", val.id)
+        var url = this.$router.resolve({path: '/home'})
+        window.open(url .href, '_blank')
+      }
+      this.dblclickId = val.id
     },
 
     // 获取省份列表
@@ -495,8 +514,16 @@ export default {
     selectProjectArea() {
       this.$axios.post(`/api/project/selectProjectArea?companyId=${this.companyId}&region=${this.region}`).then(
         res => {
-          // console.log(res.data)
-          this.statisticsData = res.data
+          if (res.data.code == 0) {
+            this.statisticsData = res.data
+          } else {
+            this.statisticsData = {
+              numW: 0,
+              numC: 0,
+              totalMoney: 0,
+              numWing: 0
+            }
+          }
         }
       )
     },
@@ -507,43 +534,40 @@ export default {
         .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=${this.region}`)
         .then(res => {
           this.allItems = res.data.data;
-          let self = this;
-          for (let i = 0; i < this.allItems.length; i++) {
-            if (!this.allItems[i].longitude || !this.allItems[i].latitude) {
-              continue
-            }
-            let marker = {
-              position: [this.allItems[i].longitude*1, this.allItems[i].latitude*1],
-              content: `<div class="prompt">${ this.allItems[i].projectName }</div>`,
-              visible: false,
-              offset:[2,-15],
-              events: {
-                click() {
-                  // debugger
-                  self.center = [self.allItems[i].longitude*1, self.allItems[i].latitude*1]
-                  self.markerList.forEach(item => {
-                    if (item.position[0] == self.center[0] && item.position[1] == self.center[1]) {
-                      item.visible = true;
-                    } else {
-                      item.visible = false;
-                    }
-                    // item.visible = false;
-                  });
-                  // for (let j = 0; j < self.markerList.length; j++) {
-                  //   if (self.markerList[j].position[0] == self.center[0] && self.markerList[j].position[1] == self.center[1]) {
-                  //     self.markerList[j].visible = true;
-                  //   }
-                  // }
-                  // self.markerList[i].visible = true;
-                  // console.log(self.markerList[i])
-                }
-              }
-            };
-            this.markerList.push(marker)
-            console.log(this.markerList)
-          }
-          this.projectSum = this.allItems.length
+          this.mapMarkersList(this.allItems)
+          // this.projectSum = this.allItems.length
         })
+    },
+
+    // 渲染地图上的点
+    mapMarkersList(data) {
+      this.projectSum = data.length
+      this.markerList = []
+      let self = this;
+        for (let i = 0; i < data.length; i++) {
+          if (!data[i].longitude || !data[i].latitude) {
+            continue
+          }
+          let marker = {
+            position: [data[i].longitude*1, data[i].latitude*1],
+            content: `<div class="prompt">${ data[i].projectName }</div>`,
+            visible: false,
+            offset:[2,-15],
+            events: {
+              click() {
+                self.center = [self.allItems[i].longitude*1, self.allItems[i].latitude*1]
+                self.markerList.forEach(item => {
+                  if (item.position[0] == self.center[0] && item.position[1] == self.center[1]) {
+                    item.visible = true;
+                  } else {
+                    item.visible = false;
+                  }
+                });
+              }
+            }
+          };
+          this.markerList.push(marker)
+        }
     },
 
     // 翻页
@@ -568,7 +592,17 @@ export default {
     getName() {
         this.userName = sessionStorage.getItem('userName')
     }
-  }
+  },
+  computed: {
+    getNum() {
+      let num = Math.floor((this.statisticsData.numWing/this.statisticsData.numW)*100)
+      if (isNaN(num)) {
+        return 0
+      } else {
+        return num
+      }
+    }
+  },
 };
 </script>
 
@@ -613,6 +647,15 @@ export default {
     margin-bottom: 0.03rem;
     background-color: #fff;
     vertical-align: text-top;
+  }
+  .top .nav-logo .name {
+    display: inline-block;
+    margin-left: 0.16rem;
+    font-size: 0.18rem;
+    color: #fff;
+    line-height: 0.24rem;
+    vertical-align: text-top;
+    text-shadow: 0.02rem 0.02rem 0.02rem #666;
   }
   .top .company {
     margin-left: 0.16rem;

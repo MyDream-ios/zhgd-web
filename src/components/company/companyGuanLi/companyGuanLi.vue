@@ -6,7 +6,7 @@
                 <a class="logo-box"></a>
                 <i class="line"></i>
             </div>
-            <div class="company">深圳市市政总公司</div>
+            <div class="company">{{companyName}}</div>
             <div class="nav">
                 <ul>
                     <li>
@@ -219,12 +219,14 @@ export default {
             activeShow: "/companyGuanLi_set", // 当前选中的模块
             userType: 1, // 账号状态
             userName: '', // 用戶名
+            companyName: '', // 公司名称
         }
     },
     created() {
         this.getPath()
         this.getUserType()
         this.getName()
+        this.getCompanyName()
     },
     methods: {
         // 选择模块
@@ -241,7 +243,7 @@ export default {
 
         // 获取账号类型
         getUserType() {
-          this.userType = sessionStorage.getItem('userType')
+            this.userType = sessionStorage.getItem('userType')
         },
 
         // 退出
@@ -254,6 +256,17 @@ export default {
         // 獲取用戶名
         getName() {
             this.userName = sessionStorage.getItem('userName')
+        },
+
+        // 获取公司名称
+        getCompanyName() {
+            this.$axios
+                .post(`/api/pcCompanyLibrary/selectHjCompanyLibrary?id=${sessionStorage.getItem('cid')}`)
+                .then(res => {
+                    if (res.data.code == 0) {
+                        this.companyName = res.data.data.companyName
+                    }
+                })
         }
     }
 }

@@ -51,6 +51,7 @@
                 background-repeat: no-repeat;
                 background-position: center center;
                 background-image: url('../../../static/images/yzt-whiteLogo.png');
+                // background-image: url('../../../static/images/lbrj_login.png');
             }
             div {
                 color: #fff;
