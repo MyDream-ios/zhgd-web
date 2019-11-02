@@ -231,6 +231,11 @@
               <!-- </router-link> -->
             </div>
             <div class="flex workerCard_black" v-else></div>
+            <!-- 调用对讲机 打包的时候打开注释-->
+            <!-- <div class="flex interphoneCard_bg" v-if="open">
+              <img src="../../../static/images/interphoneCard.png" alt="" @click="software">
+            </div>
+            <div class="flex interphoneCard_black" v-else></div> -->
             <!-- 设置 -->
             <div class="flex setCard_bg" v-if="open">
               <router-link to="/systemSet_equipmentSet">
@@ -608,6 +613,12 @@
       .workerCard_black {
         background-image: url('../../../static/images/workerCard_black.png');
       }
+      .interphoneCard_bg {
+        background-image: url('../../../static/images/interphoneCard_bg.png');
+      }
+      .interphoneCard_black {
+        background-image: url('../../../static/images/interphoneCard_black.png');
+      }
     }
     .img-big {
       img {
@@ -636,6 +647,8 @@
 </style>
 
 <script>
+// 打包的时候打开
+// const { ipcRenderer } = window.require('electron')
 export default {
   data() {
     return {
@@ -681,6 +694,12 @@ export default {
         type: "warning"
       });
     },
+    
+    // 点击调用本地exe
+    software() {
+      // 打包的时候打开
+      ipcRenderer.send('open')
+    }
   },
   created() {}
 };

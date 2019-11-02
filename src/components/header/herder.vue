@@ -13,6 +13,8 @@
               <img v-else-if="nowWeather.includes('雷')" src="../../../static/images/g_lei.png">
               <img v-else src="../../../static/images/g_wan.png">
         </div> -->
+        <!-- 打包的时候打开 -->
+        <!-- <span class="backTo" @click="back">返回</span> -->
         <ul class="nav">
           <li v-on:click="isActive('/home');personnelClick5()">
             <div class="Lactive-box" v-show="active=='/home'|| active=='/login'">
@@ -155,9 +157,11 @@
         </ul>
         <!-- <span v-on:click="isActive('/home')"> -->
         <span>
-          <!-- <router-link to="/systemHome"> -->
+          <h2 class="head-title">{{projectName}}</h2>
+          <!-- 打包的时候打开，并注释上边的,若是打开则会跳后台 -->
+          <!-- <router-link to="/systemHome">
             <h2 class="head-title">{{projectName}}</h2>
-          <!-- </router-link> -->
+          </router-link> -->
         </span>
         <div class="date-time">
           <span class="d-date" v-if="weather.length > 0">{{weather[0].date}}</span>
@@ -446,6 +450,11 @@ export default {
             }
         )
     },
+
+    // 返回上一頁
+    back() {
+      this.$router.go(-1)
+    }
   }
 };
 </script>
@@ -478,6 +487,23 @@ export default {
   height: .2rem;
   margin-left: .2rem;
   margin-top: -0.05rem;
+}
+.header .backTo {
+    color: #fff;
+    display: inline-block;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    transition: .5s all;
+}
+.header .backTo:hover {
+  background: #0f1f53;
+  color: #3375fe;
+  border: 1px solid #3375fe;
 }
 .header .nav {
      position: absolute;

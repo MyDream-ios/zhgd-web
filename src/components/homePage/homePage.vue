@@ -489,6 +489,8 @@ export default {
       }, 300);
       if (this.dblclick>=2 && this.dblclickId == val.id && val.leaf) {
         sessionStorage.setItem("pid", val.id)
+        // 打包时打开并且注释下边的
+        // this.$router.push('/home')
         var url = this.$router.resolve({path: '/home'})
         window.open(url .href, '_blank')
       }

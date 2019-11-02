@@ -45,7 +45,8 @@
             </li>
           </ul>
         </div>
-        <img :src="indexData.safetyPhotos[0]" />
+        <img :src="indexData.safetyPhotos[0]" @click="centerDialogVisible=!centerDialogVisible"
+        style="cursor: pointer">
       </div>
       <div class="inform">
         <div class="title">
@@ -154,6 +155,13 @@
           <p v-else v-for="(item, index) in indexData.makeName" :key="index">{{ item }}</p>
         </div>
       </div>
+      <el-dialog
+        title="图片"
+        :visible.sync="centerDialogVisible"
+        width="50%"
+        center>
+        <img :src="indexData.safetyPhotos[0]" style="width:100%;margin:0;height:auto">
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -365,7 +373,8 @@ export default {
       safetyId: "", // 整改id
       getIdState: 0, // 调用一次获取url中的值
       indexData: "", // 页面数据
-      list: '' // 流程列表
+      list: '', // 流程列表
+      centerDialogVisible: false
     };
   },
   created() {

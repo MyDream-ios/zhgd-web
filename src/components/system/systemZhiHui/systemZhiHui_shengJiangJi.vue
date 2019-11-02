@@ -61,6 +61,8 @@
             <img
               class="gongren"
               :src="equipmentData.rl"
+              @click="centerDialogVisible=!centerDialogVisible"
+              style="cursor: pointer"
             >
             <div class="gongrenInfo">
               <p style="margin-top:0.2rem">
@@ -329,6 +331,13 @@
       <!-- 遮罩层 -->
       <div class="shade-box" v-show="dialogShow"></div>
     </div>
+    <el-dialog
+        title="图片"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+        <img :src="equipmentData.rl" style="width:100%;margin:0;height:auto">
+      </el-dialog>
   </div>
 </template>
 <script>
@@ -360,6 +369,7 @@ export default {
         }
       ],
       tableData: [], // 历史记录列表数据
+      centerDialogVisible: false, // 弹窗
     };
   },
   created() {

@@ -1,14 +1,18 @@
 {
-  "name": "my-project",
+  "name": "wisdom",
   "version": "0.1.0",
   "private": true,
+  "main": "src/index.js",
   "scripts": {
+    "start": "electron .",
     "api": "node app.js",
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --fix"
+    "lint": "vue-cli-service lint --fix",
+    "exe": "electron-packager . wisdom --win --out ../wisdom --arch=x64 --icon=./dist/yiZhiTon.ico"
   },
   "dependencies": {
+    "electron": "^7.0.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "cropperjs": "^1.5.6",

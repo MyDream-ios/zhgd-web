@@ -73,7 +73,7 @@
           <div class="carInfo" v-show="!equipmentShow">
             <div class="title">车辆进出实时情况</div>
             <div class="carimg">
-              <img :src="newData.img" alt="">
+              <img :src="newData.img" alt="" @click="imgShow(newData.img)" style="cursor: pointer">
             </div>
             <div class="infoBox">
               <ul>
@@ -282,7 +282,7 @@
             <ul id="ul">
               <li v-for="(item,index) in truckSpace" :key="index">
                 <p class="head">{{item.vehicleNo}}({{item.cardType==0?'临时车':'月租车'}})</p>
-                <img :src="item.img">
+                <img :src="item.img" @click="imgShow(item.img)" style="cursor: pointer">
                 <p class="into">
                   <span style="color:#fcd178">{{item.liftTime}}</span>&nbsp;
                 </p>
@@ -309,6 +309,13 @@
         </div>
       </div>
     </div>
+    <el-dialog
+        title="图片"
+        :visible.sync="centerDialogVisible"
+        width="50%"
+        center>
+        <img :src="imgUrl" style="width:100%;margin:0;height:auto">
+      </el-dialog>
   </div>
 </template>
 <script>
@@ -351,6 +358,8 @@ export default {
       sn: '', // 设备编号
       count: '', // 在线车辆系统
       carSum: '', // 场内车数量
+      imgUrl: '', // 弹窗的图片
+      centerDialogVisible: false, // 弹窗的显示
     }
   },
   created() {
@@ -527,6 +536,12 @@ export default {
     // 导出Excel
     down() {
       location.href=`http://47.106.71.3:8080/api/parkings/export?deptID=${this.deptID}`
+    },
+
+    // 点击图片弹窗
+    imgShow(img) {
+      this.imgUrl = img
+      this.centerDialogVisible = !this.centerDialogVisible
     }
   }
 }
