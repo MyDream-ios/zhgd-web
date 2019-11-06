@@ -467,6 +467,7 @@
 <style lang="less">
     #systemGreen_TSP {
         width: 100%;
+        overflow: hidden;
         .content-box {
             display: flex;
             border-radius: .04rem;

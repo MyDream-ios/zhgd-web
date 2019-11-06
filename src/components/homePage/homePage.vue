@@ -5,10 +5,8 @@
       <div class="nav-logo">
         <a class="logo-box"></a>
         <i class="line"></i>
-        <span class="name">{{companyName}}</span>
       </div>
-      <!-- <div class="company">深圳市市政总公司</div> -->
-      <div class="company">&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;</div>
+      <div class="company">{{companyName}}</div>
       <div class="nav">
         <ul>
           <li>
@@ -63,60 +61,41 @@
         </el-amap>
       </div>
       <!-- 搜索框 -->
-      <!-- <div class="search-bar">
-        <input type="text" placeholder="输入信息名称进行搜索">
-        <a href="#">
+      <div class="search-bar">
+        <input type="text" placeholder="输入信息名称进行搜索" v-model="searchLeftValue" @keyup.enter="searchLeft(searchLeftValue)">
+        <a href="#" @click="searchLeft(searchLeftValue)">
           <i></i>
         </a>
-      </div> -->
+      </div>
       <!-- 公司名称/地区 -->
-      <div class="menu" style="display:none">
-        <a class="company" @click="dropDownClck('company')">
-          <span class="text">{{companyName}}</span>
-          <i class="icon el-icon-arrow-down"></i>
-        </a>
-        <a class="district" @click="dropDownClck('district')">
+      <div class="menu">
+        <div class="company" @click="dropDownClck('district')">
+          <span class="text">{{searchCompanyName}}</span>
+          <!-- <i class="icon el-icon-arrow-down"></i> -->
+        </div>
+        <div class="district" @click="dropDownClck('district')">
           <span class="text">{{provinceActive}}</span>
           <i class="icon el-icon-arrow-down"></i>
-        </a>
-        <div class="company-box" v-show="companyShow">
+        </div>
+        <!-- <div class="company-box" v-show="companyShow">
           <div class="now">
-            当前组织：{{companyName}}
+            当前组织：{{searchCompanyName}}
           </div>
           <div class="search-box">
             <i class="el-icon-search"></i>
-            <input type="text" placeholder="输入组织名称后回车搜索">
+            <input type="text" placeholder="输入组织名称后回车搜索" @keyup.enter="searchRight" ref="companyInput">
           </div>
-          <!-- <div class="collapse-box">
-            <el-collapse>
-              <el-collapse-item v-for="item in companyList" :title="item.companyName" :name="item.id" :key="item.id">
-                <el-collapse>
-                  <el-collapse-item title="中建二局西南分公司" name="1-1">
-                    <div>
-                      <a>中建二局广州分公司</a>
-                    </div>
-                    <div>
-                      <a>中建二局揭阳分公司</a>
-                    </div>
-                    <div>
-                      <a>中建二局深圳分公司</a>
-                    </div>
-                  </el-collapse-item>
-                </el-collapse>
-              </el-collapse-item>
-            </el-collapse>
-          </div> -->
-        </div>
+        </div> -->
         <div class="district-box" v-show="districtShow">
           <div class="now">
             当前区域：{{provinceActive}}
           </div>
           <ul>
             <li>
-              <a :class="provinceActive=='全国'?'active':''" @click="provinceActive='全国';region=0;getProjectList()">全国</a>
+              <a :class="provinceActive=='全国'?'active':''" @click="provinceActive='全国';region=0;searchRight()">全国</a>
             </li>
             <li v-for="item in provinceList" :key="item.id">
-              <a :class="provinceActive==item.title?'active':''" @click="provinceActive=item.title;region=item.id;getProjectList()">{{item.title}}</a>
+              <a :class="provinceActive==item.title?'active':''" @click="provinceActive=item.title;region=item.id;searchRight()">{{item.title}}</a>
             </li>
           </ul>
         </div>
@@ -205,7 +184,7 @@
             </li>
             <li>
               投资金额：
-              <span>{{statisticsData.totalMoney}}</span>
+              <span>{{Math.floor(statisticsData.totalMoney)}}</span>
               万
             </li>
           </ul>
@@ -291,6 +270,7 @@ export default {
       districtShow: false, // 地区下拉框状态
       companyId: 0, // 公司id
       companyName: '', // 当前公司名
+      searchCompanyName: '', // 搜索栏显示的公司名
       companyList: [], // 公司列表
       region: 0, // 区域id
       projectList: [], // 项目列表数据
@@ -314,12 +294,12 @@ export default {
       }, // 默认显示的数据名称
       dblclick: 0, // 双击
       dblclickId: '', // 缓存第一次点击的id
+      searchLeftValue: '', // 左侧搜索
     }
   },
   created() {
     this.getUserType()
     this.getComoanyId()
-    // this.getProjectList()
     this.getCompanyList()
     this.getComoanyName()
     this.getProvinceList()
@@ -327,6 +307,14 @@ export default {
     // this.selectAreaProjectList()
     this.getAllItems()
     this.getName()
+  },
+  mounted() {
+    // this.rootList = [{
+    //   children: '',
+    //   label: this.companyName,
+    //   isLeaf: false
+    // }]
+    // this.$set(this.rootList[0], 'children', this.companyList)
   },
   methods: {
     enter() {
@@ -375,6 +363,9 @@ export default {
       if (val == 'company') {
         this.districtShow = false
         this.companyShow = !this.companyShow
+        // setTimeout(() => {
+        //   this.$refs.companyInput.focus()
+        // }, 300)
       } else {
         this.companyShow = false
         this.districtShow = !this.districtShow
@@ -391,6 +382,7 @@ export default {
       this.$axios.post(`/api/pcCompanyLibrary/selectHjCompanyLibrary?id=${this.companyId}`).then(
         res => {
           this.companyName = res.data.data.companyName
+          this.searchCompanyName = this.companyName
         }
       )
     },
@@ -402,7 +394,7 @@ export default {
           if (res.data.code == 0 && res.data.data.total >0) {
             this.companyList = res.data.data.rows
             this.$axios
-              .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=${this.region}`)
+              .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=0`)
               .then(res => {
                 for (let i = 0; i < res.data.data.length; i++) {
                   // 控件prop，显示名称和是否含有下拉三角
@@ -418,28 +410,34 @@ export default {
 
     // 点击树形控件
     handleNodeClick(val) {
+      this.projectSum = 0
+      this.searchLeftValue = ''
+      this.region = 0
+      this.provinceActive='全国'
       // 双击
       this.getDblclick(val)
       // 获取汇总数据
       this.companyId = val.id
-      this.selectProjectArea()
+      // this.selectProjectArea()
       // 判断点击项是否为项目
       if (!val.projectName) {
+        this.selectProjectArea()
         this.$axios
           .post(`/api/pcCompanyLibrary/companyLibraryList?companyId=${val.id}`)
           .then(res => {
+            this.searchCompanyName = val.companyName
             // 判断公司下时候还有子公司，没有的话就请求项目数据
             if (res.data.code == 0 && res.data.data.total == 0) {
               this.$axios
-                .post(`/api/project/selectAreaProjectList?companyId=${val.id}&region=${this.region}`)
+                .post(`/api/project/selectAreaProjectList?companyId=${val.id}&region=0`)
                 .then(res => {
                   // 判断是否有项目
                   if (res.data.code == 0 && res.data.data.length == 0) {
-                    this.projectSum = 0
                     this.$message({
                       type: 'warning',
                       message: '该公司下没有项目'
                     })
+                    this.markerList = []
                   } else if (res.data.code == 0) {
                     for (let i = 0; i < res.data.data.length; i++) {
                       // 控件prop，显示名称和是否含有下拉三角
@@ -463,7 +461,22 @@ export default {
             }
           })
       } else if (val.projectName) {
-        // 这里是点击项目在地图上定位
+        // 点击项目在地图上定位
+        this.projectSum = 0
+        this.$axios
+          .post(`/api/project/selectHjProject?id=${val.id}`)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.statisticsData = res.data
+            } else {
+              this.statisticsData = {
+                numW: 0,
+                numC: 0,
+                totalMoney: 0,
+                numWing: 0
+              }
+            }
+          })
         if (val.longitude || val.latitude) {
           this.markerList = [{
             position: [val.longitude*1, val.latitude*1],
@@ -477,6 +490,7 @@ export default {
             type: 'warning',
             message: '该项目没有设置经纬度'
           })
+          this.markerList = []
         }
       }
     },
@@ -490,9 +504,12 @@ export default {
       if (this.dblclick>=2 && this.dblclickId == val.id && val.leaf) {
         sessionStorage.setItem("pid", val.id)
         // 打包时打开并且注释下边的
-        // this.$router.push('/home')
-        var url = this.$router.resolve({path: '/home'})
-        window.open(url .href, '_blank')
+        if (this.$exe.installation) {
+          this.$router.push('/home')
+        } else {
+          var url = this.$router.resolve({path: '/home'})
+          window.open(url .href, '_blank')
+        }
       }
       this.dblclickId = val.id
     },
@@ -514,7 +531,7 @@ export default {
 
     // 获取统计数据
     selectProjectArea() {
-      this.$axios.post(`/api/project/selectProjectArea?companyId=${this.companyId}&region=${this.region}`).then(
+      this.$axios.post(`/api/project/selectProjectArea?companyId=${this.companyId}&region=0`).then(
         res => {
           if (res.data.code == 0) {
             this.statisticsData = res.data
@@ -532,13 +549,14 @@ export default {
 
     // 获取全部项目列表
     getAllItems() {
-      this.$axios
-        .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=${this.region}`)
-        .then(res => {
-          this.allItems = res.data.data;
-          this.mapMarkersList(this.allItems)
-          // this.projectSum = this.allItems.length
-        })
+      // this.$axios
+      //   .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=${this.region}`)
+      //   .then(res => {
+      //     this.allItems = res.data.data;
+      //     this.mapMarkersList(this.allItems)
+      //     // this.projectSum = this.allItems.length
+      //   })
+      this.searchLeft()
     },
 
     // 渲染地图上的点
@@ -550,6 +568,7 @@ export default {
           if (!data[i].longitude || !data[i].latitude) {
             continue
           }
+          this.center = [data[i].longitude*1, data[i].latitude*1]
           let marker = {
             position: [data[i].longitude*1, data[i].latitude*1],
             content: `<div class="prompt">${ data[i].projectName }</div>`,
@@ -557,7 +576,7 @@ export default {
             offset:[2,-15],
             events: {
               click() {
-                self.center = [self.allItems[i].longitude*1, self.allItems[i].latitude*1]
+                self.center = [data[i].longitude*1, data[i].latitude*1]
                 self.markerList.forEach(item => {
                   if (item.position[0] == self.center[0] && item.position[1] == self.center[1]) {
                     item.visible = true;
@@ -593,7 +612,80 @@ export default {
     // 獲取用戶名
     getName() {
         this.userName = sessionStorage.getItem('userName')
-    }
+    },
+
+    // 左侧搜索
+    searchLeft(data='') {
+      this.provinceActive='全国'
+      this.searchCompanyName = this.companyName
+      this.region = 0
+      this.getComoanyId()
+      this.$axios
+        .post(`/api/project/selectProjects?cid=${this.companyId}&projectName=${data}`)
+        .then(res => {
+          if (res.data.code == 0) {
+            this.allItems = res.data.data;
+            this.mapMarkersList(this.allItems)
+            let dialog = this.allItems.every(item => {
+              return item.longitude == null && item.latitude == null
+            })
+            if (dialog) {
+              this.$message({
+                type: 'warning',
+                message: '项目未设置经纬度'
+              })
+              this.markerList = []
+            } else if(data) {
+              this.$message({
+                type: 'success',
+                message: '查询成功'
+              })
+            }
+          } else {
+            this.$message({
+              type: 'warning',
+              message: '未查询到项目'
+            })
+            this.markerList = []
+          }
+        })
+    },
+
+    // 右侧搜索
+    searchRight() {
+      this.getComoanyId()
+      let value = this.searchCompanyName == this.companyName ? '' : this.searchCompanyName
+      this.$axios
+        .post(`/api/project/selectProjectRegion?cid=${this.companyId}&constructionName=${value}&projectRegion=${this.region}`)
+        .then(res => {
+          if (res.data.code == 0) {
+            this.companyShow = false
+            this.districtShow = false
+            this.mapMarkersList(res.data.data)
+            let dialog = res.data.data.every(item => {
+              return item.longitude == null && item.latitude == null
+            })
+            if (dialog) {
+              this.$message({
+                type: 'warning',
+                message: '项目未设置经纬度'
+              })
+              this.markerList = []
+            } else {
+              this.$message({
+                type: 'success',
+                message: '查询成功'
+              })
+            }
+          } else if (res.data.code == 1) {
+            this.markerList = []
+            this.$message({
+              type: 'warning',
+              message: '该区域下没有项目'
+            })
+          }
+        })
+    },
   },
   computed: {
     getNum() {
@@ -625,6 +717,7 @@ export default {
     padding-top: 0.24rem;
     background-size: cover;
     background: linear-gradient(to right, #6cc4ff, #489cff);
+    position: relative;
   }
   .top > div {
     float: left;
@@ -668,7 +761,10 @@ export default {
     text-shadow: .02rem .02rem .02rem #666;
   }
   .top .nav {
-    margin-left: 0.99rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
   }
   .top .nav ul li {
     float: left;
@@ -784,9 +880,10 @@ export default {
     top: 0.15rem;
     right: 4.8rem;
     padding-top: .06rem;
-    >a {
+    >div {
       display: inline-block;
       position: relative;
+      cursor: pointer;
       .icon {
         position: absolute;
         right: .08rem;
@@ -799,13 +896,20 @@ export default {
       height: .3rem;
       line-height: .3rem;
       border-right: .02rem solid #f2f2f2;
-      padding-left: .16rem;
+      // padding: 0 .26rem 0 .16rem;
+      padding: 0 0 0 .16rem;
+      overflow: hidden;
     }
     .district {
+      float: right;
       width: 1.13rem;
       height: .3rem;
       line-height: .3rem;
       padding-left: .1rem;
+      .icon {
+        position: absolute;
+        right: .15rem;
+      }
     }
     .company-box,
     .district-box {
@@ -835,6 +939,7 @@ export default {
         font-size: .12rem;
         input {
           padding-left: .1rem;
+          width: calc(100% - 20px);
         }
       }
       .collapse-box {

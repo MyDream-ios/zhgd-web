@@ -115,4 +115,7 @@ body {
 /* body::-webkit-scrollbar {
   display: none
 } */
+.el-table-column--selection .cell {
+  padding-right: 0!important;
+}
 </style>

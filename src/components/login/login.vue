@@ -50,7 +50,7 @@
           <i class="user"></i>
           <input type="text" placeholder="请输入账号" v-model="user_name" @keyup.enter="login">
           <i class="password"></i>
-          <input type="password" placeholder="请输入密码" v-model="pwd" @keyup.enter="login">
+          <input type="password" placeholder="请输入密码" v-model="pwd" @keyup.enter="login" ref="passWord">
           <a @click="login"></a>
         </div>
         <div class="logo"></div>
@@ -137,11 +137,19 @@ export default {
       this.$axios.post(`/api/system/computer/login?userAccount=${this.user_name}&userPassword=${this.$md5(this.pwd)}&entry=1`).then(res => {
         // console.log(res.data)
         if (this.user_name==''||this.pwd=='') {
-          alert("账号或密码不得为空")
+          this.$message({
+            type: 'warning',
+            message: '账号或密码不得为空'
+          })
         } else {
           if (res.data.code == -1) {
-            alert("账号或密码错误！请重新输入");
+            // alert("账号或密码错误！请重新输入");
+            this.$message({
+            type: 'warning',
+            message: '账号或密码错误！请重新输入'
+          })
             this.pwd = ""
+            this.$refs.passWord.focus()
           } else {
             sessionStorage.setItem("islogin", "true")
             sessionStorage.setItem("pid", res.data.data.projectId)
@@ -282,7 +290,7 @@ export default {
   .content .logo {
     width: 1.5rem;
     height: 0.6rem;
-    margin-top: 1.9rem;
+    bottom: .3rem;
     background-image: url("../../../static/images/yzt-whiteLogo.png");
     // background-image: url("../../../static/images/lbrj_login.png");
     background-size: contain;

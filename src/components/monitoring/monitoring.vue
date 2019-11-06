@@ -45,9 +45,14 @@
                         </el-collapse>
                   </el-collapse-item>
         </el-collapse>-->
-        <ul>
+        <ul v-if="videoList">
           <li v-for="(item,index) in videoList" :key="index">
             <a :class="item.id==areaId?'active':''" @click="selectClick(item.id);">{{item.areaName}}</a>
+          </li>
+        </ul>
+        <ul v-else>
+          <li v-for="(item,index) in videoAreaData" :key="index">
+            <a :class="item.id==areaId?'active':''">{{item.areaName}}</a>
           </li>
         </ul>
       </div>
@@ -182,7 +187,7 @@
               <source :src="item.url" type />
               <source :src="item.url" type="application/x-mpegURL" />
             </video>
-            <span v-else>无视频数据</span>
+            <span v-else style="color: #3375fe">无视频数据</span>
           </div>
         </div>
       </div>
@@ -254,7 +259,8 @@ export default {
       selectActive: 0, // 当前选择的区域
       videoList: "", // 视频区列表
       areaId: "", // 当前选中视频区id
-      videoData: "" // 视频直播流
+      videoData: "", // 视频直播流
+      videoAreaData: [], // 无数据显示
     };
   },
   mounted() {
@@ -327,6 +333,8 @@ export default {
             // console.log('有视频区域')
             this.videoList = res.data.data;
             // console.log(this.videoList);
+            this.areaId = res.data.data[0].id;
+            this.getProjectVideo();
           } else {
             // console.log('无视频区域')
             this.videoAreaData = [
@@ -336,9 +344,14 @@ export default {
                 areaName: "无监控数据"
               }
             ];
+            this.videoData = [{}]
+            this.$message({
+              type: 'warning',
+              message: '无可播放监控',
+              showClose: true,
+              duration: 4000
+            })
           }
-          this.areaId = res.data.data[0].id;
-          this.getProjectVideo();
         });
     },
 
@@ -477,7 +490,9 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
-  color: #3375fe;
+  /* color: #3375fe; */
+  /* 打包的颜色 */
+  color: #fff;
 }
 /* 显示模块样式 */
 #montoring .main {

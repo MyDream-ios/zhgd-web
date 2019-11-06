@@ -121,9 +121,12 @@
             <div class="flex carCard_black" v-else></div>
             <!-- 视频 -->
             <div class="flex videoCard_bg" v-if="open">
-              <router-link to="/systemMonitoring">
+              <router-link to="/systemMonitoring" v-if="!$exe.installation">
                 <img src="../../../static/images/videoCard.png" alt="">
               </router-link>
+              <a v-else>
+                <img src="../../../static/images/videoCard.png" alt="" @click="openYSY">
+              </a>
             </div>
             <div class="flex videoCard_black" v-else></div>
             <!-- 电箱 -->
@@ -232,10 +235,10 @@
             </div>
             <div class="flex workerCard_black" v-else></div>
             <!-- 调用对讲机 打包的时候打开注释-->
-            <!-- <div class="flex interphoneCard_bg" v-if="open">
+            <div class="flex interphoneCard_bg" v-if="open&&$exe.installation">
               <img src="../../../static/images/interphoneCard.png" alt="" @click="software">
             </div>
-            <div class="flex interphoneCard_black" v-else></div> -->
+            <div class="flex interphoneCard_black" v-else @click="msg" style="cursor: pointer;"></div>
             <!-- 设置 -->
             <div class="flex setCard_bg" v-if="open">
               <router-link to="/systemSet_equipmentSet">
@@ -647,7 +650,6 @@
 </style>
 
 <script>
-// 打包的时候打开
 // const { ipcRenderer } = window.require('electron')
 export default {
   data() {
@@ -658,6 +660,9 @@ export default {
     };
   },
   mounted() {
+    // if (this.$exe.installation) {
+    //   const { ipcRenderer } = window.require('electron')
+    // }
   },
   methods: {
     // 侧导航栏缩进
@@ -694,11 +699,24 @@ export default {
         type: "warning"
       });
     },
-    
+
     // 点击调用本地exe
     software() {
       // 打包的时候打开
       ipcRenderer.send('open')
+    },
+
+    // 对讲机点击弹窗
+    msg() {
+      this.$message({
+        type: 'warning',
+        message: '请下载智慧工地安装包'
+      })
+    },
+
+    // 打开萤石云
+    openYSY() {
+      ipcRenderer.send('YSY')
     }
   },
   created() {}

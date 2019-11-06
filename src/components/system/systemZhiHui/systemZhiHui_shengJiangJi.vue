@@ -332,6 +332,7 @@
       <div class="shade-box" v-show="dialogShow"></div>
     </div>
     <el-dialog
+        v-if="equipmentData.rl"
         title="图片"
         :visible.sync="centerDialogVisible"
         width="30%"

@@ -1290,7 +1290,9 @@ export default {
     line-height: 0.6rem;
     span {
       font-size: 0.3rem;
-      color: #347fea;
+      // color: #347fea;
+      // 打包的颜色
+      color: #fff;
       margin-left: 0.12rem;
     }
   }

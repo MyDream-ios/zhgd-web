@@ -22,7 +22,7 @@ function createWindow () {
   win.loadFile('dist/index.html')
 
   // 打开开发者工具
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   // 当 window 被关闭，这个事件会被触发。
   win.on('closed', () => {
@@ -62,15 +62,15 @@ app.on('activate', () => {
 ipcMain.on('open', () => {
   // console.log(123) // prints "ping"
   // shell.openItem(exePath + '/djj/telClient.exe')
-  shell.openItem(exePath + '\\djj\\telClient.exe')
+  shell.openItem(exePath + '\\hyj\\telClient.exe')
 
 })
 
 // 异步消息
-ipcMain.on('wind', () => {
+ipcMain.on('YSY', () => {
   // console.log(123) // prints "ping"
   // shell.openItem(exePath + '/djj/telClient.exe')
-  shell.openItem(exePath + '\\djj\\telClient.exe')
+  shell.openItem(exePath + '\\ysy\\EzvizStudio.exe')
 
 })
 // 同步消息

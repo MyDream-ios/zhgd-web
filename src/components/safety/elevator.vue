@@ -337,13 +337,13 @@ export default {
   // display: flex;
   // justify-content: space-between;
   height: 1.61rem;
-  width: 19.2rem;
+  // width: 19.2rem;
   overflow: hidden;
   .top-box {
     float: left;
     margin-right: .35rem;
     height: 1.61rem;
-    width: 5.3rem;
+    width: 5rem;
     background-image: url("../../../static/images/s_top-box.png");
     background-size: contain;
     display: flex;
@@ -392,12 +392,12 @@ export default {
   // display: flex;
   // justify-content: space-between;
   height: 7.4rem;
-  width: 19.2rem;
+  // width: 19.2rem;
   overflow: hidden;
   .main {
     float: left;
     margin-right: .35rem;
-    width: 5.3rem;
+    width: 5rem;
     height: 7.4rem;
     background: url("../../../static/images/s_bottom-box.png") no-repeat center
       center;

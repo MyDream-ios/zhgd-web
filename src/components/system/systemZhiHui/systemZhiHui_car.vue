@@ -310,6 +310,7 @@
       </div>
     </div>
     <el-dialog
+        v-if="imgUrl"
         title="图片"
         :visible.sync="centerDialogVisible"
         width="50%"

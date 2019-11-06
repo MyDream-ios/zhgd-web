@@ -156,6 +156,7 @@
         </div>
       </div>
       <el-dialog
+        v-if="indexData.safetyPhotos[0]"
         title="图片"
         :visible.sync="centerDialogVisible"
         width="50%"

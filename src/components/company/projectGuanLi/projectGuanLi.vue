@@ -69,6 +69,7 @@
             padding-top: 0.24rem;
             background-size: cover;
             background: linear-gradient(to right, #6cc4ff, #489cff);
+            position: relative;
             >div {
                 float: left;
             }
@@ -102,7 +103,10 @@
                 text-shadow: .02rem .02rem .02rem #666;
             }
             .nav {
-                margin-left: 0.99rem;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
                 ul {
                     li {
                         float: left;

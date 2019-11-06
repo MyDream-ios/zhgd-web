@@ -13,8 +13,7 @@
               <img v-else-if="nowWeather.includes('雷')" src="../../../static/images/g_lei.png">
               <img v-else src="../../../static/images/g_wan.png">
         </div> -->
-        <!-- 打包的时候打开 -->
-        <!-- <span class="backTo" @click="back">返回</span> -->
+        <span class="backTo" v-if="$exe.installation"><a style="color:#fff" @click="back">返回</a></span>
         <ul class="nav">
           <li v-on:click="isActive('/home');personnelClick5()">
             <div class="Lactive-box" v-show="active=='/home'|| active=='/login'">
@@ -30,7 +29,7 @@
             </div>
             <a>人员管理</a>
             <div class="drop-down1">
-              <ul>
+              <ul :style="$exe.installation?('height:2.4rem'):('height:1.92rem')">
                 <li @click="isActive('/labour')">
                   <router-link to="/labour">两制管理</router-link>
                 </li>
@@ -42,6 +41,9 @@
                 </li>
                 <li>
                   <a @click="unopenClick">危区检测</a>
+                </li>
+                <li v-if="$exe.installation">
+                  <a @click="Talkback">对讲系统</a>
                 </li>
               </ul>
             </div>
@@ -61,8 +63,12 @@
             <a>视频监控</a>
             <div class="drop-down5">
               <ul>
-                <li v-on:click="isActive('/monitoring')">
+                <li v-on:click="isActive('/monitoring')" v-if="!$exe.installation">
                   <router-link to="/monitoring">视频监控</router-link>
+                </li>
+                <!-- 打包的时候切换注释 -->
+                <li v-on:click="isActive('/monitoring')" v-else>
+                  <a @click="openYSY">视频监控</a>
                 </li>
                 <li v-on:click="isActive('/aiDiscern')">
                   <router-link to="/aiDiscern">AI识别</router-link>
@@ -157,11 +163,10 @@
         </ul>
         <!-- <span v-on:click="isActive('/home')"> -->
         <span>
-          <h2 class="head-title">{{projectName}}</h2>
-          <!-- 打包的时候打开，并注释上边的,若是打开则会跳后台 -->
-          <!-- <router-link to="/systemHome">
+          <h2 class="head-title" v-if="!$exe.installation">{{projectName}}</h2>
+          <router-link to="/systemHome" v-else>
             <h2 class="head-title">{{projectName}}</h2>
-          </router-link> -->
+          </router-link>
         </span>
         <div class="date-time">
           <span class="d-date" v-if="weather.length > 0">{{weather[0].date}}</span>
@@ -173,6 +178,7 @@
 </template>
 
 <script>
+// const { ipcRenderer } = window.require('electron')
 import moment from "moment"
 export default {
   data() {
@@ -199,6 +205,11 @@ export default {
     this.setActive()
     this.getProjectId()
     this.selectIndex()
+  },
+  mounted() {
+    // if (this.$exe.installation) {
+    //   const { ipcRenderer } = window.require('electron')
+    // }
   },
   methods: {
     getName() {
@@ -264,8 +275,9 @@ export default {
       this.dropDownState5 = true
 
       if (this.dropDownState) {
+        let temp = this.$exe.installation?'2.4rem':'1.92rem'
         $('.drop-down1').animate({
-          height:'1.92rem'
+          height:temp
         },500)
         this.dropDownState = false
       } else {
@@ -453,7 +465,21 @@ export default {
 
     // 返回上一頁
     back() {
-      this.$router.go(-1)
+      if (sessionStorage.getItem('userType') == 2) {
+        this.$router.push('/systemHome')
+      } else {
+        this.$router.push('/homePage')
+      }
+    },
+
+    // 对讲机调用
+    Talkback() {
+      ipcRenderer.send('open')
+    },
+
+    // 打开萤石云
+    openYSY() {
+      ipcRenderer.send('YSY')
     }
   }
 };
@@ -556,7 +582,9 @@ export default {
      line-height: 0.44rem;
      font-size: 0.16rem;
      font-weight: bold;
-     color: #3375fe;
+    //  color: #3375fe;
+    // 打包的颜色
+     color: #fff;
      padding-left: .19rem;
 }
 .header .nav li:nth-child(4) {
@@ -586,8 +614,8 @@ export default {
 .Lactive-box img {
   height: .44rem;
   width: 1.51rem;
-  vertical-align: top;  
-} 
+  vertical-align: top;
+}
 .indexBody {
   .header {
     .header-main {
@@ -601,7 +629,6 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 1.92rem;              
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -625,7 +652,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 2.4rem;              
+              height: 2.4rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -649,7 +676,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 2.4rem;              
+              height: 2.4rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -673,7 +700,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 1.92rem;              
+              height: 1.92rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -697,7 +724,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 0.96rem;              
+              height: 0.96rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;

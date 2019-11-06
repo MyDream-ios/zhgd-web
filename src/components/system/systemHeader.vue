@@ -1,9 +1,8 @@
 <template>
     <div id="systemHeader">
         <div class="float-left">
-            <router-link to="/home" class="logo" target="_blank"></router-link>
-            <!-- 打包的时候打开并注释上一行 -->
-            <!-- <router-link to="/home" class="logo"></router-link> -->
+            <router-link to="/home" class="logo" target="_blank" v-if="!$exe.installation"></router-link>
+            <router-link to="/home" class="logo" v-else></router-link>
             <div class="line"></div>
             <div class="project-name">{{projectName}}</div>
         </div>
