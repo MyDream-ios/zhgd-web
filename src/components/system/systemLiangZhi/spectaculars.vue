@@ -2,9 +2,10 @@
     <div id="spectaculars">
         <!-- 标题 -->
         <div class="title">
-            <router-link to="/systemLiangZhi" v-if="!$exe.installation">{{indexData.projectName}}</router-link>
+            <router-link to="/systemLiangZhi" v-if="$exe.installation">{{indexData.projectName}}</router-link>
             <!-- 打包的时候切换注释 -->
-            <a @click="returnClick()" v-else>{{indexData.projectName}}</a>
+            <!-- <a @click="returnClick()" v-else>{{indexData.projectName}}</a> -->
+            <a v-else>{{indexData.projectName}}</a>
         </div>
         <!-- 主体 -->
         <div class="main">

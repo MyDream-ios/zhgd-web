@@ -33,7 +33,7 @@
         <el-dropdown @command="handleCommand">
           <a class="el-dropdown-link">
             <!-- 用户名 -->
-            {{userName}}
+            <!-- {{userName}} -->
             <i class="el-icon-arrow-down el-icon--right"></i>
           </a>
           <el-dropdown-menu slot="dropdown">
@@ -197,7 +197,17 @@
           </li>
         </ul> -->
         <div class="main-list">
+          <el-tree id="tree-top"
+            :data="data"
+            :props="defaultPropsTop"
+            node-key="id"
+            :default-expanded-keys="open"
+            accordion
+            @node-click="handleNodeClickTop">
+          </el-tree>
           <el-tree
+            id="tree"
+            v-show="treeShow"
             :data="companyList"
             :props="defaultProps"
             lazy
@@ -295,6 +305,17 @@ export default {
       dblclick: 0, // 双击
       dblclickId: '', // 缓存第一次点击的id
       searchLeftValue: '', // 左侧搜索
+      data: [{ // 根目录
+        label: '',
+        children: [{}],
+        id: 0
+      }],
+      defaultPropsTop: { // 根目录显示
+        label: 'label',
+        children: 'children'
+      },
+      treeShow: true, // 列表是否显示
+      open: [0], // 默认打开项
     }
   },
   created() {
@@ -382,6 +403,7 @@ export default {
       this.$axios.post(`/api/pcCompanyLibrary/selectHjCompanyLibrary?id=${this.companyId}`).then(
         res => {
           this.companyName = res.data.data.companyName
+          this.data[0].label = this.companyName
           this.searchCompanyName = this.companyName
         }
       )
@@ -531,7 +553,7 @@ export default {
 
     // 获取统计数据
     selectProjectArea() {
-      this.$axios.post(`/api/project/selectProjectArea?companyId=${this.companyId}&region=0`).then(
+      this.$axios.post(`/api/project/selectProjectAreS?companyId=${this.companyId}&region=0`).then(
         res => {
           if (res.data.code == 0) {
             this.statisticsData = res.data
@@ -686,6 +708,18 @@ export default {
           }
         })
     },
+
+    // 根目录点击事件
+    handleNodeClickTop() {
+      this.treeShow = !this.treeShow
+      this.selectProjectArea()
+      this.getAllItems()
+      if (this.open.length) {
+        this.open.pop()
+      } else {
+        this.open.push(0)
+      }
+    }
   },
   computed: {
     getNum() {
@@ -1244,5 +1278,13 @@ export default {
   :-moz-placeholder {
     color: #a5a5a5;
   } /* firefox 14-18 */
+  #tree {
+    padding-left: 18px;
+  }
+  #tree-top {
+    .el-tree-node__children {
+      display: none
+    }
+  }
 }
 </style>

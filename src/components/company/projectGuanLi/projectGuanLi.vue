@@ -24,7 +24,7 @@
                 <el-dropdown @command="handleCommand">
                     <a class="el-dropdown-link">
                         <!-- 用户名 -->
-                        {{userName}}
+                        <!-- {{userName}} -->
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
