@@ -293,6 +293,7 @@ export default {
     bottom: .3rem;
     background-image: url("../../../static/images/yzt-whiteLogo.png");
     // background-image: url("../../../static/images/lbrj_login.png");
+    // background-image: url("../../../static/images/hj_login.png");
     background-size: contain;
     position: absolute;
     z-index: 10;

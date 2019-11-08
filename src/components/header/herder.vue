@@ -457,6 +457,9 @@ export default {
     selectIndex() {
         this.$axios.post(`/api/pcLzIndex/selectIndex?pid=${this.pid}`).then(
             res => {
+                if(res.data.code != 0) {
+                    return
+                }
                 // console.log(res.data.data.projectName)
                 this.projectName = res.data.data.projectName
             }

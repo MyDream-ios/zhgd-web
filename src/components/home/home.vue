@@ -281,15 +281,15 @@
           <ul>
             <li>
               <span class="leftName">电箱数量：</span>
-              <span v-if="electricityBox.length>0" class="sub">{{electricityBox.count}}座</span>
+              <span v-if="electricityBox.count>0" class="sub">{{electricityBox.count}}座</span>
               <span v-else>0座</span>
             </li>
             <li>
               <span class="leftName">电箱温度：</span>
-              <span v-if="electricityBox.length>0" class="sub" :class="electricityBox.envirwarm>45?'danger':'noml'">{{electricityBox.envirwarm}}℃</span>
+              <span v-if="electricityBox.count>0" class="sub" :class="electricityBox.envirwarm>45?'danger':'noml'">{{electricityBox.envirwarm}}℃</span>
               <span v-else>无数据</span>
             </li>
-            <li v-if="electricityBox.length>0">
+            <li v-if="electricityBox.count>0">
               <span class="leftName">运行情况：</span>
               <span v-if="electricityBox.kgjl.sb=='正常'" class="sub noml">正常</span>
               <span v-else class="sub danger">异常</span>
@@ -302,7 +302,7 @@
           <div class="runtime">
             <div>已正常运行</div>
             <img src="../../../static/images/shizhong.png" alt>
-            <div class="noml runtimeBg" v-if="electricityBox.length>0">{{electricityBox.kgjl.days}} H</div>
+            <div class="noml runtimeBg" v-if="electricityBox.count>0">{{electricityBox.kgjl.days}} H</div>
             <div class="noml runtimeBg" v-else>0 H</div>
           </div>
         </div>

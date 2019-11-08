@@ -54,6 +54,10 @@
           :center="center"
           :zoom="zoom"
           :plugin="plugin"
+          v-loading="loading"
+          element-loading-text="拼命加载中..."
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           class="amap-demo"
         >
           <el-amap-marker v-if="markerList.length != 0" v-for="(marker, index) in markerList" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
@@ -316,6 +320,7 @@ export default {
       },
       treeShow: true, // 列表是否显示
       open: [0], // 默认打开项
+      loading: true, // 加载动画
     }
   },
   created() {
@@ -329,14 +334,7 @@ export default {
     this.getAllItems()
     this.getName()
   },
-  mounted() {
-    // this.rootList = [{
-    //   children: '',
-    //   label: this.companyName,
-    //   isLeaf: false
-    // }]
-    // this.$set(this.rootList[0], 'children', this.companyList)
-  },
+  mounted() {},
   methods: {
     enter() {
       this.sidNavClass = "come"
@@ -432,6 +430,7 @@ export default {
 
     // 点击树形控件
     handleNodeClick(val) {
+      this.loading = true
       this.projectSum = 0
       this.searchLeftValue = ''
       this.region = 0
@@ -440,7 +439,6 @@ export default {
       this.getDblclick(val)
       // 获取汇总数据
       this.companyId = val.id
-      // this.selectProjectArea()
       // 判断点击项是否为项目
       if (!val.projectName) {
         this.selectProjectArea()
@@ -450,16 +448,21 @@ export default {
             this.searchCompanyName = val.companyName
             // 判断公司下时候还有子公司，没有的话就请求项目数据
             if (res.data.code == 0 && res.data.data.total == 0) {
+              this.getPriject(val)
+            } else if (res.data.code == 0 && res.data.data.rows.length>0) {
+              // 含有子公司，将子公司添加到列表里
+              // 如果没有子数据在渲染，否则会多次叠加
+              this.markerList = []
+              if (!val.children) {
+                this.$set(val, 'children', res.data.data.rows)
+              }
+              let num = res.data.data.rows.length
               this.$axios
                 .post(`/api/project/selectAreaProjectList?companyId=${val.id}&region=0`)
                 .then(res => {
                   // 判断是否有项目
                   if (res.data.code == 0 && res.data.data.length == 0) {
-                    this.$message({
-                      type: 'warning',
-                      message: '该公司下没有项目'
-                    })
-                    this.markerList = []
+                    this.loading = false
                   } else if (res.data.code == 0) {
                     for (let i = 0; i < res.data.data.length; i++) {
                       // 控件prop，显示名称和是否含有下拉三角
@@ -467,19 +470,18 @@ export default {
                       res.data.data[i].leaf = true
                     }
                     // 如果没有子数据在渲染，否则会多次叠加
-                    if (!val.children) {
-                      this.$set(val, 'children', res.data.data)
+                    if (val.children.length == num) {
+                      for (let i = 0; i < res.data.data.length; i++) {
+                        val.children.push(res.data.data[i])
+                      }
                     }
                     // 渲染公司下的项目
                     this.mapMarkersList(res.data.data)
                   }
                 })
-            } else if (res.data.code == 0 && res.data.data.rows.length>0) {
-              // 含有子公司，将子公司添加到列表里
-              // 如果没有子数据在渲染，否则会多次叠加
-              if (!val.children) {
-                this.$set(val, 'children', res.data.data.rows)
-              }
+
+
+              this.loading = false
             }
           })
       } else if (val.projectName) {
@@ -514,7 +516,37 @@ export default {
           })
           this.markerList = []
         }
+        this.loading = false
       }
+    },
+
+    // 获取项目
+    getPriject(data) {
+      this.$axios
+        .post(`/api/project/selectAreaProjectList?companyId=${data.id}&region=0`)
+        .then(res => {
+          // 判断是否有项目
+          if (res.data.code == 0 && res.data.data.length == 0) {
+            this.$message({
+              type: 'warning',
+              message: '该公司下没有项目'
+            })
+            this.markerList = []
+            this.loading = false
+          } else if (res.data.code == 0) {
+            for (let i = 0; i < res.data.data.length; i++) {
+              // 控件prop，显示名称和是否含有下拉三角
+              res.data.data[i].companyName = res.data.data[i].projectName
+              res.data.data[i].leaf = true
+            }
+            // 如果没有子数据在渲染，否则会多次叠加
+            if (!data.children) {
+              this.$set(data, 'children', res.data.data)
+            }
+            // 渲染公司下的项目
+            this.mapMarkersList(res.data.data)
+          }
+        })
     },
 
     // 树形控件的双击
@@ -578,6 +610,7 @@ export default {
       //     this.mapMarkersList(this.allItems)
       //     // this.projectSum = this.allItems.length
       //   })
+      this.loading = true
       this.searchLeft()
     },
 
@@ -611,6 +644,7 @@ export default {
           };
           this.markerList.push(marker)
         }
+      this.loading = false
     },
 
     // 翻页
@@ -669,6 +703,7 @@ export default {
               message: '未查询到项目'
             })
             this.markerList = []
+            this.loading = false
           }
         })
     },
@@ -1047,6 +1082,7 @@ export default {
     background-size: contain;
     top: 0;
     right: 0;
+    z-index: 2000;
     >.data {
       height: .75rem;
       background-color: #ededed;
@@ -1285,6 +1321,15 @@ export default {
     .el-tree-node__children {
       display: none
     }
+  }
+  .el-loading-spinner i {
+    color: #fff;
+    font-size: 36px;
+  }
+  .el-loading-spinner .el-loading-text {
+    color: #FFF;
+    margin: 3px 0;
+    font-size: 16px;
   }
 }
 </style>
