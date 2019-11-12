@@ -107,8 +107,8 @@ body {
   width: 100%;
   height: 100%;
   min-width: 1600px;
-  max-width: 1920px;
-  max-height: 1080px;
+  /* max-width: 1920px; */
+  /* max-height: 1080px; */
   min-height: 900px;
   overflow-x: auto;
 }

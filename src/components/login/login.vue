@@ -51,6 +51,9 @@
           <input type="text" placeholder="请输入账号" v-model="user_name" @keyup.enter="login">
           <i class="password"></i>
           <input type="password" placeholder="请输入密码" v-model="pwd" @keyup.enter="login" ref="passWord">
+          <el-tooltip effect="dark" content="下次自动登录" placement="right">
+            <el-checkbox v-model="save"></el-checkbox>
+          </el-tooltip>
           <a @click="login"></a>
         </div>
         <div class="logo"></div>
@@ -107,7 +110,8 @@ export default {
   data() {
     return {
       user_name: "",
-      pwd: ""
+      pwd: "",
+      save: false
     };
   },
   methods: {
@@ -134,16 +138,14 @@ export default {
 
     // 2.0登录
     login() {
-      this.$axios.post(`/api/system/computer/login?userAccount=${this.user_name}&userPassword=${this.$md5(this.pwd)}&entry=1`).then(res => {
-        // console.log(res.data)
-        if (this.user_name==''||this.pwd=='') {
-          this.$message({
-            type: 'warning',
-            message: '账号或密码不得为空'
-          })
-        } else {
+      if (this.user_name==''||this.pwd=='') {
+        this.$message({
+          type: 'warning',
+          message: '账号或密码不得为空'
+        })
+      } else {
+        this.$axios.post(`/api/system/computer/login?userAccount=${this.user_name}&userPassword=${this.$md5(this.pwd)}&entry=1`).then(res => {
           if (res.data.code == -1) {
-            // alert("账号或密码错误！请重新输入");
             this.$message({
             type: 'warning',
             message: '账号或密码错误！请重新输入'
@@ -151,6 +153,10 @@ export default {
             this.pwd = ""
             this.$refs.passWord.focus()
           } else {
+            if (this.save) {
+              localStorage.setItem("userAccount", this.user_name)
+              localStorage.setItem("userPassword", this.pwd)
+            }
             sessionStorage.setItem("islogin", "true")
             sessionStorage.setItem("pid", res.data.data.projectId)
             sessionStorage.setItem("cid", res.data.data.companyId)
@@ -167,11 +173,24 @@ export default {
               this.$router.push({ path: "/homePage" })
             }
           }
-        }
-      })
+        })
+      }
+    },
+
+    // 是否保存了密码
+    hasPassWord() {
+      let userName = localStorage.getItem("userAccount")
+      let passWord = localStorage.getItem("userPassword")
+      if (userName && passWord) {
+        this.user_name = userName
+        this.pwd = passWord
+      }
     }
+  },
+  mounted() {
+    this.hasPassWord()
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -384,5 +403,22 @@ export default {
   :-moz-placeholder {
     color: #848484;
   } /* firefox 14-18 */
+  .el-checkbox {
+    position: absolute;
+    top: .7rem;
+    right: .4rem;
+    z-index: 20;
+    .el-checkbox__inner {
+      border: 1px solid #333;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+      border: 1px solid #409eff;
+    }
+    input {
+      width: auto !important;
+      height: auto !important;
+      cursor: pointer;
+    }
+  }
 }
 </style>
