@@ -273,7 +273,7 @@ export default {
           )
           .then(res => {
             // console.log(res.data)
-            if (res.data.code == 0) {
+            if (res.data.code == 0 && res.data.data.length) {
               this.personnelData = res.data.data[0];
               let temp = [];
               let temp2 = [];

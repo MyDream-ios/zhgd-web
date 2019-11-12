@@ -335,6 +335,24 @@ export default {
     this.getName()
   },
   mounted() {},
+  updated() {
+    let time
+    let treeMouse = document.getElementById('tree')
+    let spanClass = treeMouse.getElementsByClassName('el-tree-node__label')
+    for (let i = 0; i < spanClass.length; i++) {
+      spanClass[i].onmouseover = function() {
+        time = setInterval(() => {
+              spanClass[i].scrollLeft += 1
+            }, 10);
+      }
+      spanClass[i].onmouseout = function() {
+        clearInterval(time)
+        for (let j = 0; j < spanClass.length; j++) {
+          spanClass[j].scrollLeft = 0
+        }
+      }
+    }
+  },
   methods: {
     enter() {
       this.sidNavClass = "come"
@@ -411,8 +429,10 @@ export default {
     getCompanyList() {
       this.$axios.post(`/api/pcCompanyLibrary/companyLibraryList?companyId=${this.companyId}`).then(
         res => {
-          if (res.data.code == 0 && res.data.data.total >0) {
-            this.companyList = res.data.data.rows
+          if (res.data.code == 0) {
+            if (res.data.data.total >0) {
+              this.companyList = res.data.data.rows
+            }
             this.$axios
               .post(`/api/project/selectAreaProjectList?companyId=${this.companyId}&region=0`)
               .then(res => {
@@ -1330,6 +1350,13 @@ export default {
     color: #FFF;
     margin: 3px 0;
     font-size: 16px;
+  }
+  .el-tree-node__label {
+    white-space: nowrap;
+    overflow: auto;
+  }
+  .el-tree-node__label::-webkit-scrollbar {
+    display: none;
   }
 }
 </style>

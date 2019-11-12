@@ -304,7 +304,7 @@ export default {
                 this.$axios.post(`/api/hireApi/getHireSearch?filed=${this.name}&projectId=${this.projectId}`).then(
                     res => {
                         // console.log(res.data)
-                        if (res.data.code == 0 && res.data.data.length>0) {
+                        if (res.data.code == 0 && res.data.data.length) {
                             this.personnelData = res.data.data[0]
                             let temp = []
                             let temp2 = []

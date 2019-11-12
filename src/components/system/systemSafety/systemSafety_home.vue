@@ -340,27 +340,27 @@ export default {
                     }
                 ],
                 series: [
-                    {
-                        name: "合格",
-                        type: "bar",
-                        color: "#3ada76",
-                        barWidth: 25,
-                        data: [2, 4, 7]
-                    },
-                    {
-                        name: "不合格",
-                        type: "bar",
-                        color: "#fd5101",
-                        barWidth: 25,
-                        data: [2, 5, 9]
-                    },
-                    {
-                        name: "平均",
-                        type: "line",
-                        color: "#0090ff",
-                        yAxisIndex: 1,
-                        data: [3.2, 6.2, 9.3]
-                    }
+                    // {
+                    //     name: "合格",
+                    //     type: "bar",
+                    //     color: "#3ada76",
+                    //     barWidth: 25,
+                    //     data: [2, 4, 7]
+                    // },
+                    // {
+                    //     name: "不合格",
+                    //     type: "bar",
+                    //     color: "#fd5101",
+                    //     barWidth: 25,
+                    //     data: [2, 5, 9]
+                    // },
+                    // {
+                    //     name: "平均",
+                    //     type: "line",
+                    //     color: "#0090ff",
+                    //     yAxisIndex: 1,
+                    //     data: [3.2, 6.2, 9.3]
+                    // }
                 ]
             });
         },
