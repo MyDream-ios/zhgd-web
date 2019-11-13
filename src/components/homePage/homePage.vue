@@ -37,7 +37,7 @@
             <i class="el-icon-arrow-down el-icon--right"></i>
           </a>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>修改密码</el-dropdown-item>
+            <el-dropdown-item command="edit">修改密码</el-dropdown-item>
             <el-dropdown-item command="login">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -244,6 +244,7 @@
           </div>
         </div> -->
     </div>
+    <change-password :show="dialogShow" @close="dialogShow=false"></change-password>
   </div>
 </template>
 
@@ -251,6 +252,7 @@
 // import { amapManager } from 'vue-amap';
 let amapManager = new VueAMap.AMapManager();
 import router from '../../router/index'
+import changePassword from '@/base/changePassword'
 export default {
   data() {
     return {
@@ -321,7 +323,11 @@ export default {
       treeShow: true, // 列表是否显示
       open: [0], // 默认打开项
       loading: true, // 加载动画
+      dialogShow: false, // 修改密码弹窗
     }
+  },
+  components: {
+    changePassword
   },
   created() {
     this.getUserType()
@@ -388,10 +394,12 @@ export default {
       this.userType = sessionStorage.getItem('userType')
     },
 
-    // 退出
+    // 退出&修改密码
     handleCommand(command) {
         if (command == 'login') {
-            this.$router.push('login')
+          this.$router.push('login')
+        } else if (command == 'edit') {
+          this.dialogShow = true
         }
     },
 

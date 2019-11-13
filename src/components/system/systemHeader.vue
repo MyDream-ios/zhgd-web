@@ -24,12 +24,13 @@
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>个人设置</el-dropdown-item>
+                        <el-dropdown-item command="edit">修改密码</el-dropdown-item>
                         <el-dropdown-item command="login">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </a>
         </div>
+        <change-password :show="dialogShow" @close="dialogShow=false"></change-password>
     </div>
 </template>
 
@@ -95,13 +96,18 @@
 </style>
 
 <script>
+import changePassword from '@/base/changePassword'
 export default {
     data() {
         return {
             pid: '', // 项目id
             projectName: '', // 项目名称
             userName: '', // 用戶名
+            dialogShow: false, // 修改密码弹窗
         }
+    },
+    components: {
+        changePassword
     },
     created() {
         this.getProjectId()
@@ -128,6 +134,8 @@ export default {
         handleCommand(command) {
             if (command == 'login') {
                 this.$router.push('login')
+            } else if (command == 'edit') {
+                this.dialogShow = true
             }
         },
 

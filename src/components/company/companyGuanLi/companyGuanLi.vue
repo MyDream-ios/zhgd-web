@@ -28,12 +28,12 @@
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>修改密码</el-dropdown-item>
+                        <el-dropdown-item command="edit">修改密码</el-dropdown-item>
                         <el-dropdown-item command="login">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
-        </div> 
+        </div>
         <!-- 页面主体 -->
         <div class="main">
             <!-- 侧导航栏 -->
@@ -64,6 +64,7 @@
             <!-- 内容 -->
             <router-view class="router-box"></router-view>
         </div>
+        <change-password :show="dialogShow" @close="dialogShow=false"></change-password>
     </div>
 </template>
 
@@ -217,6 +218,7 @@
 </style>
 
 <script>
+import changePassword from '@/base/changePassword'
 export default {
     data() {
         return {
@@ -224,7 +226,11 @@ export default {
             userType: 1, // 账号状态
             userName: '', // 用戶名
             companyName: '', // 公司名称
+            dialogShow: false, // 修改密码弹窗
         }
+    },
+    components: {
+        changePassword
     },
     created() {
         this.getPath()
@@ -254,6 +260,8 @@ export default {
         handleCommand(command) {
             if (command == 'login') {
                 this.$router.push('login')
+            } else if (command == 'edit') {
+                this.dialogShow = true
             }
         },
 

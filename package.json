@@ -9,7 +9,8 @@
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --fix",
-    "exe": "electron-packager . wisdom --win --out ../wisdom --arch=x64 --icon=./dist/yiZhiTon.ico"
+    "exe": "electron-packager . wisdom --win --out ../wisdom --arch=x64 --icon=./dist/yiZhiTon.ico",
+    "analyz": "npm_config_report=true npm run build"
   },
   "dependencies": {
     "electron": "^7.0.0",

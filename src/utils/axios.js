@@ -1,5 +1,5 @@
 import axios from 'axios'
-var ui = require('element-ui')
+// var ui = require('element-ui')
 
 // 测试环境
 

@@ -101,7 +101,7 @@
         <div class="photo">
           <div class="title">隐患趋势</div>
           <div class="tu">
-            <div id="tutu" style="width:17.2rem;height:3.5rem"></div>
+            <div id="tutu" style="width:100%;height:3.5rem"></div>
           </div>
         </div>
       </div>
@@ -292,6 +292,7 @@ export default {
       }
       .time {
         transform: translate(0.3rem, 0.17rem);
+        display: inline-block;
       }
     }
     .saveInfo {

@@ -6,9 +6,12 @@ import App from './App.vue'
 import router from './router'
 import './common/font/font.css'
 // import './common/icon/iconfont'
+
+// CDN导入所以注释掉了
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+
 import 'babel-polyfill'
 import md5 from 'js-md5'
 // 用于判断是否是打安装包
