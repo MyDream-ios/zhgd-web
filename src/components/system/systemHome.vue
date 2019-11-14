@@ -246,6 +246,11 @@
               </router-link>
             </div>
             <div class="flex setCard_black" v-else></div>
+            <!-- 调用无人机 打包的时候打开注释-->
+            <div class="flex planeCard_bg" v-if="open&&$exe.installation">
+              <img src="../../../static/images/planeCard.png" alt="" @click="plane">
+            </div>
+            <div class="flex planeCard_black" v-else @click="msg" style="cursor: pointer;"></div>
             <i></i>
             <i></i>
             <i></i>
@@ -290,10 +295,10 @@
               <img src="../../../static/images/gantryCard.png" alt="">
               <p>龙门吊监管</p>
             </div>
-            <div class="flex bgc">
+            <!-- <div class="flex bgc">
               <img src="../../../static/images/noPeoplePlaneCard.png" alt="">
               <p>无人机应用</p>
-            </div>
+            </div> -->
             <div class="flex bgc">
               <img src="../../../static/images/oneCardAll.png" alt="">
               <p>一卡通管理</p>
@@ -622,6 +627,12 @@
       .interphoneCard_black {
         background-image: url('../../../static/images/interphoneCard_black.png');
       }
+      .planeCard_bg {
+        background-image: url('../../../static/images/planeCard_bg.png');
+      }
+      .planeCard_black {
+        background-image: url('../../../static/images/planeCard_black.png');
+      }
     }
     .img-big {
       img {
@@ -704,6 +715,12 @@ export default {
     software() {
       // 打包的时候打开
       ipcRenderer.send('open')
+    },
+
+    // 点击调用本地exe
+    plane() {
+      // 打包的时候打开
+      ipcRenderer.send('plane')
     },
 
     // 对讲机点击弹窗

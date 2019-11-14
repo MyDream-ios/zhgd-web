@@ -185,8 +185,12 @@ export default {
     border-radius: 5px;
   }
 }
-// /deep/.el-dialog__headerbtn:focus {
-//   font-size: .24rem;
-//   color: #fff;
-// }
+/deep/.el-dialog__header button:hover {
+  i:before {
+    color: #fff;
+  }
+  i:hover {
+    color: #fff;
+  }
+}
 </style>

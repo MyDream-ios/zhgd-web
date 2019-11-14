@@ -22,10 +22,9 @@ module.exports = {
     // }
     configureWebpack: {
       devtool: 'source-map',
-      // externals: {
-      //   echarts: 'echarts',
-      //   ElementUI: 'element-ui'
-      // }
+      externals: {
+        echarts: 'echarts'
+      }
     },
 
     // 打开的时候build可以看到包的大小

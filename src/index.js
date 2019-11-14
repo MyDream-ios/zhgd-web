@@ -58,7 +58,7 @@ app.on('activate', () => {
 // 在这个文件中，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。
 
-// 异步消息
+// 调用对讲机
 ipcMain.on('open', () => {
   // console.log(123) // prints "ping"
   // shell.openItem(exePath + '/djj/telClient.exe')
@@ -66,13 +66,22 @@ ipcMain.on('open', () => {
 
 })
 
-// 异步消息
+// 调用萤石云
 ipcMain.on('YSY', () => {
   // console.log(123) // prints "ping"
   // shell.openItem(exePath + '/djj/telClient.exe')
   shell.openItem(exePath + '\\ysy\\EzvizStudio.exe')
 
 })
+
+// 调用无人机
+ipcMain.on('plane', () => {
+  // console.log(123) // prints "ping"
+  // shell.openItem(exePath + '/djj/telClient.exe')
+  shell.openItem(exePath + '\\dj\\FlightHub.exe')
+
+})
+
 // 同步消息
 // ipcMain.on('synchronous-message', (event, arg) => {
 //   console.log(arg) // prints "ping"

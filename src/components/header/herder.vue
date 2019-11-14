@@ -143,7 +143,8 @@
             <div class="drop-down3">
               <ul>
                 <li>
-                  <a @click="unopenClick">无人机应用</a>
+                  <a @click="unopenClick" v-if="!$exe.installation">无人机应用</a>
+                  <a @click="plane" v-else>无人机应用</a>
                 </li>
                 <li>
                   <a @click="unopenClick">BIM技术应用</a>
@@ -163,10 +164,11 @@
         </ul>
         <!-- <span v-on:click="isActive('/home')"> -->
         <span>
-          <h2 class="head-title" v-if="!$exe.installation">{{projectName}}</h2>
+          <h2 class="head-title">{{projectName}}</h2>
+          <!-- <h2 class="head-title" v-if="!$exe.installation">{{projectName}}</h2>
           <router-link to="/systemHome" v-else>
             <h2 class="head-title">{{projectName}}</h2>
-          </router-link>
+          </router-link> -->
         </span>
         <div class="date-time">
           <span class="d-date" v-if="weather.length > 0">{{weather[0].date}}</span>
@@ -483,6 +485,12 @@ export default {
     // 打开萤石云
     openYSY() {
       ipcRenderer.send('YSY')
+    },
+
+    // 点击调用本地exe
+    plane() {
+      // 打包的时候打开
+      ipcRenderer.send('plane')
     }
   }
 };
