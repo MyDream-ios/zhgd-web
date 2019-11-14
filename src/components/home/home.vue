@@ -131,7 +131,37 @@
           </span>
           <router-link to="/dormitory" class="dormitory">智慧宿舍</router-link>
         </div>
-        <div class="videoInfo">
+
+        <!-- 福田区第六期优质用水入户工程 -->
+        <div class="videoInfo" v-if="projectId==366">
+          <el-carousel trigger="click" height="6.14rem">
+            <el-carousel-item>
+              <img src="../../../static/images/szswyy1.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswyy2.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswyy3.jpg">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+
+        <!-- 草埔1#临时泵站建设工程 -->
+        <div class="videoInfo" v-else-if="projectId==365">
+          <el-carousel trigger="click" height="6.14rem">
+            <el-carousel-item>
+              <img src="../../../static/images/szswcp1.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswcp2.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswcp3.jpg">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <div class="videoInfo" v-else="projectId==194">
           <el-carousel trigger="click" height="6.14rem">
             <el-carousel-item>
               <img src="../../../static/images/mmexport1565845097787.jpg">
@@ -141,10 +171,10 @@
             </el-carousel-item>
             <el-carousel-item>
               <img src="../../../static/images/mmexport1565845104313.jpg">
-              <!-- <img src="" alt=""> -->
             </el-carousel-item>
           </el-carousel>
         </div>
+
         <div class="bottomInfo">
           <div class="left">
             <h3>塔吊防碰撞系统</h3>
@@ -775,7 +805,7 @@ export default {
     // 获取项目id
     getPid() {
       this.projectId = sessionStorage.getItem('pid')
-      console.log(this.projectId)
+      // console.log(this.projectId)
     },
 
     // 获取电箱数据

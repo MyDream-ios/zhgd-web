@@ -324,6 +324,7 @@ export default {
       open: [0], // 默认打开项
       loading: true, // 加载动画
       dialogShow: false, // 修改密码弹窗
+      treeClick: false, // 根目录点击
     }
   },
   components: {
@@ -458,6 +459,7 @@ export default {
 
     // 点击树形控件
     handleNodeClick(val) {
+      this.treeClick = true
       this.loading = true
       this.projectSum = 0
       this.searchLeftValue = ''
@@ -518,16 +520,16 @@ export default {
         this.$axios
           .post(`/api/project/selectHjProject?id=${val.id}`)
           .then(res => {
-            if (res.data.code == 0) {
+            // if (res.data.code == 0) {
               this.statisticsData = res.data
-            } else {
-              this.statisticsData = {
-                numW: 0,
-                numC: 0,
-                totalMoney: 0,
-                numWing: 0
-              }
-            }
+            // } else {
+            //   this.statisticsData = {
+            //     numW: 0,
+            //     numC: 0,
+            //     totalMoney: 0,
+            //     numWing: 0
+            //   }
+            // }
           })
         if (val.longitude || val.latitude) {
           this.markerList = [{
@@ -726,10 +728,12 @@ export default {
               })
             }
           } else {
-            this.$message({
-              type: 'warning',
-              message: '未查询到项目'
-            })
+            if (this.treeClick) {
+              this.$message({
+                type: 'warning',
+                message: '未查询到项目'
+              })
+            }
             this.markerList = []
             this.loading = false
           }
@@ -774,6 +778,7 @@ export default {
 
     // 根目录点击事件
     handleNodeClickTop() {
+      this.treeClick = false
       this.treeShow = !this.treeShow
       this.selectProjectArea()
       this.getAllItems()

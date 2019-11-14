@@ -10,13 +10,16 @@ function createWindow () {
   Menu.setApplicationMenu(null)
   // 创建浏览器窗口。
   win = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     },
     // frame: false
   })
+
+  // 直接最大化
+  win.maximize()
+  win.show()
 
   // 加载index.html文件
   win.loadFile('dist/index.html')
