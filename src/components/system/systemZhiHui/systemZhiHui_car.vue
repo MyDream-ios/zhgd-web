@@ -73,7 +73,7 @@
           <div class="carInfo" v-show="!equipmentShow">
             <div class="title">车辆进出实时情况</div>
             <div class="carimg">
-              <img :src="newData.img" alt="">
+              <img :src="newData.img" alt="" @click="imgShow(newData.img)" style="cursor: pointer">
             </div>
             <div class="infoBox">
               <ul>
@@ -87,13 +87,14 @@
                   <span>通道名称：</span>{{newData.gateinname}}
                 </li>
                 <li>
-                  <span>进出类型：</span>{{newData.inOut==1?'进':'出'}}
+                  <span>进出类型：</span>{{newData.inOut==1?'进': newData.inOut==2? '出' : ''}}
                 </li>
                 <li>
-                  <span>车辆类型：</span>{{newData.cardType==0?'临时车':'月租车'}}
+                  <span>车辆类型：</span>{{newData.cardType==0?'临时车':newData.cardType==1?'月租车':newData.cardType==2?'贵宾车':newData.cardType==3?'免费车':newData.cardType==4?'充值车':''}}
                 </li>
                 <li>
-                  <span>抬杆方式：</span>自动抬杆
+                  <span>抬杆方式：</span>
+                  <span v-if="newData.cardType">{{newData.cardType==0?'手动抬杆':'自动抬杆'}}</span>
                 </li>
                 <li>
                   <span>进出时间：</span>{{newData.liftTime}}
@@ -120,9 +121,9 @@
             <div class="tableBox">
               <el-table :data="intoTableData" stripe border style="width: 100%">
                 <el-table-column type="index"
-                            label="序号"
-                            width="80"
-                            :index="indexMethod2"></el-table-column>
+                  label="序号"
+                  width="80"
+                  :index="indexMethod2"></el-table-column>
                 <el-table-column prop="operatorin" label="驾驶员" width="195"></el-table-column>
                 <el-table-column prop="vehicleNo" label="车牌号" width="173"></el-table-column>
                 <el-table-column prop="gateinname" label="通道名称" width="179"></el-table-column>
@@ -145,9 +146,9 @@
             <div class="tableBox">
               <el-table :data="outinTableData" stripe border style="width: 100%">
                 <el-table-column type="index"
-                            label="序号"
-                            width="80"
-                            :index="indexMethod2"></el-table-column>
+                  label="序号"
+                  width="80"
+                  :index="indexMethod2"></el-table-column>
                 <el-table-column prop="operatorin" label="驾驶员" width="195"></el-table-column>
                 <el-table-column prop="vehicleNo" label="车牌号" width="173"></el-table-column>
                 <el-table-column prop="gateinname" label="通道名称" width="179"></el-table-column>
@@ -204,9 +205,10 @@
             <div class="tableBox">
               <el-table :data="allTableData" stripe border>
                 <el-table-column type="index"
-                            label="序号"
-                            width="80"
-                            :index="indexMethod"></el-table-column>
+                  label="序号"
+                  width="80"
+                  :index="indexMethod"
+                ></el-table-column>
                 <el-table-column prop="name" label="驾驶员" width="195"></el-table-column>
                 <el-table-column prop="vehicleNo" label="车牌号" width="173"></el-table-column>
                 <el-table-column prop="gateinname" label="通道名称" width="179"></el-table-column>
@@ -282,7 +284,7 @@
             <ul id="ul">
               <li v-for="(item,index) in truckSpace" :key="index">
                 <p class="head">{{item.vehicleNo}}({{item.cardType==0?'临时车':'月租车'}})</p>
-                <img :src="item.img">
+                <img :src="item.img" @click="imgShow(item.img)" style="cursor: pointer">
                 <p class="into">
                   <span style="color:#fcd178">{{item.liftTime}}</span>&nbsp;
                 </p>
@@ -309,6 +311,14 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      v-if="imgUrl"
+      title="图片"
+      :visible.sync="centerDialogVisible"
+      width="50%"
+      center>
+      <img :src="imgUrl" style="width:100%;margin:0;height:auto">
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -351,6 +361,8 @@ export default {
       sn: '', // 设备编号
       count: '', // 在线车辆系统
       carSum: '', // 场内车数量
+      imgUrl: '', // 弹窗的图片
+      centerDialogVisible: false, // 弹窗的显示
     }
   },
   created() {
@@ -527,6 +539,12 @@ export default {
     // 导出Excel
     down() {
       location.href=`http://47.106.71.3:8080/api/parkings/export?deptID=${this.deptID}`
+    },
+
+    // 点击图片弹窗
+    imgShow(img) {
+      this.imgUrl = img
+      this.centerDialogVisible = !this.centerDialogVisible
     }
   }
 }

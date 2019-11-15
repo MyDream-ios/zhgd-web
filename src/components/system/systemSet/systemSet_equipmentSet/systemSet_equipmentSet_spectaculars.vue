@@ -36,21 +36,23 @@
         </div>
         <!-- 图片显示位置 -->
         <div class="img">
-          <div class="add-warp" v-show="imgAdd">
+          <div class="add-warp" v-show="imgAdd" @click="imgAdd=!imgAdd">
             <i class="add"></i>
             <p class="fs-20">点击添加</p>
             <p>jpg、png、psd格式</p>
           </div>
+          <img :src="cropperImg" style="max-width: 100%" ref="img" id="img">
         </div>
       </div>
-      <dialog-box :show="!imgAdd" :title="'添加图纸'" :button="'保 存'" @confirm="uploadPicture">
-        <div style="width:10rem">123</div>
-      </dialog-box>
+      <dialog-box :show="!imgAdd" :title="'添加图纸'" :button="'保 存'" :image=true @imgUrl="uploadPicture" @close="imgAdd=!imgAdd"></dialog-box>
     </div>
   </div>
 </template>
 
 <script>
+import Cropper from 'cropperjs'
+import 'cropperjs/dist/cropper.min.css'
+
 import dialogBox from '@/base/dialog'
 export default {
   data() {
@@ -71,20 +73,47 @@ export default {
         }
       ],
       imgAdd: true, // 添加图片
+      cropperImg: require('C:/Users/Administrator/Desktop/IMG_0040.jpg'),
+      cropper: '', // 截图api挂载在这里
+      imgName: ''
     }
   },
   components: {
     dialogBox
   },
-  mounted() {},
+  mounted() {
+    this.initCropper()
+  },
   methods: {
+    // 返回
     back() {
       this.$router.go(-1)
     },
 
+    // 点击上传图片
     uploadPicture(val) {
-      console.log(val)
       this.imgAdd = !this.imgAdd
+      console.log(val)
+    },
+
+    // 初始化截图工具
+    initCropper () {
+      console.log(this.$slots)
+      let cropper = new Cropper(this.$refs.img, {
+        viewMode: 1,
+        aspectRatio: 16/9,
+        dragMode: 'move'
+      })
+      this.cropper = cropper
+    },
+
+    // 点击确定按钮
+    getPic() {
+      let canvasDiv = this.$refs.img.cropper('getCroppedCanvas', {
+        width: 1920,
+        height: 1080
+      })
+      console.log(canvasDiv.toDataURL())
     }
   }
 }

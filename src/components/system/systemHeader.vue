@@ -1,7 +1,8 @@
 <template>
     <div id="systemHeader">
         <div class="float-left">
-            <router-link to="/home" class="logo" target="_blank"></router-link>
+            <router-link to="/home" class="logo" target="_blank" v-if="!$exe.installation"></router-link>
+            <router-link to="/home" class="logo" v-else></router-link>
             <div class="line"></div>
             <div class="project-name">{{projectName}}</div>
         </div>
@@ -18,16 +19,18 @@
             <a class="user">
                 <el-dropdown @command="handleCommand">
                     <a class="el-dropdown-link">
-                        用户
+                        <!-- 用户 -->
+                        {{userName}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>个人设置</el-dropdown-item>
+                        <el-dropdown-item command="edit">修改密码</el-dropdown-item>
                         <el-dropdown-item command="login">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </a>
         </div>
+        <change-password :show="dialogShow" @close="dialogShow=false"></change-password>
     </div>
 </template>
 
@@ -50,6 +53,7 @@
                 background-repeat: no-repeat;
                 background-position: center center;
                 background-image: url('../../../static/images/yzt-whiteLogo.png');
+                // background-image: url('../../../static/images/lbrj_login.png');
             }
             div {
                 color: #fff;
@@ -92,16 +96,23 @@
 </style>
 
 <script>
+import changePassword from '@/base/changePassword'
 export default {
     data() {
         return {
             pid: '', // 项目id
             projectName: '', // 项目名称
+            userName: '', // 用戶名
+            dialogShow: false, // 修改密码弹窗
         }
+    },
+    components: {
+        changePassword
     },
     created() {
         this.getProjectId()
         this.selectIndex()
+        this.getName()
     },
     methods: {
         // 获取项目id
@@ -123,8 +134,15 @@ export default {
         handleCommand(command) {
             if (command == 'login') {
                 this.$router.push('login')
+            } else if (command == 'edit') {
+                this.dialogShow = true
             }
         },
+
+        // 獲取用戶名
+        getName() {
+            this.userName = sessionStorage.getItem('userName')
+        }
     }
 }
 </script>

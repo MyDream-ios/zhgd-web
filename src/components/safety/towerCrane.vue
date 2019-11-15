@@ -524,7 +524,7 @@ export default {
         height: 9.41rem; */
         /* flex-wrap: wrap; */
         height: 9.41rem;
-        width: 19.2rem;
+        /* width: 19.2rem; */
         overflow: hidden;
     }
     .content-box {

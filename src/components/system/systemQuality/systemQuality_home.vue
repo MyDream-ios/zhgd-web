@@ -101,7 +101,7 @@
         <div class="photo">
           <div class="title">隐患趋势</div>
           <div class="tu">
-            <div id="tutu" style="width:17.2rem;height:3.5rem"></div>
+            <div id="tutu" style="width:100%;height:3.5rem"></div>
           </div>
         </div>
       </div>
@@ -188,28 +188,28 @@ export default {
         ],
 
         series: [
-          {
-            name: "合格",
-            type: "bar",
-            color: "#3ada76",
-            barWidth: 25,
+          // {
+          //   name: "合格",
+          //   type: "bar",
+          //   color: "#3ada76",
+          //   barWidth: 25,
 
-            data: [2, 4, 7]
-          },
-          {
-            name: "不合格",
-            type: "bar",
-            color: "#fd5101",
-            barWidth: 25,
-            data: [2, 5, 9]
-          },
-          {
-            name: "平均",
-            type: "line",
-            color: "#0090ff",
-            yAxisIndex: 1,
-            data: [3.2, 6.2, 9.3]
-          }
+          //   data: [2, 4, 7]
+          // },
+          // {
+          //   name: "不合格",
+          //   type: "bar",
+          //   color: "#fd5101",
+          //   barWidth: 25,
+          //   data: [2, 5, 9]
+          // },
+          // {
+          //   name: "平均",
+          //   type: "line",
+          //   color: "#0090ff",
+          //   yAxisIndex: 1,
+          //   data: [3.2, 6.2, 9.3]
+          // }
         ]
       });
     },
@@ -292,6 +292,7 @@ export default {
       }
       .time {
         transform: translate(0.3rem, 0.17rem);
+        display: inline-block;
       }
     }
     .saveInfo {

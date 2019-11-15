@@ -13,6 +13,7 @@
               <img v-else-if="nowWeather.includes('雷')" src="../../../static/images/g_lei.png">
               <img v-else src="../../../static/images/g_wan.png">
         </div> -->
+        <span class="backTo" v-if="$exe.installation"><a style="color:#fff" @click="back">返回</a></span>
         <ul class="nav">
           <li v-on:click="isActive('/home');personnelClick5()">
             <div class="Lactive-box" v-show="active=='/home'|| active=='/login'">
@@ -28,7 +29,7 @@
             </div>
             <a>人员管理</a>
             <div class="drop-down1">
-              <ul>
+              <ul :style="$exe.installation?('height:2.4rem'):('height:1.92rem')">
                 <li @click="isActive('/labour')">
                   <router-link to="/labour">两制管理</router-link>
                 </li>
@@ -40,6 +41,9 @@
                 </li>
                 <li>
                   <a @click="unopenClick">危区检测</a>
+                </li>
+                <li v-if="$exe.installation">
+                  <a @click="Talkback">对讲系统</a>
                 </li>
               </ul>
             </div>
@@ -59,8 +63,12 @@
             <a>视频监控</a>
             <div class="drop-down5">
               <ul>
-                <li v-on:click="isActive('/monitoring')">
+                <li v-on:click="isActive('/monitoring')" v-if="!$exe.installation">
                   <router-link to="/monitoring">视频监控</router-link>
+                </li>
+                <!-- 打包的时候切换注释 -->
+                <li v-on:click="isActive('/monitoring')" v-else>
+                  <a @click="openYSY">视频监控</a>
                 </li>
                 <li v-on:click="isActive('/aiDiscern')">
                   <router-link to="/aiDiscern">AI识别</router-link>
@@ -135,7 +143,8 @@
             <div class="drop-down3">
               <ul>
                 <li>
-                  <a @click="unopenClick">无人机应用</a>
+                  <a @click="unopenClick" v-if="!$exe.installation">无人机应用</a>
+                  <a @click="plane" v-else>无人机应用</a>
                 </li>
                 <li>
                   <a @click="unopenClick">BIM技术应用</a>
@@ -155,9 +164,11 @@
         </ul>
         <!-- <span v-on:click="isActive('/home')"> -->
         <span>
-          <!-- <router-link to="/systemHome"> -->
+          <h2 class="head-title">{{projectName}}</h2>
+          <!-- <h2 class="head-title" v-if="!$exe.installation">{{projectName}}</h2>
+          <router-link to="/systemHome" v-else>
             <h2 class="head-title">{{projectName}}</h2>
-          <!-- </router-link> -->
+          </router-link> -->
         </span>
         <div class="date-time">
           <span class="d-date" v-if="weather.length > 0">{{weather[0].date}}</span>
@@ -169,6 +180,7 @@
 </template>
 
 <script>
+// const { ipcRenderer } = window.require('electron')
 import moment from "moment"
 export default {
   data() {
@@ -195,6 +207,11 @@ export default {
     this.setActive()
     this.getProjectId()
     this.selectIndex()
+  },
+  mounted() {
+    // if (this.$exe.installation) {
+    //   const { ipcRenderer } = window.require('electron')
+    // }
   },
   methods: {
     getName() {
@@ -260,8 +277,9 @@ export default {
       this.dropDownState5 = true
 
       if (this.dropDownState) {
+        let temp = this.$exe.installation?'2.4rem':'1.92rem'
         $('.drop-down1').animate({
-          height:'1.92rem'
+          height:temp
         },500)
         this.dropDownState = false
       } else {
@@ -441,11 +459,39 @@ export default {
     selectIndex() {
         this.$axios.post(`/api/pcLzIndex/selectIndex?pid=${this.pid}`).then(
             res => {
+                if(res.data.code != 0) {
+                    return
+                }
                 // console.log(res.data.data.projectName)
                 this.projectName = res.data.data.projectName
             }
         )
     },
+
+    // 返回上一頁
+    back() {
+      if (sessionStorage.getItem('userType') == 2) {
+        this.$router.push('/systemHome')
+      } else {
+        this.$router.push('/homePage')
+      }
+    },
+
+    // 对讲机调用
+    Talkback() {
+      ipcRenderer.send('open')
+    },
+
+    // 打开萤石云
+    openYSY() {
+      ipcRenderer.send('YSY')
+    },
+
+    // 点击调用本地exe
+    plane() {
+      // 打包的时候打开
+      ipcRenderer.send('plane')
+    }
   }
 };
 </script>
@@ -478,6 +524,23 @@ export default {
   height: .2rem;
   margin-left: .2rem;
   margin-top: -0.05rem;
+}
+.header .backTo {
+    color: #fff;
+    display: inline-block;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    transition: .5s all;
+}
+.header .backTo:hover {
+  background: #0f1f53;
+  color: #3375fe;
+  border: 1px solid #3375fe;
 }
 .header .nav {
      position: absolute;
@@ -530,7 +593,9 @@ export default {
      line-height: 0.44rem;
      font-size: 0.16rem;
      font-weight: bold;
-     color: #3375fe;
+    //  color: #3375fe;
+    // 打包的颜色
+     color: #fff;
      padding-left: .19rem;
 }
 .header .nav li:nth-child(4) {
@@ -560,8 +625,8 @@ export default {
 .Lactive-box img {
   height: .44rem;
   width: 1.51rem;
-  vertical-align: top;  
-} 
+  vertical-align: top;
+}
 .indexBody {
   .header {
     .header-main {
@@ -575,7 +640,6 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 1.92rem;              
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -599,7 +663,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 2.4rem;              
+              height: 2.4rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -623,7 +687,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 2.4rem;              
+              height: 2.4rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -647,7 +711,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 1.92rem;              
+              height: 1.92rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;
@@ -671,7 +735,7 @@ export default {
             overflow: hidden;
             ul {
               width: 1.28rem;
-              height: 0.96rem;              
+              height: 0.96rem;
               overflow: hidden;
               border: .01rem solid #0f1f53;
               background-color: #020521;

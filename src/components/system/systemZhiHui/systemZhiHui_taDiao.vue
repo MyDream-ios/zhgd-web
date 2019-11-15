@@ -55,7 +55,8 @@
           <!-- 设备信息 -->
           <div class="person" v-show="!equipmentShow">
             <div class="title">{{equipmentData.dname}}</div>
-            <img class="gongren" :src="equipmentData.rl" />
+            <img class="gongren" :src="equipmentData.rl" @click="centerDialogVisible=!centerDialogVisible"
+            style="cursor: pointer">
             <div class="gongrenInfo">
               <p style="margin-top:0.2rem">
                 <span style="font-size: .2rem;">操作员</span>
@@ -331,6 +332,14 @@
       <!-- 遮罩层 -->
       <div class="shade-box" v-show="dialogShow"></div>
     </div>
+    <el-dialog
+      v-if="equipmentData.rl"
+      title="图片"
+      :visible.sync="centerDialogVisible"
+      width="20%"
+      center>
+      <img :src="equipmentData.rl" style="width:100%;margin:0;height:auto">
+    </el-dialog>
   </div>
 </template>
 
@@ -364,6 +373,7 @@ export default {
       ],
       tableData: [], // 列表数据
       workDay: [], // 工人上班日期
+      centerDialogVisible: false, // 点击图片弹窗
     };
   },
   created() {

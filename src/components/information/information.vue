@@ -193,7 +193,9 @@
                     height: .56rem;
                     line-height: .56rem;
                     font-size: .2rem;
-                    color: #3979fe;
+                    // color: #3979fe;
+                    // 打包的颜色
+                    color: #fff;
                     text-align: center;
                     background-image: url('../../../static/images/m_select-border.png');
                     background-position: center .54rem;
@@ -215,7 +217,9 @@
                     position: relative;
                     .el-collapse-item__header {
                         font-size: .12rem;
-                        color: #3375fe;
+                        // color: #3375fe;
+                        // 打包的颜色
+                        color: #fff;
                         background-color: #020521;
                         border-bottom: 0;
                         height: .56rem;
@@ -364,7 +368,9 @@
                     width: 1.85rem;
                     padding: 0 .1rem;
                     a {
-                        color: #3979fe;
+                        // color: #3979fe;
+                        // 打包的颜色
+                        color: #fff;
                     }
                     i {
                         padding-left: .1rem;
@@ -410,7 +416,9 @@
                                 font-style: normal;
                             }
                             a {
-                                color: #3979fe;
+                                // color: #3979fe;
+                                // 打包的颜色
+                                color: #fff;
                             }
                         }
                     }

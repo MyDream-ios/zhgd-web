@@ -1,12 +1,16 @@
 {
-  "name": "my-project",
+  "name": "wisdom",
   "version": "0.1.0",
   "private": true,
+  "main": "src/index.js",
   "scripts": {
+    "start": "electron .",
     "api": "node app.js",
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --fix"
+    "lint": "vue-cli-service lint --fix",
+    "exe": "electron-packager . wisdom --win --out ../wisdom --arch=x64 --icon=./dist/yiZhiTon.ico",
+    "analyz": "npm_config_report=true npm run build"
   },
   "dependencies": {
     "axios": "^0.18.1",
@@ -14,6 +18,7 @@
     "cropperjs": "^1.5.6",
     "dhtmlx-gantt": "^6.2.2",
     "echarts": "^4.2.0-rc.2",
+    "electron": "^7.0.0",
     "element-ui": "^2.6.1",
     "express": "^4.17.1",
     "js-md5": "^0.7.3",

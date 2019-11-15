@@ -2,8 +2,10 @@
     <div id="spectaculars">
         <!-- 标题 -->
         <div class="title">
-            <!-- <router-link to="/systemLiangZhi">{{indexData.projectName}}</router-link> -->
-            <a @click="returnClick()">{{indexData.projectName}}</a>
+            <router-link to="/systemLiangZhi" v-if="$exe.installation">{{indexData.projectName}}</router-link>
+            <!-- 打包的时候切换注释 -->
+            <!-- <a @click="returnClick()" v-else>{{indexData.projectName}}</a> -->
+            <a v-else>{{indexData.projectName}}</a>
         </div>
         <!-- 主体 -->
         <div class="main">
@@ -190,7 +192,7 @@
                         对比照片
                         <i class="right-icon"></i>
                     </div>
-                    <img :src="indexData.inOrOut.faceUrl" alt="">
+                    <img :src="indexData.inOrOut.faceUrl" alt="" @click="windo(indexData.inOrOut.faceUrl)" style="cursor: pointer">
                     <ul>
                         <li>姓名：{{indexData.inOrOut.empName}}</li>
                         <li>班组：{{indexData.inOrOut.teamName}}</li>
@@ -205,7 +207,7 @@
                         实时照片
                         <i class="right-icon"></i>
                     </div>
-                    <img :src="indexData.har.sitePhoto" alt="">
+                    <img :src="indexData.har.sitePhoto" alt="" @click="windo(indexData.har.sitePhoto)" style="cursor: pointer">
                     <ul>
                         <li>设备：考勤一号机</li>
                         <li>时间：{{indexData.har.passedTime}}</li>
@@ -213,6 +215,14 @@
                 </div>
             </div>
         </div>
+        <el-dialog
+            v-if="imgUrl"
+            title="图片"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+            <img :src="imgUrl" style="width:100%;margin:0;height:auto">
+        </el-dialog>
     </div>
 </template>
 
@@ -619,6 +629,8 @@ export default {
             month: '', // 月
             day: '', // 日
             indexTimeId: '', // 页面数据定时器
+            centerDialogVisible: false, // 控制弹窗
+            imgUrl: '', // 图片url
         }
     },
     mounted() {
@@ -751,14 +763,21 @@ export default {
         },
 
         // 返回
+        // 打包的时候打开注释
         returnClick() {
             // // console.log(123)
-            // window.clearInterval(this.indexTimeId)
-            // // this.$router.go(-1)
-            // setTimeout(() => {
-            //     this.$router.go(-1)
-            // },100)
+            window.clearInterval(this.indexTimeId)
+            // this.$router.go(-1)
+            setTimeout(() => {
+                this.$router.go(-1)
+            },100)
         },
+
+        // 弹窗
+        windo(img) {
+            this.centerDialogVisible = !this.centerDialogVisible
+            this.imgUrl = img
+        }
     }
 }
 </script>

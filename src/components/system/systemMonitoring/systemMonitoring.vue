@@ -28,7 +28,7 @@
                                 <i class="dot"></i>
                             </a>
                             <div class="video">
-                                <video id="player1" poster="" controls playsInline webkit-playsinline autoplay >
+                                <video :id="'player' + (index+1)" poster="" controls playsInline webkit-playsinline autoplay >
                                     <source :src="item.url" type="" />
                                     <source :src="item.url" type="application/x-mpegURL" />
                                 </video>
@@ -150,6 +150,7 @@
         width: 100%;
         display: flex;
         background-color: #f7f7f7;
+        overflow: hidden;
         .shadow-box {
             width: 100%;
             height: 0.15rem;
@@ -360,6 +361,9 @@ export default {
             videoAreaData: [], // 视频区数据
             videoData: [], // 视频数据
             player1: '',
+            player2: '',
+            player3: '',
+            player4: '',
         }
     },
     created() {
@@ -370,9 +374,9 @@ export default {
         if(this.videoData!=""){
             //如果在mounted中声明，直播地址还未取到，导致视频不显示。所以放在了这里
             this.player1 = new EZUIPlayer('player1');
-            // this.player2 = new EZUIPlayer('player2')
-            // this.player3 = new EZUIPlayer('player3')
-            // this.player4 = new EZUIPlayer('player4')
+            this.player2 = new EZUIPlayer('player2')
+            this.player3 = new EZUIPlayer('player3')
+            this.player4 = new EZUIPlayer('player4')
         }
     },
     methods: {
@@ -402,7 +406,6 @@ export default {
                 }
             )
         },
-        
         // 获取监控直播流
         getProjectVideo() {
             this.$axios.post(`/api/ProjectVideo/getProjectVideo?areaId=${this.areaId}`).then(
@@ -419,6 +422,8 @@ export default {
             this.areaId = areaId
             this.getProjectVideo()
         },
+
+        //TODO 这里的点击交互没有做，左侧点击右侧的数据变化
     }
 }
 </script>

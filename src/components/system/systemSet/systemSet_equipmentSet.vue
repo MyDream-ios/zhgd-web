@@ -107,10 +107,10 @@
             <i class="icon spectaculars"></i>
             <div class="text">
               <div class="name">看板设置</div>
-              <router-link to="/systemSet_equipmentSet_spectaculars">
+              <!-- <router-link to="/systemSet_equipmentSet_spectaculars"> -->
                 <i class="setIcon"></i>
                 设置
-              </router-link>
+              <!-- </router-link> -->
             </div>
           </li>
         </ul>

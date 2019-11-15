@@ -121,9 +121,12 @@
             <div class="flex carCard_black" v-else></div>
             <!-- 视频 -->
             <div class="flex videoCard_bg" v-if="open">
-              <router-link to="/systemMonitoring">
+              <router-link to="/systemMonitoring" v-if="!$exe.installation">
                 <img src="../../../static/images/videoCard.png" alt="">
               </router-link>
+              <a v-else>
+                <img src="../../../static/images/videoCard.png" alt="" @click="openYSY">
+              </a>
             </div>
             <div class="flex videoCard_black" v-else></div>
             <!-- 电箱 -->
@@ -231,6 +234,11 @@
               <!-- </router-link> -->
             </div>
             <div class="flex workerCard_black" v-else></div>
+            <!-- 调用对讲机 打包的时候打开注释-->
+            <div class="flex interphoneCard_bg" v-if="open&&$exe.installation">
+              <img src="../../../static/images/interphoneCard.png" alt="" @click="software">
+            </div>
+            <div class="flex interphoneCard_black" v-else @click="msg" style="cursor: pointer;"></div>
             <!-- 设置 -->
             <div class="flex setCard_bg" v-if="open">
               <router-link to="/systemSet_equipmentSet">
@@ -238,6 +246,11 @@
               </router-link>
             </div>
             <div class="flex setCard_black" v-else></div>
+            <!-- 调用无人机 打包的时候打开注释-->
+            <div class="flex planeCard_bg" v-if="open&&$exe.installation">
+              <img src="../../../static/images/planeCard.png" alt="" @click="plane">
+            </div>
+            <div class="flex planeCard_black" v-else @click="msg" style="cursor: pointer;"></div>
             <i></i>
             <i></i>
             <i></i>
@@ -282,10 +295,10 @@
               <img src="../../../static/images/gantryCard.png" alt="">
               <p>龙门吊监管</p>
             </div>
-            <div class="flex bgc">
+            <!-- <div class="flex bgc">
               <img src="../../../static/images/noPeoplePlaneCard.png" alt="">
               <p>无人机应用</p>
-            </div>
+            </div> -->
             <div class="flex bgc">
               <img src="../../../static/images/oneCardAll.png" alt="">
               <p>一卡通管理</p>
@@ -608,6 +621,18 @@
       .workerCard_black {
         background-image: url('../../../static/images/workerCard_black.png');
       }
+      .interphoneCard_bg {
+        background-image: url('../../../static/images/interphoneCard_bg.png');
+      }
+      .interphoneCard_black {
+        background-image: url('../../../static/images/interphoneCard_black.png');
+      }
+      .planeCard_bg {
+        background-image: url('../../../static/images/planeCard_bg.png');
+      }
+      .planeCard_black {
+        background-image: url('../../../static/images/planeCard_black.png');
+      }
     }
     .img-big {
       img {
@@ -636,6 +661,7 @@
 </style>
 
 <script>
+// const { ipcRenderer } = window.require('electron')
 export default {
   data() {
     return {
@@ -645,6 +671,9 @@ export default {
     };
   },
   mounted() {
+    // if (this.$exe.installation) {
+    //   const { ipcRenderer } = window.require('electron')
+    // }
   },
   methods: {
     // 侧导航栏缩进
@@ -681,6 +710,31 @@ export default {
         type: "warning"
       });
     },
+
+    // 点击调用本地exe
+    software() {
+      // 打包的时候打开
+      ipcRenderer.send('open')
+    },
+
+    // 点击调用本地exe
+    plane() {
+      // 打包的时候打开
+      ipcRenderer.send('plane')
+    },
+
+    // 对讲机点击弹窗
+    msg() {
+      this.$message({
+        type: 'warning',
+        message: '请下载智慧工地安装包'
+      })
+    },
+
+    // 打开萤石云
+    openYSY() {
+      ipcRenderer.send('YSY')
+    }
   },
   created() {}
 };

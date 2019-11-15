@@ -131,7 +131,37 @@
           </span>
           <router-link to="/dormitory" class="dormitory">智慧宿舍</router-link>
         </div>
-        <div class="videoInfo">
+
+        <!-- 福田区第六期优质用水入户工程 -->
+        <div class="videoInfo" v-if="projectId==366">
+          <el-carousel trigger="click" height="6.14rem">
+            <el-carousel-item>
+              <img src="../../../static/images/szswyy1.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswyy2.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswyy3.jpg">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+
+        <!-- 草埔1#临时泵站建设工程 -->
+        <div class="videoInfo" v-else-if="projectId==365">
+          <el-carousel trigger="click" height="6.14rem">
+            <el-carousel-item>
+              <img src="../../../static/images/szswcp1.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswcp2.jpg">
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../../../static/images/szswcp3.jpg">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <div class="videoInfo" v-else="projectId==194">
           <el-carousel trigger="click" height="6.14rem">
             <el-carousel-item>
               <img src="../../../static/images/mmexport1565845097787.jpg">
@@ -141,10 +171,10 @@
             </el-carousel-item>
             <el-carousel-item>
               <img src="../../../static/images/mmexport1565845104313.jpg">
-              <!-- <img src="" alt=""> -->
             </el-carousel-item>
           </el-carousel>
         </div>
+
         <div class="bottomInfo">
           <div class="left">
             <h3>塔吊防碰撞系统</h3>
@@ -281,15 +311,15 @@
           <ul>
             <li>
               <span class="leftName">电箱数量：</span>
-              <span v-if="electricityBox.length>0" class="sub">{{electricityBox.count}}座</span>
+              <span v-if="electricityBox.count>0" class="sub">{{electricityBox.count}}座</span>
               <span v-else>0座</span>
             </li>
             <li>
               <span class="leftName">电箱温度：</span>
-              <span v-if="electricityBox.length>0" class="sub" :class="electricityBox.envirwarm>45?'danger':'noml'">{{electricityBox.envirwarm}}℃</span>
+              <span v-if="electricityBox.count>0" class="sub" :class="electricityBox.envirwarm>45?'danger':'noml'">{{electricityBox.envirwarm}}℃</span>
               <span v-else>无数据</span>
             </li>
-            <li v-if="electricityBox.length>0">
+            <li v-if="electricityBox.count>0">
               <span class="leftName">运行情况：</span>
               <span v-if="electricityBox.kgjl.sb=='正常'" class="sub noml">正常</span>
               <span v-else class="sub danger">异常</span>
@@ -302,7 +332,7 @@
           <div class="runtime">
             <div>已正常运行</div>
             <img src="../../../static/images/shizhong.png" alt>
-            <div class="noml runtimeBg" v-if="electricityBox.length>0">{{electricityBox.kgjl.days}} H</div>
+            <div class="noml runtimeBg" v-if="electricityBox.count>0">{{electricityBox.kgjl.days}} H</div>
             <div class="noml runtimeBg" v-else>0 H</div>
           </div>
         </div>
@@ -775,7 +805,7 @@ export default {
     // 获取项目id
     getPid() {
       this.projectId = sessionStorage.getItem('pid')
-      console.log(this.projectId)
+      // console.log(this.projectId)
     },
 
     // 获取电箱数据
@@ -1290,7 +1320,9 @@ export default {
     line-height: 0.6rem;
     span {
       font-size: 0.3rem;
-      color: #347fea;
+      // color: #347fea;
+      // 打包的颜色
+      color: #fff;
       margin-left: 0.12rem;
     }
   }

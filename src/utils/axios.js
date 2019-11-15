@@ -1,36 +1,20 @@
 import axios from 'axios'
-var ui = require('element-ui')
+// var ui = require('element-ui')
 
 // 测试环境
 
 // 模拟数据
-// axios.defaults.baseURL = "http://localhost:3000"<<<<<<< .mine
+// axios.defaults.baseURL = "http://localhost:3000"
 // 颜通
 // axios.defaults.baseURL = "http://192.168.1.117:8025"
 // 佳超
-// axios.defaults.baseURL = "http://192.168.1.40:8080"
+// axios.defaults.baseURL = "http://192.168.1.52:8080"
 // 李媛
 // axios.defaults.baseURL = "http://192.168.1.55:8080"
 // 陈吕
 // axios.defaults.baseURL = "http://192.168.1.21:8080"
 // 生产环境
 axios.defaults.baseURL = "http://47.106.71.3:8080"
-// 模拟数据
-// axios.defaults.baseURL = "http://localhost:3000"
-=======
-// 颜通
-// axios.defaults.baseURL = "http://192.168.1.117:8025"
-// 佳超
-// axios.defaults.baseURL = "http://192.168.1.40:8080"
-// 李媛
-// axios.defaults.baseURL = "http://192.168.1.55:8080"
-// 陈吕
-axios.defaults.baseURL = "http://192.168.1.21:8080"
-// 生产环境
-// axios.defaults.baseURL = "http://47.106.71.3:8080"
-// 模拟数据
-// axios.defaults.baseURL = "http://localhost:3000"
->>>>>>> .theirs
 
 // 添加请求拦截器
 // axios.interceptors.request.use(function (config) {
@@ -47,15 +31,15 @@ axios.defaults.baseURL = "http://192.168.1.21:8080"
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   // eslint-disable-next-line no-console
-  if (response && response.data && response.data.code && response.data.code != 0) {
-    ui.Message({
-      message: response.data.msg || '页面加载失败',
-      type: 'warning'
-    })
-  } else {
-    return response;
-  }
-  // return response;
+  // if (response && response.data && response.data.code && response.data.code != 0) {
+  //   ui.Message({
+  //     message: response.data.msg || '页面加载失败',
+  //     type: 'warning'
+  //   })
+  // } else {
+  //   return response;
+  // }
+  return response;
 }, function (error) {
   // 对响应错误做点什么
   // console.log(error)

@@ -6,7 +6,11 @@
                 <div class="title">
                     <div class="text">
                         <span>当前工程：</span>
-                        <router-link to="/spectaculars" class="project-name" target="_blank">
+                        <router-link to="/spectaculars" class="project-name" target="_blank" v-if="!$exe.installation">
+                            {{indexData.projectName}}
+                        </router-link>
+                        <!-- 打包的时候打开注释 -->
+                        <router-link to="/spectaculars" class="project-name" v-else>
                             {{indexData.projectName}}
                         </router-link>
                     </div>
@@ -625,7 +629,7 @@ export default {
                     {
                         type: "value",
                         min: 0,
-                        interval: 20,
+                        // interval: 20,
                         axisLabel: {
                             textStyle: {
                                 color: "#000"

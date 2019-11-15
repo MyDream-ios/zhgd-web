@@ -21,6 +21,16 @@ module.exports = {
     //     }
     // }
     configureWebpack: {
-        devtool: 'source-map'
+      devtool: 'source-map',
+      externals: {
+        echarts: 'echarts'
       }
+    },
+
+    // 打开的时候build可以看到包的大小
+    // chainWebpack: config => {
+    //   config
+    //     .plugin('webpack-bundle-analyzer')
+    //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    // }
 }

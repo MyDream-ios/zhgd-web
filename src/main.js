@@ -6,11 +6,15 @@ import App from './App.vue'
 import router from './router'
 import './common/font/font.css'
 // import './common/icon/iconfont'
-import echarts from 'echarts'
+
+// CDN导入所以注释掉了
+// import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'babel-polyfill'
 import md5 from 'js-md5'
+// 用于判断是否是打安装包
+import installation from './installation.js'
 Vue.directive('focus', function (el) {
   // console.log(el.querySelector('input'));
 
@@ -44,7 +48,7 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$md5 = md5
 Vue.prototype.$axios = axios
 Vue.prototype.$old = OLDURL
-
+Vue.prototype.$exe = installation
 // Vue.use(Carousel);
 // Vue.use(Row);
 // Vue.use(Col);

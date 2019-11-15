@@ -6,7 +6,7 @@
                 <a class="logo-box"></a>
                 <i class="line"></i>
             </div>
-            <div class="company">深圳市市政总公司</div>
+            <div class="company">{{companyName}}</div>
             <div class="nav">
                 <ul>
                     <li>
@@ -23,11 +23,12 @@
             <div class="user">
                 <el-dropdown @command="handleCommand">
                     <a class="el-dropdown-link">
-                        用户名
+                        <!-- 用户名 -->
+                        <!-- {{userName}} -->
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>修改密码</el-dropdown-item>
+                        <el-dropdown-item command="edit">修改密码</el-dropdown-item>
                         <el-dropdown-item command="login">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -57,17 +58,19 @@
             <!-- 内容 -->
             <router-view class="router-box"></router-view>
         </div>
+        <change-password :show="dialogShow" @close="dialogShow=false"></change-password>
     </div>
 </template>
 
 <style lang="less">
     #projectGuanLi {
         .top {
-            width: 19.2rem;
+            // width: 19.2rem;
             height: 0.8rem;
             padding-top: 0.24rem;
             background-size: cover;
             background: linear-gradient(to right, #6cc4ff, #489cff);
+            position: relative;
             >div {
                 float: left;
             }
@@ -101,7 +104,10 @@
                 text-shadow: .02rem .02rem .02rem #666;
             }
             .nav {
-                margin-left: 0.99rem;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
                 ul {
                     li {
                         float: left;
@@ -206,14 +212,23 @@
 </style>
 
 <script>
+import changePassword from '@/base/changePassword'
 export default {
     data() {
         return {
-            activeShow: "/projectGuanLi_set" // 当前选中的模块
+            activeShow: "/projectGuanLi_set", // 当前选中的模块
+            userName: '', // 用戶名
+            companyName: '', // 公司名称
+            dialogShow: false, // 修改密码弹窗
         }
     },
     created() {
         this.getPath()
+        this.getName()
+        this.getCompanyName()
+    },
+    components: {
+        changePassword
     },
     methods: {
         // 选择模块
@@ -232,8 +247,26 @@ export default {
         handleCommand(command) {
             if (command == 'login') {
                 this.$router.push('login')
+            } else if (command == 'edit') {
+                this.dialogShow = true
             }
         },
+
+        // 獲取用戶名
+        getName() {
+            this.userName = sessionStorage.getItem('userName')
+        },
+
+        // 获取公司名称
+        getCompanyName() {
+            this.$axios
+                .post(`/api/pcCompanyLibrary/selectHjCompanyLibrary?id=${sessionStorage.getItem('cid')}`)
+                .then(res => {
+                    if (res.data.code == 0) {
+                        this.companyName = res.data.data.companyName
+                    }
+                })
+        }
     }
 }
 </script>

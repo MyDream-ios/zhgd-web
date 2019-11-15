@@ -50,7 +50,10 @@
           <i class="user"></i>
           <input type="text" placeholder="请输入账号" v-model="user_name" @keyup.enter="login">
           <i class="password"></i>
-          <input type="password" placeholder="请输入密码" v-model="pwd" @keyup.enter="login">
+          <input type="password" placeholder="请输入密码" v-model="pwd" @keyup.enter="login" ref="passWord">
+          <el-tooltip effect="dark" content="下次自动登录" placement="right">
+            <el-checkbox v-model="save"></el-checkbox>
+          </el-tooltip>
           <a @click="login"></a>
         </div>
         <div class="logo"></div>
@@ -107,7 +110,8 @@ export default {
   data() {
     return {
       user_name: "",
-      pwd: ""
+      pwd: "",
+      save: false
     };
   },
   methods: {
@@ -134,15 +138,25 @@ export default {
 
     // 2.0登录
     login() {
-      this.$axios.post(`/api/system/computer/login?userAccount=${this.user_name}&userPassword=${this.$md5(this.pwd)}&entry=1`).then(res => {
-        // console.log(res.data)
-        if (this.user_name==''||this.pwd=='') {
-          alert("账号或密码不得为空")
-        } else {
+      if (this.user_name==''||this.pwd=='') {
+        this.$message({
+          type: 'warning',
+          message: '账号或密码不得为空'
+        })
+      } else {
+        this.$axios.post(`/api/system/computer/login?userAccount=${this.user_name}&userPassword=${this.$md5(this.pwd)}&entry=1`).then(res => {
           if (res.data.code == -1) {
-            alert("账号或密码错误！请重新输入");
+            this.$message({
+            type: 'warning',
+            message: '账号或密码错误！请重新输入'
+          })
             this.pwd = ""
+            this.$refs.passWord.focus()
           } else {
+            if (this.save) {
+              localStorage.setItem("userAccount", this.user_name)
+              localStorage.setItem("userPassword", this.pwd)
+            }
             sessionStorage.setItem("islogin", "true")
             sessionStorage.setItem("pid", res.data.data.projectId)
             sessionStorage.setItem("cid", res.data.data.companyId)
@@ -159,22 +173,35 @@ export default {
               this.$router.push({ path: "/homePage" })
             }
           }
-        }
-      })
+        })
+      }
+    },
+
+    // 是否保存了密码
+    hasPassWord() {
+      let userName = localStorage.getItem("userAccount")
+      let passWord = localStorage.getItem("userPassword")
+      if (userName && passWord) {
+        this.user_name = userName
+        this.pwd = passWord
+      }
     }
+  },
+  mounted() {
+    this.hasPassWord()
   }
-};
+}
 </script>
 
 <style lang="less">
 #main {
-  height: 9.8rem;
+  // height: 9.8rem;
   background-color: #fff;
   .nav {
-    height: 1.65rem;
-    padding-top: 0.19rem;
+    // height: 1.65rem;
+    height: .9rem;
+    padding: .2rem 0;
   }
-  
   .bottom {
     height: 2.65rem;
     ul{
@@ -206,12 +233,12 @@ export default {
     }
   }
   .content {
-    width: 19.2rem;
+    // width: 19.2rem;
     height: 7.5rem;
     background-image: url("../../../static/images/login_bg.png");
-    background-size: contain;
+    background-size: cover;
     position: relative;
-    margin-top: -0.8rem;
+    // margin-top: -0.8rem;
   }
   /* 登录框样式 */
   .content .login {
@@ -220,8 +247,9 @@ export default {
     background-image: url("../../../static/images/login_border.png");
     background-size: contain;
     position: absolute;
-    right: 4.2rem;
-    top: 1.44rem;
+    right: 15%;
+    top: 50%;
+    transform: translateY(-50%);
     padding-top: 0.38rem;
   }
   .content .login-title {
@@ -281,8 +309,10 @@ export default {
   .content .logo {
     width: 1.5rem;
     height: 0.6rem;
-    margin-top: 1.9rem;
+    bottom: .3rem;
     background-image: url("../../../static/images/yzt-whiteLogo.png");
+    // background-image: url("../../../static/images/lbrj_login.png");
+    // background-image: url("../../../static/images/hj_login.png");
     background-size: contain;
     position: absolute;
     z-index: 10;
@@ -301,7 +331,7 @@ export default {
     transform: translate(-50%);
   }
   .content .light {
-    width: 19.2rem;
+    // width: 19.2rem;
     height: 7.5rem;
     background-image: url("../../../static/images/login_light.png");
     background-size: contain;
@@ -373,5 +403,22 @@ export default {
   :-moz-placeholder {
     color: #848484;
   } /* firefox 14-18 */
+  .el-checkbox {
+    position: absolute;
+    top: .7rem;
+    right: .4rem;
+    z-index: 20;
+    .el-checkbox__inner {
+      border: 1px solid #333;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+      border: 1px solid #409eff;
+    }
+    input {
+      width: auto !important;
+      height: auto !important;
+      cursor: pointer;
+    }
+  }
 }
 </style>

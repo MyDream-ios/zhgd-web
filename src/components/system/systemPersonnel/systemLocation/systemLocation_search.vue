@@ -295,7 +295,7 @@ export default {
 
         // 获取项目id
         getPid() {
-          this.projectId = sessionStorage.getItem('pid')
+            this.projectId = sessionStorage.getItem('pid')
         },
 
         // 获取人员定位数据
@@ -304,7 +304,7 @@ export default {
                 this.$axios.post(`/api/hireApi/getHireSearch?filed=${this.name}&projectId=${this.projectId}`).then(
                     res => {
                         // console.log(res.data)
-                        if (res.data.code == 0) {
+                        if (res.data.code == 0 && res.data.data.length) {
                             this.personnelData = res.data.data[0]
                             let temp = []
                             let temp2 = []
