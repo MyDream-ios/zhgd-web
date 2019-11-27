@@ -73,7 +73,7 @@ export default {
         }
       ],
       imgAdd: true, // 添加图片
-      cropperImg: require('C:/Users/Administrator/Desktop/IMG_0040.jpg'),
+      cropperImg: '',
       cropper: '', // 截图api挂载在这里
       imgName: ''
     }

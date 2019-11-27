@@ -6,7 +6,7 @@
       :title="title"
       :visible.sync="visible"
       center>
-      <slot><p @click="initCropper">点击加载</p></slot>
+      <slot><p @click="initCropper">点击加载1111</p></slot>
       <div v-if="image">
         <div style="width: 910px; height: 480px; border: dashed #cacaca 1px; text-align: center;">
           <img :src="cropperImg" style="max-width: 100%" ref="img" id="img">
@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      cropperImg: require('C:/Users/Administrator/Desktop/IMG_0040.jpg'),
+      cropperImg: '',
       cropper: '', // 截图api挂载在这里
       imgName: ''
     }
