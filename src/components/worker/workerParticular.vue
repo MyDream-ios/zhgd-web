@@ -58,12 +58,20 @@
                 <div class="right-box">
                     <div class="message">
                         基本信息
+                   基本信息
                     </div>
-                    <div class="phone">
+                        <span v-if="!getPhone">电话：{{foremanData.phone!=null?foremanData.phone.substring(0,3):''}}********</span>
+                        <span v-else>电话：{{foremanData.phone}}</span><div class="phone">
                         <i class="phone-icon"></i>
-                        <span>电话：{{foremanData.phone!=null?foremanData.phone.substring(0,3):''}}********</span>
-                        <a>点击获取号码</a>
+                    
+                        <a @click="getPhone=!getPhone">{{!getPhone?'点击获取号码':'点击隐藏号码'}}</a >
                     </div>
+                    <div class="amount">
+                        <i class="people-icon"></i>
+                        <span>人数：{{flowData.count}}人</span>
+                    </div>
+
+
                     <div class="amount">
                         <i class="people-icon"></i>
                         <span>人数：{{flowData.count}}人</span>
@@ -290,6 +298,7 @@ export default {
             flowData: '', // 班组人数与项目经验
             foremanData: '', // 班组信息
             imageUrl: 'http://hujiang.oss-cn-shenzhen.aliyuncs.com/', // 图片地址
+            getPhone:false //获取点号码
         }
     },
     created() {
